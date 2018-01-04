@@ -1,0 +1,71 @@
+---------------------------------------
+1.10 Beta 2  2017-02-07
+---------------------------------------
+- fix date issues (bleekk)
+
+---------------------------------------
+1.10 Beta 1  2016-06-27
+---------------------------------------
+- Converted to XOOPS 2.5.6 Admin GUI (Mamba)
+- Renamed to "Assessment" (mamba)
+
+============================
+24/07/2007: Version 0.8.0 beta
+============================
+- Acrescentado tutorial parcial
+
+============================
+23/07/2007: Version 0.7.0 beta
+============================
+- Redução de queries na index.php (Marcello Brandão)
+- mudança nos nomes das constantes de _MD_ para _AM_ASSESSMENT_ (Marcello Brandão)
+- Read-me e leia-me (Marcello Brandão)
+- credits (Marcello Brandão)
+- extras ( needed packages ) (Marcello Brandão)
+- Licença GNU (Marcello Brandão)
+- Changelog (Marcello Brandão)
+- IMagem de stats
+- Configurações extras
+- plugin sitemap
+
+
+============================
+23/07/2007: Version 0.6.0 alpha
+============================
+- Atributo Title para as imagens (Marcello Brandão/César Felip)
+- Tradução para inglês (Marcello Brandão/Eduarda Helena)
+- Alguns textos não estavam  no formato de tradução (Marcello Brandão)
+- Design Primeira Página (Marcello Brandão)
+- Notificações (Marcello Brandão)
+
+
+============================
+21/07/2007: Version 0.5.0 alpha
+============================
+- Clonar Prova (Marcello Brandão)
+
+============================
+20/07/2007: Version 0.4.0 alpha
+============================
+- Definir Ordem das perguntas (Marcello Brandão)
+- o uso do editor mastop no módulo (Marcello Brandão)
+- o uma mexida no layout da primeira página (Marcello Brandão)
+- Sanitizing (Marcello Brandão)
+
+============================
+19/07/2007: Version 0.3.0 prealpha
+============================
+- Variáveis de tradução introduzidas (Marcello Brandão)
+- Verificação de dependências (Marcello Brandão/Giba)
+
+============================
+17/03/2007: Version 0.2.0 prealpha
+============================
+- muitos detalhes de segurança
+- Padrão de Projeto MVC para parte do usuário ( ao invés do decorator padrão dos forms) (Marcello Brandão)
+- Coloquei o resumo das notas de uma prova (média máximo mínimo) (Marcello Brandão)
+- Dei uma melhorada no design de uns detalhes (Marcello Brandão)
+
+15/03/2007: Version 0.1.0 prealpha
+===============================
+The first public release of 1.0 series.(Marcello Brandão)

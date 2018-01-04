@@ -1,0 +1,6 @@
+Nesta pasta você encontra:
+
+- um plugin para o módulo sitemap.
+- A pasta com o mastoppublish adapatado para rodar na pasta xoopseditor.
+
+Obrigado e bom trabalho

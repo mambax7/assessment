@@ -1,0 +1,15 @@
+Assessment - Credits
+=======================
+
+Originally developed by Marcello Brandão under the name "Nivelamento"
+
+- Marcello Brandão - Líder de Projeto e administrador
+- César Felip      - Tester
+- Estevão          - Tester
+- Giba         - Tester
+- Frodo            - Tester
+- Eduarda Helena   - Tradutora(inglês)
+- Xoops Total      - Comunidade de apoio
+
+Version 1.1 was updated to XOOPS 2.5.6 Standard GUI by Michael Beck (Mamba)
+
