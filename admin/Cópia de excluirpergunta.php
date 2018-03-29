@@ -8,17 +8,17 @@ require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
 
 $cod_prova = $_POST['cod_prova'];
 
-$criteria             = new Criteria('cod_prova', $cod_prova);
-$fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_provas    = new Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_respostas = new Xoopsassessment_respostasHandler($xoopsDB);
+$criteria             = new \Criteria('cod_prova', $cod_prova);
+$fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_de_provas    = new \Xoopsassessment_provasHandler($xoopsDB);
+$fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
 
 $perguntas = $fabrica_de_perguntas->getObjects($criteria);
 
 foreach ($perguntas as $pergunta) {
     ++$i;
     $cod_pergunta      = $pergunta->getVar('cod_pergunta');
-    $criteria_pergunta = new Criteria('cod_pergunta', $cod_pergunta);
+    $criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
     $fabrica_de_respostas->deleteAll($criteria_pergunta);
     echo 'respostas da pergunta ' . $i . ' apagada';
     $fabrica_de_perguntas->delete($pergunta);

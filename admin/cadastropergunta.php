@@ -47,8 +47,8 @@ $tit_resposta_errada[3] = $_POST['campo_resposta4'];
 $tit_resposta_errada[4] = $_POST['campo_resposta5'];
 
 $uid_elaborador       = $xoopsUser->getVar('uid');
-$fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_respostas = new Xoopsassessment_respostasHandler($xoopsDB);
+$fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
 $pergunta             = $fabrica_de_perguntas->create();
 $pergunta->setVar('cod_prova', $cod_prova);
 $pergunta->setVar('titulo', $titulo);

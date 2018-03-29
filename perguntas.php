@@ -35,6 +35,10 @@
  * @package assessment
  */
 
+use XoopsModules\Assessment;
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
@@ -73,11 +77,11 @@ $start     = $_GET['start'];
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_resultados    = new Xoopsassessment_resultadosHandler($xoopsDB);
-$fabrica_de_respostas  = new Xoopsassessment_respostasHandler($xoopsDB);
-$fabrica_de_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
+$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+$fabrica_resultados    = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_de_respostas  = new \Xoopsassessment_respostasHandler($xoopsDB);
+$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
 
 /**
  * Buscando na f�brica a prova a que esta pergunta pertence
@@ -106,12 +110,12 @@ if ($fimmaistempo < time()) {
  * Verificando se aluno j� tinha terminado a prova antes em caso positivo
  * informa atraves de mensagem
  */
-$criteria_prova = new criteria('cod_prova', $cod_prova);
+$criteria_prova = new \Criteria('cod_prova', $cod_prova);
 $criteria_prova->setOrder('ASC');
 $criteria_prova->setSort('ordem');
-$criteria_aluno     = new criteria('uid_aluno', $uid);
-$criteria_terminou  = new criteria('terminou', 1);
-$criteria_resultado = new criteriaCompo($criteria_aluno);
+$criteria_aluno     = new \Criteria('uid_aluno', $uid);
+$criteria_terminou  = new \Criteria('terminou', 1);
+$criteria_resultado = new \CriteriaCompo($criteria_aluno);
 $criteria_resultado->add($criteria_prova);
 $criteria_resultado->add($criteria_terminou);
 if ($fabrica_resultados->getCount($criteria_resultado) > 0) {
@@ -129,7 +133,7 @@ if ($qtd_perguntas < 1) {
 /**
  * Cria��o de objetos de crit�rio para passar para as F�bricas
  */
-$criteria_compo = new criteriaCompo($criteria_prova);
+$criteria_compo = new \CriteriaCompo($criteria_prova);
 $criteria_compo->add($criteria_aluno);
 
 /**
@@ -184,7 +188,7 @@ $hora_fim_da_prova = $fabrica_de_provas->converte_segundos($data_inicio_segundos
 if ($tempo_restante['segundos'] < 0) {
     $resultado->setVar('terminou', 1);
     $resultado->unsetNew();
-    if (1 == $xoopsModuleConfig['notadireta']) {
+    if (1 == $helper->getConfig('notadireta')) {
         $resultado->setVar('fechada', 1);
     }
     $fabrica_resultados->insert($resultado, true);
@@ -210,7 +214,7 @@ $documentos =& $fabrica_de_documentos->getDocumentosProvaPergunta($cod_prova, $c
 /**
  * Cria��o de objetos de crit�rio para passar para as F�bricas
  */
-$criteria_pergunta = new criteria('cod_pergunta', $cod_pergunta);
+$criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
 
 /**
  * buscando as respostas a serem exibidas
@@ -235,7 +239,7 @@ $cod_resultado = $resultado->getVar('cod_resultado');
 $cod_perguntas_respondidas = $resultado->getCodPerguntasAsArray();
 $cod_perguntas             =& $fabrica_de_perguntas->getCodObjects($criteria_prova);
 $navegacao                 = new NavegadorProva($qtd_perguntas, 1, $start, 'start', 'cod_prova=' . $cod_prova);
-$barra_navegacao           = $navegacao->renderImageNav($cod_perguntas, $cod_perguntas_respondidas, $xoopsModuleConfig['qtdmenu']);
+$barra_navegacao           = $navegacao->renderImageNav($cod_perguntas, $cod_perguntas_respondidas, $helper->getConfig('qtdmenu'));
 
 //Montando o Formul�rio
 $formulario = $fabrica_de_perguntas->renderFormResponder('form_resposta.php', $pergunta, $respostas, $cod_resposta_anterior);

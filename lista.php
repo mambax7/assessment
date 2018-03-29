@@ -1,18 +1,23 @@
 <?php
+
+use XoopsModules\Assessment;
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+
 include dirname(dirname(__DIR__)) . '/mainfile.php';
 include dirname(dirname(__DIR__)) . '/header.php';
 
 //aqui come�a o conte�do principal
 //echo('uiohaiufuihfaui<br>');
-//echo ($xoopsModuleConfig['ploft']);
+//echo ($helper->getConfig('ploft'));
 $xoopsOption['template_main'] = 'meumodulo_lista.tpl';
-$xoopsTpl->assign('valor1', $xoopsModuleConfig['ploft']);
+$xoopsTpl->assign('valor1', $helper->getConfig('ploft'));
 
 $sql = 'SELECT teste_id,teste_nome FROM ' . $xoopsDB->prefix('meumodulo_tabela1');
 $rs  = $xoopsDB->query($sql);
 
 $i = 1;
-while (list($id, $nome) = $xoopsDB->fetchRow($rs)) {
+while (false !== (list($id, $nome) = $xoopsDB->fetchRow($rs))) {
     $vetorresultados[$i]['id']   = $id;
     $vetorresultados[$i]['nome'] = $nome;
     ++$i;

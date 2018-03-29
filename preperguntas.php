@@ -66,14 +66,14 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 /**
  * Cria��o da F�brica de resultados (padr�o de projeto factory com DAO)
  */
-$fabrica_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
 
 /**
  * Cria��o dos crit�rios para a f�brica produzir os objetos
  */
-$criteria_prova = new criteria('cod_prova', $cod_prova);
-$criteria_aluno = new criteria('uid_aluno', $uid);
-$criteria       = new criteriaCompo($criteria_prova);
+$criteria_prova = new \Criteria('cod_prova', $cod_prova);
+$criteria_aluno = new \Criteria('uid_aluno', $uid);
+$criteria       = new \CriteriaCompo($criteria_prova);
 $criteria->add($criteria_aluno);
 
 /**

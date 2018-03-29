@@ -40,6 +40,10 @@
  * Arquivo de cabeçalho da administração do Xoops
  */
 
+use XoopsModules\Assessment;
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+
 $currentFile = basename(__FILE__);
 
 require_once __DIR__ . '/admin_header.php';
@@ -109,13 +113,13 @@ function listarprovas()
     /**
      * Criação da fábrica de provas
      */
-    $fabrica_de_provas = new Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_provas = new \Xoopsassessment_provasHandler($xoopsDB);
 
     /**
      * Criação dos objetos critérios para repassar para a fábrica de provas
      */
-    $criteria = new Criteria('cod_prova');
-    $criteria->setLimit($xoopsModuleConfig['qtditens']);
+    $criteria = new \Criteria('cod_prova');
+    $criteria->setLimit($helper->getConfig('qtditens'));
     $criteria->setStart($start);
 
     /**
@@ -167,7 +171,7 @@ function listarprovas()
         /**
          * Criando a barra de navegação caso tenha muitas provas
          */
-        $barra_navegacao = new XoopsPageNav($total_items, $xoopsModuleConfig['qtditens'], $start);
+        $barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtditens'), $start);
         echo $barra_navegacao->renderImageNav(2);
     }
 }
@@ -189,13 +193,13 @@ function verDetalhePergunta($cod_pergunta, $cod_resposta)
     /**
      * Criação da fábrica de provas
      */
-    $fabrica_de_respostas = new Xoopsassessment_respostasHandler($xoopsDB);
-    $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
+    $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
 
     /**
      * Criação dos objetos critérios para repassar para a fábrica de provas
      */
-    $criteria = new Criteria('cod_pergunta', $cod_pergunta);
+    $criteria = new \Criteria('cod_pergunta', $cod_pergunta);
 
     /**
      * Buscando na fábrica as respostas e a pergunta
@@ -239,9 +243,9 @@ function editarResultado()
     /**
      * Criação das fábricas dos objetos que vamos precisar
      */
-    $fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
-    $fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-    $fabrica_de_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+    $fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
 
     /**
      * Buscando na fábrica o resultado a ser editado
@@ -253,9 +257,9 @@ function editarResultado()
     /**
      * Criação dos objetos critéria para repassar para a fábrica de provas
      */
-    $criteria_prova = new Criteria('cod_prova', $cod_prova);
-    $criteria_aluno = new Criteria('uid_aluno', $uid_aluno);
-    $criteria       = new criteriaCompo($criteria_prova);
+    $criteria_prova = new \Criteria('cod_prova', $cod_prova);
+    $criteria_aluno = new \Criteria('uid_aluno', $uid_aluno);
+    $criteria       = new \CriteriaCompo($criteria_prova);
     $criteria->add($criteria_aluno);
 
     /**
@@ -289,15 +293,15 @@ function listarResultados()
     /**
      * Criação das fábricas dos objetos que vamos precisar
      */
-    $fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-    $fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
+    $fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
 
     /**
      * Criação dos objetos critéria para repassar para a fábrica de provas
      * Vamos limitar para começar do start e buscar 5 na prova de cod_prova
      */
-    $criteria_prova = new Criteria('cod_prova', $cod_prova);
-    $criteria_prova->setLimit($xoopsModuleConfig['qtditens']);
+    $criteria_prova = new \Criteria('cod_prova', $cod_prova);
+    $criteria_prova->setLimit($helper->getConfig('qtditens'));
     if (isset($_GET['start'])) {
         $criteria_prova->setStart($_GET['start']);
     }
@@ -340,7 +344,7 @@ function listarResultados()
              . ' </td></tr>';
         echo '</table>';
 
-        $barra_navegacao = new XoopsPageNav($total_items, $xoopsModuleConfig['qtditens'], $start, 'start', 'op=' . $_GET['op']);
+        $barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtditens'), $start, 'start', 'op=' . $_GET['op']);
         $prova           = $fabrica_de_provas->getObjects($criteria_prova);
         $titulo          = $prova[0]->getVar('titulo');
         echo "<table class='outer' width='100%'><tr><th colspan='2'>" . _AM_ASSESSMENT_LISTARESULTADOS . '</th></tr>';
@@ -383,18 +387,18 @@ function listarResultados()
 function listarperguntas()
 {
     global $xoopsDB, $startper, $xoopsModuleConfig, $pathIcon16;
-    $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
     $cod_prova            = $_GET['cod_prova'];
-    $criteria             = new Criteria('cod_prova', $cod_prova);
+    $criteria             = new \Criteria('cod_prova', $cod_prova);
     $criteria->setSort('ordem');
     $criteria->setOrder('ASC');
-    $criteria->setLimit($xoopsModuleConfig['qtditens']);
+    $criteria->setLimit($helper->getConfig('qtditens'));
     $criteria->setStart($startper);
     $vetor_perguntas = $fabrica_de_perguntas->getObjects($criteria);
     $criteria->setLimit('');
     $criteria->setStart(0);
     $total_items     = $fabrica_de_perguntas->getCount($criteria);
-    $barra_navegacao = new XoopsPageNav($total_items, $xoopsModuleConfig['qtditens'], $startper, 'startper', 'op=' . $_GET['op'] . '&' . 'cod_prova=' . $_GET['cod_prova']);
+    $barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtditens'), $startper, 'startper', 'op=' . $_GET['op'] . '&' . 'cod_prova=' . $_GET['cod_prova']);
 
     echo "<table class='outer' width='100%'><tr><th colspan=3>" . _AM_ASSESSMENT_LISTAPERGASSOC . '</th></tr>';
     if (null == $vetor_perguntas) {
@@ -425,17 +429,17 @@ function cadastrarpergunta()
 {
     global $xoopsDB;
     $cod_prova         = $_GET['cod_prova'];
-    $fabrica_de_provas = new Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_provas = new \Xoopsassessment_provasHandler($xoopsDB);
     $prova             = $fabrica_de_provas->get($cod_prova);
 
-    $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
     $fabrica_de_perguntas->renderFormCadastrar('cadastropergunta.php', $prova);
 }
 
 function cadastrarprova()
 {
     global $xoopsDB;
-    $fabrica_de_provas = new Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_provas = new \Xoopsassessment_provasHandler($xoopsDB);
     $fabrica_de_provas->renderFormCadastrar('cadastroprova.php');
 }
 
@@ -444,7 +448,7 @@ function editarprova()
     global $xoopsDB;
     $cod_prova = $_GET['cod_prova'];
 
-    $fabrica_de_provas = new Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_provas = new \Xoopsassessment_provasHandler($xoopsDB);
     $prova             = $fabrica_de_provas->get($cod_prova);
     $fabrica_de_provas->renderFormEditar('editarprova.php', $prova);
 }
@@ -456,12 +460,12 @@ function editarpergunta()
     //    loadModuleAdminMenu(1,"migalhas3");
     $mainAdmin = new ModuleAdmin();
     echo $mainAdmin->addNavigation('main.php?op=editar_pergunta');
-    $criteria = new Criteria('cod_pergunta', $cod_pergunta);
+    $criteria = new \Criteria('cod_pergunta', $cod_pergunta);
     $criteria->setSort('cod_resposta');
     $criteria->setOrder('ASC');
-    $fabrica_de_respostas = new Xoopsassessment_respostasHandler($xoopsDB);
+    $fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
     $respostas            = $fabrica_de_respostas->getObjects($criteria);
-    $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
     $pergunta             = $fabrica_de_perguntas->get($cod_pergunta);
     $fabrica_de_perguntas->renderFormEditar('editarpergunta.php', $pergunta, $respostas);
 }
@@ -481,10 +485,10 @@ function listarDocumentos()
     /**
      * Montando os criterios para buscar o total de documentos para montar a barra de navegacao
      */
-    $criteria = new Criteria('cod_prova', $cod_prova);
+    $criteria = new \Criteria('cod_prova', $cod_prova);
     $criteria->setLimit('');
     $criteria->setStart(0);
-    $fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
+    $fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
     $total_items           = $fabrica_de_documentos->getCount($criteria);
     if (0 == $total_items) {
         echo _AM_ASSESSMENT_SEMDOCUMENTO;
@@ -492,12 +496,12 @@ function listarDocumentos()
         /**
          * Montando os criterios para buscar somente os documentos desta página
          */
-        $criteria->setLimit($xoopsModuleConfig['qtditens']);
+        $criteria->setLimit($helper->getConfig('qtditens'));
         $criteria->setStart($startdoc);
 
         $vetor_documentos = $fabrica_de_documentos->getObjects($criteria);
 
-        $barra_navegacao = new XoopsPageNav($total_items, $xoopsModuleConfig['qtditens'], $startdoc, 'startdoc', 'op=' . $_GET['op'] . '&' . 'cod_prova=' . $cod_prova);
+        $barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtditens'), $startdoc, 'startdoc', 'op=' . $_GET['op'] . '&' . 'cod_prova=' . $cod_prova);
 
         echo "<table class='outer' width='100%'><tr><th colspan='3'>" . _AM_ASSESSMENT_LISTADOC . '</th></tr>';
         foreach ($vetor_documentos as $documento) {
@@ -537,7 +541,7 @@ function cadastrarDocumento()
     if ('' == $cod_prova) {
         echo _AM_ASSESSMENT_INSTRUCOESNOVODOC;
     } else {
-        $fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
+        $fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
         $fabrica_de_documentos->renderFormCadastrar('cadastrardocumento.php', $cod_prova);
     }
 }
@@ -547,7 +551,7 @@ function editarDocumento()
     global $xoopsDB;
     $cod_documento = $_GET['cod_documento'];
 
-    $fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
+    $fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
     $fabrica_de_documentos->renderFormEditar('editar_documento.php', $cod_documento);
 }
 

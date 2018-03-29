@@ -43,7 +43,7 @@ $nivel         = $_POST['campo_nivel'];
 $obs           = $_POST['campo_observacoes'];
 $cod_resultado = $_POST['campo_cod_resultado'];
 
-$fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
 $resultado             = $fabrica_de_resultados->get($cod_resultado);
 $resultado->setVar('nota_final', $nota_final);
 $resultado->setVar('nivel', $nivel);

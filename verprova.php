@@ -63,9 +63,9 @@ $uid       = $xoopsUser->getVar('uid');
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
-$fabrica_de_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+$fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
 
 /**
  * Fabricando o objeto prova
@@ -93,10 +93,10 @@ if ($fimmaistempo < time()) {
 /**
  * Cria��o de objetos de crit�rio para passar para as F�bricas
  */
-$criteria_prova     = new criteria('cod_prova', $cod_prova);
-$criteria_aluno     = new criteria('uid_aluno', $uid);
-$criteria_terminou  = new criteria('terminou', 1);
-$criteria_resultado = new criteriaCompo($criteria_aluno);
+$criteria_prova     = new \Criteria('cod_prova', $cod_prova);
+$criteria_aluno     = new \Criteria('uid_aluno', $uid);
+$criteria_terminou  = new \Criteria('terminou', 1);
+$criteria_resultado = new \CriteriaCompo($criteria_aluno);
 $criteria_resultado->add($criteria_prova);
 $criteria_resultado->add($criteria_terminou);
 

@@ -35,6 +35,8 @@
  * @package assessment
  */
 
+use XoopsModules\Assessment;
+
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
@@ -44,7 +46,7 @@ $xoopsOption['template_main'] = 'assessment_index.tpl';
 include dirname(dirname(__DIR__)) . '/header.php';
 
 $moduleDirName = basename(__DIR__);
-$helper = \Xmf\Module\Helper::getHelper($moduleDirName);
+$helper = Assessment\Helper::getInstance();
 
 /**
  * Inclus�es das classes do m�dulo
@@ -62,9 +64,9 @@ require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
 
 /**
  * Buscar todas as provas, todos os resultados deste aluno e e todas as perguntas
@@ -72,7 +74,7 @@ $fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
 if (isset($_GET['start'])) {
     $start = $_GET['start'];
 }
-//$criteria = new criteria ('cod_prova');
+//$criteria = new \Criteria ('cod_prova');
 //$criteria->setLimit(10);
 //$criteria->setStart($start);
 //$total_items = $fabrica_de_provas->getCount();
@@ -83,7 +85,7 @@ $qtd_provas       = count($vetor_provas);
 if (is_object($GLOBALS['xoopsUser'])) {
     $uid = $GLOBALS['xoopsUser']->getVar('uid');
 
-    $criteria_aluno   = new criteria('uid_aluno', $uid);
+    $criteria_aluno   = new \Criteria('uid_aluno', $uid);
     $vetor_resultados = $fabrica_de_resultados->getObjects($criteria_aluno);
     $vetor_perguntas  = $fabrica_de_perguntas->getObjects();
     //echo "<pre>";
@@ -148,7 +150,7 @@ if (is_object($GLOBALS['xoopsUser'])) {
         ++$i;
     }
 }
-//$barra_navegacao = new XoopsPageNav($total_items, $xoopsModuleConfig['qtdindex'], $start);
+//$barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtdindex'), $start);
 //$barrinha = $barra_navegacao->renderImageNav(2);
 //$xoopsTpl->assign('navegacao', $barrinha );
 $provas = $x;

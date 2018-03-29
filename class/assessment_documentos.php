@@ -29,6 +29,10 @@
 //                                             //
 // ----------------------------------------------------------------- //
 
+use XoopsModules\Assessment;
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php';
@@ -58,7 +62,7 @@ class assessment_documentos extends XoopsObject
      */
     public function __construct($id = null)
     {
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('cod_documento', XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar('titulo', XOBJ_DTYPE_TXTBOX, null, false);
         $this->initVar('tipo', XOBJ_DTYPE_INT, null, false, 10);
@@ -104,7 +108,7 @@ class assessment_documentos extends XoopsObject
      */
     public function getAllassessment_documentoss($criteria = [], $asobject = false, $sort = 'cod_documento', $order = 'ASC', $limit = 0, $start = 0)
     {
-        $db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $ret         = [];
         $where_query = '';
         if (is_array($criteria) && count($criteria) > 0) {
@@ -119,13 +123,13 @@ class assessment_documentos extends XoopsObject
         if (!$asobject) {
             $sql    = 'SELECT cod_documento FROM ' . $db->prefix('assessment_documentos') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = $myrow['assessment_documentos_id'];
             }
         } else {
             $sql    = 'SELECT * FROM ' . $db->prefix('assessment_documentos') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = new assessment_documentos($myrow);
             }
         }
@@ -195,10 +199,10 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(XoopsObject $assessment_documentos, $force = false)
+    public function insert(\XoopsObject $assessment_documentos, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_documentos' != get_class($assessment_documentos)) {
+        if (!$assessment_documentos instanceof \assessment_documentos) {
             return false;
         }
         if (!$assessment_documentos->isDirty()) {
@@ -248,7 +252,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed.
      */
-    public function delete(XoopsObject $assessment_documentos, $force = false)
+    public function delete(\XoopsObject $assessment_documentos, $force = false)
     {
         if ('assessment_documentos' != get_class($assessment_documentos)) {
             return false;
@@ -293,7 +297,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
         if (!$result) {
             return $ret;
         }
-        while ($myrow = $this->db->fetchArray($result)) {
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $assessment_documentos = new assessment_documentos();
             $assessment_documentos->assignVars($myrow);
             if (!$id_as_key) {
@@ -320,16 +324,16 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
      */
     public function &getDocumentosProvaPergunta($cod_prova, $cod_pergunta)
     {
-        $criteria         = new criteria('cod_prova', $cod_prova);
+        $criteria         = new \Criteria('cod_prova', $cod_prova);
         $cod_documentos   = [];
-        $documentos_prova = $this->getObjects($criteria);
+        $documentos_prova =& $this->getObjects($criteria);
         $i                = 0;
         foreach ($documentos_prova as $documento_prova) {
             $cods_perguntas = explode(',', $documento_prova->getVar('cods_perguntas'));
             if (in_array($cod_pergunta, $cods_perguntas)) {
                 $documentos[$i]['titulo'] = $documento_prova->getVar('titulo');
                 $documentos[$i]['fonte']  = $documento_prova->getVar('fonte');
-                /*if ($xoopsModuleConfig['editorpadrao']=="dhtmlext"||$xoopsModuleConfig['editorpadrao']=="textarea") {
+                /*if ($helper->getConfig('editorpadrao')=="dhtmlext"||$helper->getConfig('editorpadrao')=="textarea") {
                 $documentos[$i]['documento']= text_filter($documento_prova->getVar('documento',"s"),true);} else {
                 $documentos[$i]['documento']= text_filter($documento_prova->getVar('documento',"n"),true);
                     }*/
@@ -406,24 +410,24 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
     {
         global $xoopsDB, $xoopsUser;
 
-        $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
-        $criteria             = new criteria('cod_prova', $cod_prova);
+        $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
+        $criteria             = new \Criteria('cod_prova', $cod_prova);
 
         $vetor_perguntas = $fabrica_de_perguntas->getObjects($criteria);
-        $campo_perguntas = new XoopsFormSelect(_AM_ASSESSMENT_PERGASSOC, 'campo_perguntas', null, 10, true);
+        $campo_perguntas = new \XoopsFormSelect(_AM_ASSESSMENT_PERGASSOC, 'campo_perguntas', null, 10, true);
 
         foreach ($vetor_perguntas as $pergunta) {
             $campo_perguntas->addOption($pergunta->getVar('cod_pergunta'), $pergunta->getVar('titulo'));
         }
 
-        $form           = new XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_DOCUMENTO, 'form_documento', $action, 'post', true);
-        $campo_titulo   = new XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
-        $campo_fonte    = new XoopsFormText(_AM_ASSESSMENT_FONTE, 'campo_fonte', 35, 20);
-        $campo_codprova = new XoopsFormHidden('campo_codprova', $cod_prova);
+        $form           = new \XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_DOCUMENTO, 'form_documento', $action, 'post', true);
+        $campo_titulo   = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
+        $campo_fonte    = new \XoopsFormText(_AM_ASSESSMENT_FONTE, 'campo_fonte', 35, 20);
+        $campo_codprova = new \XoopsFormHidden('campo_codprova', $cod_prova);
 
         $form->setExtra('enctype="multipart/form-data"');
 
-        if (!is_object($GLOBALS['xoopsModule']) || 'assessment' != $GLOBALS['xoopsModule']->getVar('dirname')) {
+        if (!is_object($GLOBALS['xoopsModule']) || 'assessment' !== $GLOBALS['xoopsModule']->getVar('dirname')) {
             $modhandler    = &xoops_getHandler('module');
             $module        =& $modhandler->getByDirname('assessment');
             $configHandler = &xoops_getHandler('config');
@@ -435,7 +439,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
 
         // Add the editor selection box
         // If dohtml is disabled, set $noHtml = true
-        //$form->addElement(new XoopsFormSelectEditor($form, "editor", $editor, $noHtml = false));
+        //$form->addElement(new \XoopsFormSelectEditor($form, "editor", $editor, $noHtml = false));
 
         // options for the editor
         //required configs
@@ -450,8 +454,8 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
         // "textarea": if the selected editor with name of $editor can not be created, the editor "textarea" will be used
         // if no $onFailure is set, then the first available editor will be used
         // If dohtml is disabled, set $noHtml to true
-        $campo_documento = new XoopsFormEditor(_AM_ASSESSMENT_DOCUMENTO, $editor, $options, $nohtml = false, $onfailure = 'textarea');
-        $botao_enviar    = new XoopsFormButton(_AM_ASSESSMENT_CADASTRAR, 'botao_submit', _SUBMIT, 'submit');
+        $campo_documento = new \XoopsFormEditor(_AM_ASSESSMENT_DOCUMENTO, $editor, $options, $nohtml = false, $onfailure = 'textarea');
+        $botao_enviar    = new \XoopsFormButton(_AM_ASSESSMENT_CADASTRAR, 'botao_submit', _SUBMIT, 'submit');
 
         $form->addElement($campo_codprova);
         $form->addElement($campo_titulo, true);
@@ -483,28 +487,28 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
         $cod_prova                    = $documento->getVar('cod_prova', 's');
         $vetor_perguntas_selecionadas = explode(',', $documento->getVar('cods_perguntas', 's'));
 
-        $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
-        $criteria             = new criteria('cod_prova', $cod_prova);
+        $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
+        $criteria             = new \Criteria('cod_prova', $cod_prova);
 
         $vetor_perguntas = $fabrica_de_perguntas->getObjects($criteria);
-        $campo_perguntas = new XoopsFormSelect('Perguntas associadas', 'campo_perguntas', $vetor_perguntas_selecionadas, 10, true);
+        $campo_perguntas = new \XoopsFormSelect('Perguntas associadas', 'campo_perguntas', $vetor_perguntas_selecionadas, 10, true);
 
         foreach ($vetor_perguntas as $pergunta) {
             $campo_perguntas->addOption($pergunta->getVar('cod_pergunta'), $pergunta->getVar('titulo'));
         }
 
-        $form               = new XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_DOCUMENTO, 'form_documento', $action, 'post', true);
-        $campo_titulo       = new XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', $titulo, 2, 50);
-        $campo_fonte        = new XoopsFormText(_AM_ASSESSMENT_FONTE, 'campo_fonte', 35, 20, $fonte);
-        $campo_coddocumento = new XoopsFormHidden('campo_coddocumento', $cod_documento);
-        $campo_codprova     = new XoopsFormHidden('campo_codprova', $cod_prova);
+        $form               = new \XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_DOCUMENTO, 'form_documento', $action, 'post', true);
+        $campo_titulo       = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', $titulo, 2, 50);
+        $campo_fonte        = new \XoopsFormText(_AM_ASSESSMENT_FONTE, 'campo_fonte', 35, 20, $fonte);
+        $campo_coddocumento = new \XoopsFormHidden('campo_coddocumento', $cod_documento);
+        $campo_codprova     = new \XoopsFormHidden('campo_codprova', $cod_prova);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $editor = $xoopsModuleConfig['editorpadrao'];
+        $editor = $helper->getConfig('editorpadrao');
 
         // Add the editor selection box
         // If dohtml is disabled, set $noHtml = true
-        //$form->addElement(new XoopsFormSelectEditor($form, "editor", $editor, $noHtml = false));
+        //$form->addElement(new \XoopsFormSelectEditor($form, "editor", $editor, $noHtml = false));
 
         // options for the editor
         //required configs
@@ -519,8 +523,8 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
         // "textarea": if the selected editor with name of $editor can not be created, the editor "textarea" will be used
         // if no $onFailure is set, then the first available editor will be used
         // If dohtml is disabled, set $noHtml to true
-        $campo_documento = new XoopsFormEditor(_AM_ASSESSMENT_DOCUMENTO, $editor, $options, $nohtml = false, $onfailure = 'textarea');
-        $botao_enviar    = new XoopsFormButton(_AM_ASSESSMENT_EDITAR, 'botao_submit', _SUBMIT, 'submit');
+        $campo_documento = new \XoopsFormEditor(_AM_ASSESSMENT_DOCUMENTO, $editor, $options, $nohtml = false, $onfailure = 'textarea');
+        $botao_enviar    = new \XoopsFormButton(_AM_ASSESSMENT_EDITAR, 'botao_submit', _SUBMIT, 'submit');
 
         $form->addElement($campo_coddocumento);
         $form->addElement($campo_titulo, true);
@@ -546,7 +550,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
     {
         global $xoopsDB;
 
-        $documentos = $this->getObjects($criteria);
+        $documentos =& $this->getObjects($criteria);
         foreach ($documentos as $documento) {
             $documento->setVar('cod_prova', $cod_prova);
             $documento->setVar('cod_documento', 0);

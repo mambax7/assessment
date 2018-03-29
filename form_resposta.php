@@ -82,16 +82,16 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_respostas  = new Xoopsassessment_respostasHandler($xoopsDB);
-$fabrica_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_respostas  = new \Xoopsassessment_respostasHandler($xoopsDB);
+$fabrica_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
 
 /**
  * Cria��o de objetos de crit�rio para passar para as F�bricas
  */
-$criteria_pergunta       = new criteria('cod_pergunta', $cod_pergunta);
-$criteria_certa          = new criteria('iscerta', 1);
-$criteria_resposta_certa = new criteriaCompo($criteria_pergunta);
+$criteria_pergunta       = new \Criteria('cod_pergunta', $cod_pergunta);
+$criteria_certa          = new \Criteria('iscerta', 1);
+$criteria_resposta_certa = new \CriteriaCompo($criteria_pergunta);
 $criteria_resposta_certa->add($criteria_certa);
 
 /**
@@ -110,9 +110,9 @@ $cod_prova = $pergunta->getVar('cod_prova');
  * Criando mais um criterio para cod_prova, um criterio para uid_aluno e
  * um que tenha os dois
  */
-$criteria_prova   = new criteria('cod_prova', $cod_prova);
-$criteria_usuario = new criteria('uid_aluno', $uid);
-$criteria         = new criteriaCompo($criteria_prova);
+$criteria_prova   = new \Criteria('cod_prova', $cod_prova);
+$criteria_usuario = new \Criteria('uid_aluno', $uid);
+$criteria         = new \CriteriaCompo($criteria_prova);
 $criteria->add($criteria_usuario);
 
 /**
@@ -176,11 +176,11 @@ if (!($cod_resposta == $cod_resposta_antiga)) {
     $resultado->unsetNew();
     $fabrica_resultados->insert($resultado);
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=' . $start, 2, $message = _MA_ASSESSMENT_SUCESSO);
-    /**
-     * Se a resposta que ele tinha dado antes � a mesma que ele
-     * est� dando agora avisa ele que ele j� tinha respondido assim
-     * a esta pergunta
-     */
+/**
+ * Se a resposta que ele tinha dado antes � a mesma que ele
+ * est� dando agora avisa ele que ele j� tinha respondido assim
+ * a esta pergunta
+ */
 } else {
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=' . $start, 2, $message = _MA_ASSESSMENT_RESPOSTA_REPETIDA);
 }

@@ -59,12 +59,12 @@ $cod_prova = $_POST['cod_prova'];
 /**
  * Cria��o das f�bricas dos objetos que vamos precisar
  */
-$fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
+$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
 $fabrica_de_provas->clonarProva($cod_prova);
 $cod_prova_clone = $xoopsDB->getInsertId();
-$criteria        = new Criteria('cod_prova', $cod_prova);
+$criteria        = new \Criteria('cod_prova', $cod_prova);
 $fabrica_de_perguntas->clonarPerguntas($criteria, $cod_prova_clone);
 $fabrica_de_documentos->clonarDocumentos($criteria, $cod_prova_clone);
 

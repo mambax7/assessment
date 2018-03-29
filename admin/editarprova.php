@@ -35,7 +35,7 @@ include dirname(__DIR__) . '/class/assessment_provas.php';
 if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header($_SERVER['HTTP_REFERER'], 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
-$fabrica_de_provas      = new Xoopsassessment_provasHandler($xoopsDB);
+$fabrica_de_provas      = new \Xoopsassessment_provasHandler($xoopsDB);
 $instrucoes             = $_POST['campo_instrucoes'];
 $descricao              = $_POST['campo_descricao'];
 $titulo                 = $_POST['campo_titulo'];

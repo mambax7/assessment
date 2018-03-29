@@ -81,16 +81,16 @@ if (1 == $segunda_vez) {
     /**
      * Cria��o das F�bricas de objetos que vamos precisar
      */
-    $fabrica_de_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
-    $fabrica_de_provas     = new Xoopsassessment_provasHandler($xoopsDB);
-    $fabrica_de_respostas  = new Xoopsassessment_respostasHandler($xoopsDB);
-    $fabrica_de_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
-    $fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
+    $fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
+    $fabrica_de_respostas  = new \Xoopsassessment_respostasHandler($xoopsDB);
+    $fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+    $fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
 
     /**
      * Cria��o de objetos de crit�rio para passar para as F�bricas
      */
-    $criteria = new Criteria('cod_prova', $cod_prova);
+    $criteria = new \Criteria('cod_prova', $cod_prova);
 
     /**
      * Buscamos na f�brica quantos documentos vamos excluir, os exclu�mos
@@ -117,7 +117,7 @@ if (1 == $segunda_vez) {
     foreach ($perguntas as $pergunta) {
         ++$i;
         $cod_pergunta      = $pergunta->getVar('cod_pergunta');
-        $criteria_pergunta = new Criteria('cod_pergunta', $cod_pergunta);
+        $criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
         $fabrica_de_respostas->deleteAll($criteria_pergunta);
         printf(_AM_ASSESSMENT_RESPDAPERG, $i);
         echo '<br>';

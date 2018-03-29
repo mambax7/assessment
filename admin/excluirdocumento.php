@@ -41,8 +41,8 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 $cod_documento = $_POST['cod_documento'];
 $cod_prova     = $_POST['cod_prova'];
 
-$fabrica_de_documentos = new Xoopsassessment_documentosHandler($xoopsDB);
-$criteria              = new Criteria('cod_documento', $cod_documento);
+$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
+$criteria              = new \Criteria('cod_documento', $cod_documento);
 
 if ($fabrica_de_documentos->deleteAll($criteria)) {
     redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);

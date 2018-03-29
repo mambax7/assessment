@@ -40,11 +40,11 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 
 $cod_pergunta = $_POST['cod_pergunta'];
 
-$fabrica_de_respostas = new Xoopsassessment_respostasHandler($xoopsDB);
-$criteria             = new Criteria('cod_pergunta', $cod_pergunta);
+$fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
+$criteria             = new \Criteria('cod_pergunta', $cod_pergunta);
 
 if ($fabrica_de_respostas->deleteAll($criteria)) {
-    $fabrica_de_perguntas = new Xoopsassessment_perguntasHandler($xoopsDB);
+    $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
     $pergunta             = $fabrica_de_perguntas->get($cod_pergunta);
     $cod_prova            = $pergunta->getVar('cod_prova');
     if ($fabrica_de_perguntas->delete($pergunta)) {

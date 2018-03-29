@@ -34,19 +34,24 @@
  * @package assessment
  */
 
+use XoopsModules\Assessment;
+
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
 include dirname(dirname(__DIR__)) . '/mainfile.php';
 include dirname(dirname(__DIR__)) . '/header.php';
 
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
+//include __DIR__ . '/class/assessment_perguntas.php';
+//include __DIR__ . '/class/assessment_provas.php';
+//include __DIR__ . '/class/assessment_respostas.php';
+//include __DIR__ . '/class/assessment_resultados.php';
 
 /**
  * Pegando cod_prova do formul�rio
@@ -63,8 +68,8 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 /**
  * Cria��o da F�brica de resultados e perguntas (padr�o de projeto factory com DAO)
  */
-$fabrica_resultados = new Xoopsassessment_resultadosHandler($xoopsDB);
-$fabrica_perguntas  = new Xoopsassessment_perguntasHandler($xoopsDB);
+$fabrica_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$fabrica_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
 
 /**
  * Buscando na F�brica o resultado (padr�o de projeto factory com DAO)
@@ -79,7 +84,7 @@ $resp_certas  = $resultado->getVar('resp_certas');
 $resp_erradas = $resultado->getVar('resp_erradas');
 $cod_prova    = $resultado->getVar('cod_prova');
 
-$criteria      = new criteria('cod_prova', $cod_prova);
+$criteria      = new \Criteria('cod_prova', $cod_prova);
 $qtd_perguntas = $fabrica_perguntas->getCount($criteria);
 
 $qtd_acertos = count(explode(',', $resp_certas));
@@ -98,7 +103,7 @@ $nota_sugest = round(100 * $qtd_acertos / $qtd_perguntas, 2);
  */
 $resultado->setVar('nota_final', $nota_sugest);
 $resultado->setVar('terminou', 1);
-if (1 == $xoopsModuleConfig['notadireta']) {
+if (1 == $helper->getConfig('notadireta'')) {
     $resultado->setVar('fechada', 1);
 }
 $resultado->unsetNew();

@@ -43,7 +43,7 @@ class assessment_respostas extends XoopsObject
      */
     public function __construct($id = null)
     {
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('cod_resposta', XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar('cod_pergunta', XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar('titulo', XOBJ_DTYPE_TXTBOX, null, false);
@@ -88,7 +88,7 @@ class assessment_respostas extends XoopsObject
      */
     public function getAllassessment_respostass($criteria = [], $asobject = false, $sort = 'cod_resposta', $order = 'ASC', $limit = 0, $start = 0)
     {
-        $db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $ret         = [];
         $where_query = '';
         if (is_array($criteria) && count($criteria) > 0) {
@@ -103,13 +103,13 @@ class assessment_respostas extends XoopsObject
         if (!$asobject) {
             $sql    = 'SELECT cod_resposta FROM ' . $db->prefix('assessment_respostas') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = $myrow['assessment_respostas_id'];
             }
         } else {
             $sql    = 'SELECT * FROM ' . $db->prefix('assessment_respostas') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = new assessment_respostas($myrow);
             }
         }
@@ -181,10 +181,10 @@ class Xoopsassessment_respostasHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(XoopsObject $assessment_respostas, $force = false)
+    public function insert(\XoopsObject $assessment_respostas, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_respostas' != get_class($assessment_respostas)) {
+        if ('assessment_respostas' !== get_class($assessment_respostas)) {
             return false;
         }
         if (!$assessment_respostas->isDirty()) {
@@ -234,7 +234,7 @@ class Xoopsassessment_respostasHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed.
      */
-    public function delete(XoopsObject $assessment_respostas, $force = false)
+    public function delete(\XoopsObject $assessment_respostas, $force = false)
     {
         if ('assessment_respostas' != get_class($assessment_respostas)) {
             return false;
@@ -279,7 +279,7 @@ class Xoopsassessment_respostasHandler extends XoopsPersistableObjectHandler
         if (!$result) {
             return $ret;
         }
-        while ($myrow = $this->db->fetchArray($result)) {
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $assessment_respostas = new assessment_respostas();
             $assessment_respostas->assignVars($myrow);
             if (!$id_as_key) {

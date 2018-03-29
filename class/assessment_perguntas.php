@@ -50,7 +50,7 @@ class assessment_perguntas extends XoopsObject
      */
     public function __construct($id = null)
     {
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('cod_pergunta', XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar('cod_prova', XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar('titulo', XOBJ_DTYPE_TXTBOX, null, false);
@@ -94,7 +94,7 @@ class assessment_perguntas extends XoopsObject
      */
     public function getAllassessment_perguntass($criteria = [], $asobject = false, $sort = 'cod_pergunta', $order = 'ASC', $limit = 0, $start = 0)
     {
-        $db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $ret         = [];
         $where_query = '';
         if (is_array($criteria) && count($criteria) > 0) {
@@ -109,13 +109,13 @@ class assessment_perguntas extends XoopsObject
         if (!$asobject) {
             $sql    = 'SELECT cod_pergunta FROM ' . $db->prefix('assessment_perguntas') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = $myrow['assessment_perguntas_id'];
             }
         } else {
             $sql    = 'SELECT * FROM ' . $db->prefix('assessment_perguntas') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = new assessment_perguntas($myrow);
             }
         }
@@ -188,10 +188,10 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(XoopsObject $assessment_perguntas, $force = false)
+    public function insert(\XoopsObject $assessment_perguntas, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_perguntas' != get_class($assessment_perguntas)) {
+        if ('assessment_perguntas' !== get_class($assessment_perguntas)) {
             return false;
         }
         if (!$assessment_perguntas->isDirty()) {
@@ -241,9 +241,9 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed.
      */
-    public function delete(XoopsObject $assessment_perguntas, $force = false)
+    public function delete(\XoopsObject $assessment_perguntas, $force = false)
     {
-        if ('assessment_perguntas' != get_class($assessment_perguntas)) {
+        if ('assessment_perguntas' !== get_class($assessment_perguntas)) {
             return false;
         }
         $sql = sprintf('DELETE FROM %s WHERE cod_pergunta = %u', $this->db->prefix('assessment_perguntas'), $assessment_perguntas->getVar('cod_pergunta'));
@@ -286,7 +286,7 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
         if (!$result) {
             return $ret;
         }
-        while ($myrow = $this->db->fetchArray($result)) {
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $assessment_perguntas = new assessment_perguntas();
             $assessment_perguntas->assignVars($myrow);
             if (!$id_as_key) {
@@ -322,7 +322,7 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
             $start = $criteria->getStart();
         }
         $result = $this->db->query($sql, $limit, $start);
-        while ($myrow = $this->db->fetchArray($result)) {
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $ret[] = $myrow['cod_pergunta'];
         }
 
@@ -384,24 +384,24 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
      */
     public function renderFormCadastrar($action, $prova = null)
     {
-        $form              = new XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PERGUNTA, 'form_pergunta', $action, 'post', true);
-        $campo_titulo      = new XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
-        $campo_ordem       = new XoopsFormText(_AM_ASSESSMENT_ORDEM, 'campo_ordem', 3, 3, '0');
+        $form              = new \XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PERGUNTA, 'form_pergunta', $action, 'post', true);
+        $campo_titulo      = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
+        $campo_ordem       = new \XoopsFormText(_AM_ASSESSMENT_ORDEM, 'campo_ordem', 3, 3, '0');
         $cod_prova         = $prova->getVar('cod_prova');
         $titulo_prova      = $prova->getVar('titulo');
-        $campo_prova_label = new XoopsFormLabel(_AM_ASSESSMENT_PROVA, $titulo_prova);
-        $campo_prova_valor = new XoopsFormHidden('campo_cod_prova', $cod_prova);
-        $campo_resposta1   = new XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 1 <br>(correta)', 'campo_resposta1', '', 2, 50);
+        $campo_prova_label = new \XoopsFormLabel(_AM_ASSESSMENT_PROVA, $titulo_prova);
+        $campo_prova_valor = new \XoopsFormHidden('campo_cod_prova', $cod_prova);
+        $campo_resposta1   = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 1 <br>(correta)', 'campo_resposta1', '', 2, 50);
         $campo_resposta1->setExtra('style="background-color:#ECFFEC"');
-        $campo_resposta2 = new XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 2 - (errada)', 'campo_resposta2', '', 2, 50);
+        $campo_resposta2 = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 2 - (errada)', 'campo_resposta2', '', 2, 50);
         $campo_resposta2->setExtra('style="background-color:#FFF0F0"');
-        $campo_resposta3 = new XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 3 - (errada)', 'campo_resposta3', '', 2, 50);
+        $campo_resposta3 = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 3 - (errada)', 'campo_resposta3', '', 2, 50);
         $campo_resposta3->setExtra('style="background-color:#FFF0F0"');
-        $campo_resposta4 = new XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 4 - (errada)', 'campo_resposta4', '', 2, 50);
+        $campo_resposta4 = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 4 - (errada)', 'campo_resposta4', '', 2, 50);
         $campo_resposta4->setExtra('style="background-color:#FFF0F0"');
-        $campo_resposta5 = new XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 5 - (errada)', 'campo_resposta5', '', 2, 50);
+        $campo_resposta5 = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 5 - (errada)', 'campo_resposta5', '', 2, 50);
         $campo_resposta5->setExtra('style="background-color:#FFF0F0"');
-        $botao_enviar = new XoopsFormButton(_AM_ASSESSMENT_CADASTRAR, 'botao_submit', _SUBMIT, 'submit');
+        $botao_enviar = new \XoopsFormButton(_AM_ASSESSMENT_CADASTRAR, 'botao_submit', _SUBMIT, 'submit');
         $form->addElement($campo_prova_label);
         $form->addElement($campo_prova_valor);
         $form->addElement($campo_ordem, true);
@@ -431,14 +431,14 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
         $cod_pergunta = $pergunta->getVar('cod_pergunta');
         $ordem        = $pergunta->getVar('ordem');
 
-        $form = new XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_PERGUNTA, 'form_pergunta', $action, 'post', true);
+        $form = new \XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_PERGUNTA, 'form_pergunta', $action, 'post', true);
 
-        $campo_ordem = new XoopsFormText(_AM_ASSESSMENT_ORDEM, 'campo_ordem', 3, 3, $ordem);
+        $campo_ordem = new \XoopsFormText(_AM_ASSESSMENT_ORDEM, 'campo_ordem', 3, 3, $ordem);
         $form->addElement($campo_ordem, true);
-        $campo_titulo = new XoopsFormTextArea(_AM_ASSESSMENT_PERGUNTA, 'campo_titulo', $titulo, 2, 50);
+        $campo_titulo = new \XoopsFormTextArea(_AM_ASSESSMENT_PERGUNTA, 'campo_titulo', $titulo, 2, 50);
         $form->addElement($campo_titulo, true);
-        $botao_enviar       = new XoopsFormButton('', 'botao_submit', _AM_ASSESSMENT_SALVARALTERACOES, 'submit');
-        $campo_cod_pergunta = new XoopsFormHidden('campo_cod_pergunta', $cod_pergunta);
+        $botao_enviar       = new \XoopsFormButton('', 'botao_submit', _AM_ASSESSMENT_SALVARALTERACOES, 'submit');
+        $campo_cod_pergunta = new \XoopsFormHidden('campo_cod_pergunta', $cod_pergunta);
 
         $i = 1;
         foreach ($respostas as $resposta) {
@@ -446,15 +446,15 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
             $cod_resposta               = $resposta->getVar('cod_resposta');
             $nome_campo_titulo_resposta = 'campo_resposta' . $i;
             if (1 == $resposta->getVar('iscerta')) {
-                $resposta_correta = new XoopsFormTextArea(_AM_ASSESSMENT_RESPCORRETA . $i, $nome_campo_titulo_resposta, $titulo_resposta, 2, 50);
+                $resposta_correta = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPCORRETA . $i, $nome_campo_titulo_resposta, $titulo_resposta, 2, 50);
                 $resposta_correta->setExtra('style="background-color:#ECFFEC"');
-                $cod_resposta_correta = new XoopsFormHidden('campo_cod_resp1', $cod_resposta);
+                $cod_resposta_correta = new \XoopsFormHidden('campo_cod_resp1', $cod_resposta);
                 $form->addElement($cod_resposta_correta, true);
                 $form->addElement($resposta_correta, true);
             } else {
-                $vetor_respostas_erradas[$i] = new XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . $i, $nome_campo_titulo_resposta, $titulo_resposta, 2, 50);
+                $vetor_respostas_erradas[$i] = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . $i, $nome_campo_titulo_resposta, $titulo_resposta, 2, 50);
                 $vetor_respostas_erradas[$i]->setExtra('style="background-color:#FFF0F0"');
-                $vetor_cod_respostas_erradas[$i] = new XoopsFormHidden('campo_cod_resp' . $i, $cod_resposta);
+                $vetor_cod_respostas_erradas[$i] = new \XoopsFormHidden('campo_cod_resp' . $i, $cod_resposta);
                 $form->addElement($vetor_respostas_erradas[$i], true);
                 $form->addElement($vetor_cod_respostas_erradas[$i], true);
             }
@@ -485,12 +485,12 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
         $cod_prova    = $pergunta->getVar('cod_prova');
         $titulo       = $pergunta->getVar('titulo');
         $cod_pergunta = $pergunta->getVar('cod_pergunta');
-        $form         = new XoopsThemeForm("$titulo", 'form_resposta', $action, 'post', true);
+        $form         = new \XoopsThemeForm((string)$titulo, 'form_resposta', $action, 'post', true);
 
-        $botao_enviar       = new XoopsFormButton('', 'botao_submit', _SUBMIT, 'submit');
-        $campo_cod_pergunta = new XoopsFormHidden('cod_pergunta', $cod_pergunta);
-        $campo_start        = new XoopsFormHidden('start', $start);
-        $campo_respostas    = new XoopsFormRadio(_MA_ASSESSMENT_RESPOSTA, 'cod_resposta', '', '<br>');
+        $botao_enviar       = new \XoopsFormButton('', 'botao_submit', _SUBMIT, 'submit');
+        $campo_cod_pergunta = new \XoopsFormHidden('cod_pergunta', $cod_pergunta);
+        $campo_start        = new \XoopsFormHidden('start', $start);
+        $campo_respostas    = new \XoopsFormRadio(_MA_ASSESSMENT_RESPOSTA, 'cod_resposta', '', '<br>');
         shuffle($respostas);
 
         $campo_respostas->setValue($param_cod_resposta);
@@ -531,8 +531,8 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
     public function clonarPerguntas($criteria, $cod_prova)
     {
         global $xoopsDB;
-        $fabrica_de_respostas = new Xoopsassessment_respostasHandler($xoopsDB);
-        $perguntas            = $this->getObjects($criteria);
+        $fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
+        $perguntas            =& $this->getObjects($criteria);
         foreach ($perguntas as $pergunta) {
             $cod_pergunta = $pergunta->getVar('cod_pergunta');
             $pergunta->setVar('cod_prova', $cod_prova);
@@ -541,7 +541,7 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
             $this->insert($pergunta);
             $cod_pergunta_clone = $xoopsDB->getInsertId();
 
-            $criteria_pergunta = new Criteria('cod_pergunta', $cod_pergunta);
+            $criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
             $respostas         = $fabrica_de_respostas->getObjects($criteria_pergunta);
 
             foreach ($respostas as $resposta) {

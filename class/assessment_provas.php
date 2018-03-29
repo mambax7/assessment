@@ -45,7 +45,7 @@ class assessment_provas extends XoopsObject
      */
     public function __construct($id = null)
     {
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('cod_prova', XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar('data_criacao', XOBJ_DTYPE_TXTBOX, '2017-01-01', false);
         $this->initVar('data_update', XOBJ_DTYPE_TXTBOX, '2017-01-01', false);
@@ -93,7 +93,7 @@ class assessment_provas extends XoopsObject
      */
     public function getAllassessment_provass($criteria = [], $asobject = false, $sort = 'cod_prova', $order = 'ASC', $limit = 0, $start = 0)
     {
-        $db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $ret         = [];
         $where_query = '';
         if (is_array($criteria) && count($criteria) > 0) {
@@ -108,13 +108,13 @@ class assessment_provas extends XoopsObject
         if (!$asobject) {
             $sql    = 'SELECT cod_prova FROM ' . $db->prefix('assessment_provas') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = $myrow['assessment_provas_id'];
             }
         } else {
             $sql    = 'SELECT * FROM ' . $db->prefix('assessment_provas') . "$where_query ORDER BY $sort $order";
             $result = $db->query($sql, $limit, $start);
-            while ($myrow = $db->fetchArray($result)) {
+            while (false !== ($myrow = $db->fetchArray($result))) {
                 $ret[] = new assessment_provas($myrow);
             }
         }
@@ -144,7 +144,7 @@ class assessment_provas extends XoopsObject
         }
 
         $inicio            = $this->getVar('data_inicio', 'n');
-        $fabrica_de_provas = new Xoopsassessment_provasHandler($xoopsDB);
+        $fabrica_de_provas = new \Xoopsassessment_provasHandler($xoopsDB);
         if ($fabrica_de_provas->dataMysql2dataUnix($inicio) > time()) {
             return false;
         }
@@ -171,7 +171,7 @@ class assessment_provas extends XoopsObject
         }
 
         $inicio            = $this->getVar('data_inicio', 'n');
-        $fabrica_de_provas = new Xoopsassessment_provasHandler($xoopsDB);
+        $fabrica_de_provas = new \Xoopsassessment_provasHandler($xoopsDB);
         if ($fabrica_de_provas->dataMysql2dataUnix($inicio) > time()) {
             return false;
         }
@@ -243,10 +243,10 @@ class Xoopsassessment_provasHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(XoopsObject $assessment_provas, $force = false)
+    public function insert(\XoopsObject $assessment_provas, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_provas' != get_class($assessment_provas)) {
+        if ('assessment_provas' !== get_class($assessment_provas)) {
             return false;
         }
         if (!$assessment_provas->isDirty()) {
@@ -325,7 +325,7 @@ class Xoopsassessment_provasHandler extends XoopsPersistableObjectHandler
      *
      * @return bool FALSE if failed.
      */
-    public function delete(XoopsObject $assessment_provas, $force = false)
+    public function delete(\XoopsObject $assessment_provas, $force = false)
     {
         if ('assessment_provas' != get_class($assessment_provas)) {
             return false;
@@ -383,7 +383,7 @@ class Xoopsassessment_provasHandler extends XoopsPersistableObjectHandler
         if (!$result) {
             return $ret;
         }
-        while ($myrow = $this->db->fetchArray($result)) {
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $assessment_provas = new assessment_provas();
             $assessment_provas->assignVars($myrow);
             if (!$id_as_key) {
@@ -451,16 +451,16 @@ class Xoopsassessment_provasHandler extends XoopsPersistableObjectHandler
      */
     public function renderFormCadastrar($action)
     {
-        $form             = new XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PROVA, 'form_prova', $action, 'post', true);
-        $campo_titulo     = new XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
-        $campo_descricao  = new XoopsFormTextArea(_AM_ASSESSMENT_DESCRICAO, 'campo_descricao', '', 2, 50);
-        $campo_instrucoes = new XoopsFormTextArea(_AM_ASSESSMENT_INSTRUCOES, 'campo_instrucoes', '', 2, 50);
-        $campo_tempo      = new XoopsFormText(_AM_ASSESSMENT_TEMPO, 'campo_tempo', 10, 20);
+        $form             = new \XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PROVA, 'form_prova', $action, 'post', true);
+        $campo_titulo     = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
+        $campo_descricao  = new \XoopsFormTextArea(_AM_ASSESSMENT_DESCRICAO, 'campo_descricao', '', 2, 50);
+        $campo_instrucoes = new \XoopsFormTextArea(_AM_ASSESSMENT_INSTRUCOES, 'campo_instrucoes', '', 2, 50);
+        $campo_tempo      = new \XoopsFormText(_AM_ASSESSMENT_TEMPO, 'campo_tempo', 10, 20);
 
-        $campo_acesso      = new XoopsFormSelectGroup(_AM_ASSESSMENT_GRUPOSACESSO, 'campo_grupo', false, null, 4, true);
-        $botao_enviar      = new XoopsFormButton(_AM_ASSESSMENT_CADASTRAR, 'botao_submit', _SUBMIT, 'submit');
-        $campo_data_inicio = new XoopsFormDateTime(_AM_ASSESSMENT_DATA_INICIO, 'campo_data_inicio');
-        $campo_data_fim    = new XoopsFormDateTime(_AM_ASSESSMENT_DATA_FIM, 'campo_data_fim');
+        $campo_acesso      = new \XoopsFormSelectGroup(_AM_ASSESSMENT_GRUPOSACESSO, 'campo_grupo', false, null, 4, true);
+        $botao_enviar      = new \XoopsFormButton(_AM_ASSESSMENT_CADASTRAR, 'botao_submit', _SUBMIT, 'submit');
+        $campo_data_inicio = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_INICIO, 'campo_data_inicio');
+        $campo_data_fim    = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_FIM, 'campo_data_fim');
         $form->addElement($campo_titulo, true);
         $form->addElement($campo_descricao, true);
         $form->addElement($campo_instrucoes, true);
@@ -495,16 +495,16 @@ class Xoopsassessment_provasHandler extends XoopsPersistableObjectHandler
         $inicio     = $this->dataMysql2dataUnix($prova->getVar('data_inicio'));
         $fim        = $this->dataMysql2dataUnix($prova->getVar('data_fim'));
 
-        $form              = new XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_PROVA, 'form_prova', $action, 'post', true);
-        $campo_titulo      = new XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', $titulo, 2, 50);
-        $campo_descricao   = new XoopsFormTextArea(_AM_ASSESSMENT_DESCRICAO, 'campo_descricao', $descricao, 2, 50);
-        $campo_instrucoes  = new XoopsFormTextArea(_AM_ASSESSMENT_INSTRUCOES, 'campo_instrucoes', $instrucoes, 2, 50);
-        $campo_tempo       = new XoopsFormText(_AM_ASSESSMENT_TEMPO, 'campo_tempo', 10, 20, $tempo);
-        $campo_acesso      = new XoopsFormSelectGroup(_AM_ASSESSMENT_GRUPOSACESSO, 'campo_grupo', false, $acessos, 4, true);
-        $campo_cod_prova   = new XoopsFormHidden('campo_cod_prova', $cod_prova);
-        $campo_data_inicio = new XoopsFormDateTime(_AM_ASSESSMENT_DATA_INICIO, 'campo_data_inicio', null, $inicio);
-        $campo_data_fim    = new XoopsFormDateTime(_AM_ASSESSMENT_DATA_FIM, 'campo_data_fim', null, $fim);
-        $botao_enviar      = new XoopsFormButton('', 'botao_submit', _AM_ASSESSMENT_SALVARALTERACOES, 'submit');
+        $form              = new \XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_PROVA, 'form_prova', $action, 'post', true);
+        $campo_titulo      = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', $titulo, 2, 50);
+        $campo_descricao   = new \XoopsFormTextArea(_AM_ASSESSMENT_DESCRICAO, 'campo_descricao', $descricao, 2, 50);
+        $campo_instrucoes  = new \XoopsFormTextArea(_AM_ASSESSMENT_INSTRUCOES, 'campo_instrucoes', $instrucoes, 2, 50);
+        $campo_tempo       = new \XoopsFormText(_AM_ASSESSMENT_TEMPO, 'campo_tempo', 10, 20, $tempo);
+        $campo_acesso      = new \XoopsFormSelectGroup(_AM_ASSESSMENT_GRUPOSACESSO, 'campo_grupo', false, $acessos, 4, true);
+        $campo_cod_prova   = new \XoopsFormHidden('campo_cod_prova', $cod_prova);
+        $campo_data_inicio = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_INICIO, 'campo_data_inicio', null, $inicio);
+        $campo_data_fim    = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_FIM, 'campo_data_fim', null, $fim);
+        $botao_enviar      = new \XoopsFormButton('', 'botao_submit', _AM_ASSESSMENT_SALVARALTERACOES, 'submit');
         $form->addElement($campo_titulo, true);
         $form->addElement($campo_descricao, true);
         $form->addElement($campo_instrucoes, true);
@@ -560,27 +560,27 @@ class Xoopsassessment_provasHandler extends XoopsPersistableObjectHandler
 
         $comecou = false;
 
-        if ('Y' == $inicio) {
+        if ('Y' === $inicio) {
             $array['anos']  = floor($total_segundos / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12));
             $total_segundos = ($total_segundos % (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12));
             $comecou        = true;
         }
-        if (('m' == $inicio) || (true === $comecou)) {
+        if (('m' === $inicio) || (true === $comecou)) {
             $array['meses'] = floor($total_segundos / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH));
             $total_segundos = ($total_segundos % (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH));
             $comecou        = true;
         }
-        if (('d' == $inicio) || (true === $comecou)) {
+        if (('d' === $inicio) || (true === $comecou)) {
             $array['dias']  = floor($total_segundos / (60 * 60 * 24));
             $total_segundos = ($total_segundos % (60 * 60 * 24));
             $comecou        = true;
         }
-        if (('H' == $inicio) || (true === $comecou)) {
+        if (('H' === $inicio) || (true === $comecou)) {
             $array['horas'] = floor($total_segundos / (60 * 60));
             $total_segundos = ($total_segundos % (60 * 60));
             $comecou        = true;
         }
-        if (('i' == $inicio) || (true === $comecou)) {
+        if (('i' === $inicio) || (true === $comecou)) {
             $array['minutos'] = floor($total_segundos / 60);
             $total_segundos   = ($total_segundos % 60);
             $comecou          = true;
