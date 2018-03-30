@@ -41,8 +41,6 @@
  */
 
 use XoopsModules\Assessment;
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
 
 $currentFile = basename(__FILE__);
 
@@ -96,7 +94,7 @@ $startdoc = isset($_GET['startdoc']) ? $_GET['startdoc'] : '';
 /**
  * Para termos as configs dentro da parte de admin
  */
-global $xoopsModuleConfig;
+// global $xoopsModuleConfig;
 
 /**
  * Essa função lista na tabela dentro de uma tabela os titulos das
@@ -108,7 +106,9 @@ function listarprovas()
     /**
      * Declaração de variáveis globais
      */
-    global $xoopsDB, $start, $xoopsModuleConfig, $pathIcon16;
+    global $xoopsDB, $start, $pathIcon16;
+    /** @var Assessment\Helper $helper */
+    $helper = Assessment\Helper::getInstance();
 
     /**
      * Criação da fábrica de provas
@@ -283,7 +283,9 @@ function listarResultados()
     /**
      * Declaração de variáveis globais
      */
-    global $xoopsDB, $xoopsUser, $start, $xoopsModuleConfig, $pathIcon16;
+    global $xoopsDB, $xoopsUser, $start,  $pathIcon16;
+    /** @var Assessment\Helper $helper */
+    $helper = Assessment\Helper::getInstance();
 
     /**
      * Buscando os dados passados via GET
@@ -386,7 +388,9 @@ function listarResultados()
 
 function listarperguntas()
 {
-    global $xoopsDB, $startper, $xoopsModuleConfig, $pathIcon16;
+    global $xoopsDB, $startper,  $pathIcon16;
+    /** @var Assessment\Helper $helper */
+    $helper = Assessment\Helper::getInstance();
     $fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
     $cod_prova            = $_GET['cod_prova'];
     $criteria             = new \Criteria('cod_prova', $cod_prova);
@@ -475,7 +479,9 @@ function listarDocumentos()
     /**
      * Listar variáveis globais
      */
-    global $xoopsDB, $start, $startdoc, $xoopsModuleConfig, $pathIcon16;
+    global $xoopsDB, $start, $startdoc,  $pathIcon16;
+    /** @var Assessment\Helper $helper */
+    $helper = Assessment\Helper::getInstance();
 
     /**
      * Buscando os dados passados via GET
