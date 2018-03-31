@@ -103,7 +103,7 @@ $nota_sugest = round(100 * $qtd_acertos / $qtd_perguntas, 2);
  */
 $resultado->setVar('nota_final', $nota_sugest);
 $resultado->setVar('terminou', 1);
-if (1 == $helper->getConfig('notadireta'')) {
+if (1 == $helper->getConfig('notadireta')) {
     $resultado->setVar('fechada', 1);
 }
 $resultado->unsetNew();
