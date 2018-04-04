@@ -87,8 +87,8 @@ $cod_prova    = $resultado->getVar('cod_prova');
 $criteria      = new \Criteria('cod_prova', $cod_prova);
 $qtd_perguntas = $fabrica_perguntas->getCount($criteria);
 
-$qtd_acertos = count(explode(',', $resp_certas));
-$qtd_erros   = count(explode(',', $resp_erradas));
+$qtd_acertos = substr_count($resp_certas, ',') + 1;
+$qtd_erros   = substr_count($resp_erradas, ',') + 1;
 if ('' == $resp_certas[0]) {
     $qtd_acertos = 0;
 }

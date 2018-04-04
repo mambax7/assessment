@@ -29,7 +29,6 @@ class XoopsFormMPublishTextArea extends XoopsFormElement
      * Constructor
      *
      * @param array $configs Editor Options
-     * @return XoopsFormMPublishTextArea
      */
     public function __construct($configs)
     {

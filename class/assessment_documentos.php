@@ -30,8 +30,7 @@
 // ----------------------------------------------------------------- //
 
 use XoopsModules\Assessment;
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
+
 
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
@@ -42,6 +41,9 @@ require_once XOOPS_ROOT_PATH . '/class/xoopsform/formselecteditor.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsform/formeditor.php';
 //require_once XOOPS_ROOT_PATH."/Frameworks/art/functions.sanitizer.php";
 //require_once XOOPS_ROOT_PATH."/Frameworks/xoops22/class/xoopsform/xoopsformloader.php";
+/** @var Assessment\Helper $helper */
+
+$helper = Assessment\Helper::getInstance();
 
 require_once __DIR__ . '/assessment_perguntas.php';
 
@@ -58,7 +60,6 @@ class assessment_documentos extends XoopsObject
 
     /**
      * @param null $id
-     * @return assessment_documentos
      */
     public function __construct($id = null)
     {
@@ -254,10 +255,10 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
      */
     public function delete(\XoopsObject $assessment_documentos, $force = false)
     {
-        if ('assessment_documentos' != get_class($assessment_documentos)) {
+        if (!$assessment_documentos instanceof \assessment_documentos) {
             return false;
         }
-        $sql = sprintf('DELETE FROM %s WHERE cod_documento = %u', $this->db->prefix('assessment_documentos'), $assessment_documentos->getVar('cod_documento'));
+        $sql = sprintf('DELETE FROM `%s` WHERE cod_documento = %u', $this->db->prefix('assessment_documentos'), $assessment_documentos->getVar('cod_documento'));
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {
@@ -544,7 +545,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
      * @param object $criteria {@link CriteriaElement} to match
      *
      * @param        $cod_prova
-     * @return int count of assessment_perguntass
+     * @return void count of assessment_perguntass
      */
     public function clonarDocumentos($criteria, $cod_prova)
     {

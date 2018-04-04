@@ -46,7 +46,6 @@ class assessment_perguntas extends XoopsObject
 
     /**
      * @param null $id
-     * @return assessment_perguntas
      */
     public function __construct($id = null)
     {
@@ -191,7 +190,7 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
     public function insert(\XoopsObject $assessment_perguntas, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_perguntas' !== get_class($assessment_perguntas)) {
+        if (!$assessment_perguntas instanceof \assessment_perguntas) {
             return false;
         }
         if (!$assessment_perguntas->isDirty()) {
@@ -243,10 +242,10 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
      */
     public function delete(\XoopsObject $assessment_perguntas, $force = false)
     {
-        if ('assessment_perguntas' !== get_class($assessment_perguntas)) {
+        if (!$assessment_perguntas instanceof \assessment_perguntas) {
             return false;
         }
-        $sql = sprintf('DELETE FROM %s WHERE cod_pergunta = %u', $this->db->prefix('assessment_perguntas'), $assessment_perguntas->getVar('cod_pergunta'));
+        $sql = sprintf('DELETE FROM `%s` WHERE cod_pergunta = %u', $this->db->prefix('assessment_perguntas'), $assessment_perguntas->getVar('cod_pergunta'));
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {
@@ -526,7 +525,7 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
      * @param object $criteria {@link CriteriaElement} to match
      *
      * @param        $cod_prova
-     * @return int count of assessment_perguntass
+     * @return void count of assessment_perguntass
      */
     public function clonarPerguntas($criteria, $cod_prova)
     {

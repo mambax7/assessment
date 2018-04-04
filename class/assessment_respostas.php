@@ -39,7 +39,6 @@ class assessment_respostas extends XoopsObject
 
     /**
      * @param null $id
-     * @return assessment_respostas
      */
     public function __construct($id = null)
     {
@@ -184,7 +183,7 @@ class Xoopsassessment_respostasHandler extends XoopsPersistableObjectHandler
     public function insert(\XoopsObject $assessment_respostas, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_respostas' !== get_class($assessment_respostas)) {
+        if (!$assessment_respostas instanceof \assessment_respostas) {
             return false;
         }
         if (!$assessment_respostas->isDirty()) {
@@ -236,10 +235,10 @@ class Xoopsassessment_respostasHandler extends XoopsPersistableObjectHandler
      */
     public function delete(\XoopsObject $assessment_respostas, $force = false)
     {
-        if ('assessment_respostas' != get_class($assessment_respostas)) {
+        if (!$assessment_respostas instanceof \assessment_respostas) {
             return false;
         }
-        $sql = sprintf('DELETE FROM %s WHERE cod_resposta = %u', $this->db->prefix('assessment_respostas'), $assessment_respostas->getVar('cod_resposta'));
+        $sql = sprintf('DELETE FROM `%s` WHERE cod_resposta = %u', $this->db->prefix('assessment_respostas'), $assessment_respostas->getVar('cod_resposta'));
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {

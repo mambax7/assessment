@@ -39,7 +39,6 @@ class assessment_resultados extends XoopsObject
 
     /**
      * @param null $id
-     * @return assessment_resultados
      */
     public function __construct($id = null)
     {
@@ -306,7 +305,7 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
     public function insert(\XoopsObject $assessment_resultados, $force = false)
     {
         global $xoopsConfig;
-        if ('assessment_resultados' !== get_class($assessment_resultados)) {
+        if (!$assessment_resultados instanceof \assessment_resultados) {
             return false;
         }
         if (!$assessment_resultados->isDirty()) {
@@ -375,10 +374,10 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
      */
     public function delete(\XoopsObject $assessment_resultados, $force = false)
     {
-        if ('assessment_resultados' !== get_class($assessment_resultados)) {
+        if (!$assessment_resultados instanceof \assessment_resultados) {
             return false;
         }
-        $sql = sprintf('DELETE FROM %s WHERE cod_resultado = %u', $this->db->prefix('assessment_resultados'), $assessment_resultados->getVar('cod_resultado'));
+        $sql = sprintf('DELETE FROM `%s` WHERE cod_resultado = %u', $this->db->prefix('assessment_resultados'), $assessment_resultados->getVar('cod_resultado'));
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {
@@ -506,8 +505,8 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
         $nota_final    = $resultado->getVar('nota_final');
         $nivel         = $resultado->getVar('nivel');
         $observacoes   = $resultado->getVar('obs');
-        $qtd_acertos   = count(explode(',', $resp_certas));
-        $qtd_erros     = count(explode(',', $resp_erradas));
+        $qtd_acertos   = substr_count($resp_certas, ',') + 1;
+        $qtd_erros     = substr_count($resp_erradas, ',') + 1;
 
         $texto_resp_certas = _AM_ASSESSMENT_PERGDETALHES . '<br>';
         $vetor_resp_certas = explode(',', $resp_certas);
