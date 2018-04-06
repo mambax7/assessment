@@ -327,7 +327,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
     {
         $criteria         = new \Criteria('cod_prova', $cod_prova);
         $cod_documentos   = [];
-        $documentos_prova =& $this->getObjects($criteria);
+        $documentos_prova = $this->getObjects($criteria);
         $i                = 0;
         foreach ($documentos_prova as $documento_prova) {
             $cods_perguntas = explode(',', $documento_prova->getVar('cods_perguntas'));
@@ -445,7 +445,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
         // options for the editor
         //required configs
         $options['name']  = 'campo_documento';
-        $options['value'] = empty($_REQUEST['message']) ? '' : $_REQUEST['message'];
+        $options['value'] = \Xmf\Request::getString('message', '');
         //optional configs
         $options['rows']   = 25; // default value = 5
         $options['cols']   = 60; // default value = 50
@@ -514,7 +514,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
         // options for the editor
         //required configs
         $options['name']  = 'campo_documento';
-        $options['value'] = empty($_REQUEST['message']) ? $textodocumento : $_REQUEST['message'];
+        $options['value'] = \Xmf\Request::getString('message', $textodocumento); 
         //optional configs
         $options['rows']   = 25; // default value = 5
         $options['cols']   = 60; // default value = 50
@@ -551,7 +551,7 @@ class Xoopsassessment_documentosHandler extends XoopsPersistableObjectHandler
     {
         global $xoopsDB;
 
-        $documentos =& $this->getObjects($criteria);
+        $documentos = $this->getObjects($criteria);
         foreach ($documentos as $documento) {
             $documento->setVar('cod_prova', $cod_prova);
             $documento->setVar('cod_documento', 0);

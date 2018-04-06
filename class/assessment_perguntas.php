@@ -531,7 +531,7 @@ class Xoopsassessment_perguntasHandler extends XoopsPersistableObjectHandler
     {
         global $xoopsDB;
         $fabrica_de_respostas = new \Xoopsassessment_respostasHandler($xoopsDB);
-        $perguntas            =& $this->getObjects($criteria);
+        $perguntas            = $this->getObjects($criteria);
         foreach ($perguntas as $pergunta) {
             $cod_pergunta = $pergunta->getVar('cod_pergunta');
             $pergunta->setVar('cod_prova', $cod_prova);
