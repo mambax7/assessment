@@ -1,5 +1,5 @@
-<?php
-// $Id: assessment_resultados.php,v 1.7 2007/03/24 14:41:41 marcellobrandao Exp $
+<?php namespace XoopsModules\Assessment;
+
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -24,258 +24,46 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
+
+use XoopsModules\Assessment;
+
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 
-/**
- * assessment_resultados class.
- * $this class is responsible for providing data access mechanisms to the data source
- * of XOOPS user class objects.
- */
-class assessment_resultados extends XoopsObject
-{
-    public $db;
-
-    // constructor
-
-    /**
-     * @param null $id
-     */
-    public function __construct($id = null)
-    {
-        $this->db = \XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar('cod_resultado', XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar('cod_prova', XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar('uid_aluno', XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar('data_inicio', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('data_fim', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('resp_certas', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('resp_erradas', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('nota_final', XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar('nivel', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('obs', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('fechada', XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar('terminou', XOBJ_DTYPE_INT, null, false, 10);
-        if (!empty($id)) {
-            if (is_array($id)) {
-                $this->assignVars($id);
-            } else {
-                $this->load((int)$id);
-            }
-        } else {
-            $this->setNew();
-        }
-    }
-
-    /**
-     * @param $id
-     */
-    public function load($id)
-    {
-        $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_resultados') . ' WHERE cod_resultado=' . $id;
-        $myrow = $this->db->fetchArray($this->db->query($sql));
-        $this->assignVars($myrow);
-        if (!$myrow) {
-            $this->setNew();
-        }
-    }
-
-    /**
-     * @param array  $criteria
-     * @param bool   $asobject
-     * @param string $sort
-     * @param string $order
-     * @param int    $limit
-     * @param int    $start
-     *
-     * @return array
-     */
-    public function getAllassessment_resultadoss($criteria = [], $asobject = false, $sort = 'cod_resultado', $order = 'ASC', $limit = 0, $start = 0)
-    {
-        $db          = \XoopsDatabaseFactory::getDatabaseConnection();
-        $ret         = [];
-        $where_query = '';
-        if (is_array($criteria) && count($criteria) > 0) {
-            $where_query = ' WHERE';
-            foreach ($criteria as $c) {
-                $where_query .= " $c AND";
-            }
-            $where_query = substr($where_query, 0, -4);
-        } elseif (!is_array($criteria) && $criteria) {
-            $where_query = ' WHERE ' . $criteria;
-        }
-        if (!$asobject) {
-            $sql    = 'SELECT cod_resultado FROM ' . $db->prefix('assessment_resultados') . "$where_query ORDER BY $sort $order";
-            $result = $db->query($sql, $limit, $start);
-            while (false !== ($myrow = $db->fetchArray($result))) {
-                $ret[] = $myrow['assessment_resultados_id'];
-            }
-        } else {
-            $sql    = 'SELECT * FROM ' . $db->prefix('assessment_resultados') . "$where_query ORDER BY $sort $order";
-            $result = $db->query($sql, $limit, $start);
-            while (false !== ($myrow = $db->fetchArray($result))) {
-                $ret[] = new assessment_resultados($myrow);
-            }
-        }
-
-        return $ret;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRespostasCertasAsArray()
-    {
-        $respostas     = [];
-        $respostas     = explode(',', $this->getVar('resp_certas'));
-        $par_respostas = [];
-        foreach ($respostas as $resposta) {
-            $x                    = explode('-', $resposta);
-            $par_respostas[$x[0]] = @$x[1];
-        }
-
-        return $par_respostas;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRespostasErradasAsArray()
-    {
-        $respostas     = explode(',', $this->getVar('resp_erradas'));
-        $par_respostas = [];
-        foreach ($respostas as $resposta) {
-            $x = explode('-', $resposta);
-            if (isset($x[1])) {
-                $par_respostas[$x[0]] = $x[1];
-            }
-        }
-
-        return $par_respostas;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRespostasAsArray()
-    {
-        $erradas = [];
-        $certas  = [];
-        $erradas = $this->getRespostasErradasAsArray();
-        $certas  = $this->getRespostasCertasAsArray();
-
-        $todas = $erradas + $certas;
-
-        return $todas;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCodPerguntasAsArray()
-    {
-        $erradas = [];
-        $certas  = [];
-        $erradas = $this->getRespostasErradasAsArray();
-        $certas  = $this->getRespostasCertasAsArray();
-
-        $todas = $erradas + $certas;
-
-        return array_keys($todas);
-    }
-
-    /**
-     * @param $respostasCertas
-     */
-    public function setRespostasCertasAsArray($respostasCertas)
-    {
-        $x = [];
-        foreach ($respostasCertas as $chave => $valor) {
-            if (!(null == $chave)) {
-                $x[] = $chave . '-' . $valor;
-            }
-        }
-
-        $y = implode(',', $x);
-        $this->setVar('resp_certas', $y);
-    }
-
-    /**
-     * @param $respostasErradas
-     */
-    public function setRespostasErradasAsArray($respostasErradas)
-    {
-        $x = [];
-        foreach ($respostasErradas as $chave => $valor) {
-            if (!(null == $chave)) {
-                $x[] = $chave . '-' . $valor;
-            }
-        }
-
-        $y = implode(',', $x);
-        $this->setVar('resp_erradas', $y);
-    }
-
-    /**
-     * @param $cod_pergunta
-     *
-     * @return mixed
-     */
-    public function getRespostaUsuario($cod_pergunta)
-    {
-        $respostas = $this->getRespostasAsArray();
-
-        return $respostas[$cod_pergunta];
-    }
-
-    /**
-     * @return int
-     */
-    public function contarRespostas()
-    {
-        $respostas = $this->getRespostasAsArray();
-        unset($respostas[null]);
-
-        $qtd = count($respostas);
-
-        return $qtd;
-    }
-}
-
 // -------------------------------------------------------------------------
-// ------------------assessment_resultados user handler class -------------------
+// ------------------Result user handler class -------------------
 // -------------------------------------------------------------------------
 
 /**
  * assessment_resultadoshandler class.
- * This class provides simple mecanisme for assessment_resultados object
+ * This class provides simple mecanisme for Result object
  */
-class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
+class ResultHandler extends \XoopsPersistableObjectHandler
 {
     /**
-     * create a new assessment_resultados
+     * create a new Assessment\Result
      *
      * @param bool $isNew flag the new objects as "new"?
      *
-     * @return object assessment_resultados
+     * @return object Result
      */
     public function &create($isNew = true)
     {
-        $assessment_resultados = new assessment_resultados();
+        $result = new Assessment\Result();
         if ($isNew) {
-            $assessment_resultados->setNew();
+            $result->setNew();
         } else {
-            $assessment_resultados->unsetNew();
+            $result->unsetNew();
         }
 
-        return $assessment_resultados;
+        return $result;
     }
 
     /**
-     * retrieve a assessment_resultados
+     * retrieve a Result
      *
      * @param  mixed $id     ID
      * @param  array $fields fields to fetch
-     * @return XoopsObject {@link XoopsObject}
+     * @return \XoopsObject {@link \XoopsObject}
      */
     public function get($id = null, $fields = null)
     {
@@ -285,49 +73,49 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
         }
         $numrows = $this->db->getRowsNum($result);
         if (1 == $numrows) {
-            $assessment_resultados = new assessment_resultados();
-            $assessment_resultados->assignVars($this->db->fetchArray($result));
+            $result = new Assessment\Result();
+            $result->assignVars($this->db->fetchArray($result));
 
-            return $assessment_resultados;
+            return $result;
         }
 
         return false;
     }
 
     /**
-     * insert a new assessment_resultados in the database
+     * insert a new Assessment\Result in the database
      *
-     * @param XoopsObject $assessment_resultados reference to the {@link assessment_resultados} object
+     * @param \XoopsObject $result reference to the {@link Result} object
      * @param bool        $force
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(\XoopsObject $assessment_resultados, $force = false)
+    public function insert(\XoopsObject $result, $force = false)
     {
         global $xoopsConfig;
-        if (!$assessment_resultados instanceof \assessment_resultados) {
+        if (!$result instanceof \XoopsModules\Assessment\Result) {
             return false;
         }
-        if (!$assessment_resultados->isDirty()) {
+        if (!$result->isDirty()) {
             return true;
         }
-        if (!$assessment_resultados->cleanVars()) {
+        if (!$result->cleanVars()) {
             return false;
         }
-        foreach ($assessment_resultados->cleanVars as $k => $v) {
+        foreach ($result->cleanVars as $k => $v) {
             ${$k} = $v;
         }
         //$now = "date_add(now(), interval ".$xoopsConfig['server_TZ']." hour)";
         $now = 'now()';
-        if ($assessment_resultados->isNew()) {
-            // ajout/modification d'un assessment_resultados
-            $assessment_resultados = new assessment_resultados();
-            $format                = 'INSERT INTO %s (cod_resultado, cod_prova, uid_aluno, data_inicio, data_fim, resp_certas, resp_erradas, nota_final, nivel, obs, fechada, terminou)';
+        if ($result->isNew()) {
+            // ajout/modification d'un Result
+            $result = new Assessment\Result();
+            $format                = 'INSERT INTO `%s` (cod_resultado, cod_prova, uid_aluno, data_inicio, data_fim, resp_certas, resp_erradas, nota_final, nivel, obs, fechada, terminou)';
             $format                .= 'VALUES (%u, %u, %u, %s, %s, %s, %s, %u, %s, %s, %u, %u)';
             $sql                   = sprintf($format, $this->db->prefix('assessment_resultados'), $cod_resultado, $cod_prova, $uid_aluno, $this->db->quoteString($data_inicio), $now, $now, $this->db->quoteString($resp_certas), $this->db->quoteString($resp_erradas), $nota_final, $this->db->quoteString($nivel), $this->db->quoteString($obs), $fechada, $terminou);
             $force                 = true;
         } else {
-            $format = 'UPDATE %s SET ';
+            $format = 'UPDATE `%s` SET ';
             $format .= 'cod_resultado=%u, cod_prova=%u, uid_aluno=%u, data_inicio=%s, data_fim=%s, resp_certas=%s, resp_erradas=%s, nota_final=%u, nivel=%s, obs=%s, fechada=%u, terminou=%u';
             $format .= ' WHERE cod_resultado = %u';
             $sql    = sprintf(
@@ -359,25 +147,25 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
         if (empty($cod_resultado)) {
             $cod_resultado = $this->db->getInsertId();
         }
-        $assessment_resultados->assignVar('cod_resultado', $cod_resultado);
+        $result->assignVar('cod_resultado', $cod_resultado);
 
         return true;
     }
 
     /**
-     * delete a assessment_resultados from the database
+     * delete a Result from the database
      *
-     * @param XoopsObject $assessment_resultados reference to the assessment_resultados to delete
+     * @param \XoopsObject $result reference to the Result to delete
      * @param bool        $force
      *
      * @return bool FALSE if failed.
      */
-    public function delete(\XoopsObject $assessment_resultados, $force = false)
+    public function delete(\XoopsObject $result, $force = false)
     {
-        if (!$assessment_resultados instanceof \assessment_resultados) {
+        if (!$result instanceof \XoopsModules\Assessment\Result) {
             return false;
         }
-        $sql = sprintf('DELETE FROM `%s` WHERE cod_resultado = %u', $this->db->prefix('assessment_resultados'), $assessment_resultados->getVar('cod_resultado'));
+        $sql = sprintf('DELETE FROM `%s` WHERE cod_resultado = %u', $this->db->prefix('assessment_resultados'), $result->getVar('cod_resultado'));
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {
@@ -393,19 +181,19 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
     /**
      * retrieve assessment_resultadoss from the database
      *
-     * @param CriteriaElement $criteria  {@link CriteriaElement} conditions to be met
+     * @param \CriteriaElement $criteria {@link \CriteriaElement} conditions to be met
      * @param bool            $id_as_key use the UID as key for the array?
      *
      * @param bool            $as_object
-     * @return array array of <a href='psi_element://$assessment_resultados'>$assessment_resultados</a> objects
+     * @return array array of <a href='psi_element://$result'>$result</a> objects
      *                                   objects
      */
-    public function &getObjects(CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
+    public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
     {
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_resultados');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -418,14 +206,14 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
             return $ret;
         }
         while (false !== ($myrow = $this->db->fetchArray($result))) {
-            $assessment_resultados = new assessment_resultados();
-            $assessment_resultados->assignVars($myrow);
+            $result = new Assessment\Result();
+            $result->assignVars($myrow);
             if (!$id_as_key) {
-                $ret[] = $assessment_resultados;
+                $ret[] = $result;
             } else {
-                $ret[$myrow['cod_resultado']] = $assessment_resultados;
+                $ret[$myrow['cod_resultado']] = $result;
             }
-            unset($assessment_resultados);
+            unset($result);
         }
 
         return $ret;
@@ -434,14 +222,14 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
     /**
      * count assessment_resultadoss matching a condition
      *
-     * @param CriteriaElement $criteria {@link CriteriaElement} to match
+     * @param \CriteriaElement $criteria {@link \CriteriaElement} to match
      *
-     * @return int count of assessment_perguntass
+     * @return int count of Questions
      */
-    public function getCount(CriteriaElement $criteria = null)
+    public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_resultados');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -456,16 +244,16 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
     /**
      * delete assessment_resultadoss matching a set of conditions
      *
-     * @param CriteriaElement $criteria {@link CriteriaElement}
+     * @param \CriteriaElement $criteria {@link \CriteriaElement}
      *
      * @param bool            $force
      * @param bool            $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(CriteriaElement $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_resultados');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -478,7 +266,7 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
     /* cria form de edi��o de resultado
 *
 * @param string $action caminho para arquivo que ...
-* @param object $assessment_perguntas {@link assessment_perguntas}
+* @param object $question {@link Question}
 * @return bool FALSE if deletion failed
 */
     /**
@@ -585,7 +373,7 @@ class Xoopsassessment_resultadosHandler extends XoopsPersistableObjectHandler
         $qtd_provas = $this->getCount($criteria);
         $ret['qtd'] = $qtd_provas;
         $sql        = 'SELECT max(nota_final),min(nota_final),avg(nota_final) FROM ' . $this->db->prefix('assessment_resultados');
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);

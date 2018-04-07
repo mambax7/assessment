@@ -34,6 +34,8 @@
  * @package assessment
  */
 
+use XoopsModules\Assessment;
+
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
@@ -43,10 +45,6 @@ include dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
 
 /**
  * Passar as vari�veis enviadas por $_POST para vari�veis com o mesmo nome
@@ -82,9 +80,9 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_respostas  = new \Xoopsassessment_respostasHandler($xoopsDB);
-$fabrica_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+$answerFactory  = new Assessment\AnswerHandler($xoopsDB);
+$resultFactory = new Assessment\ResultHandler($xoopsDB);
 
 /**
  * Cria��o de objetos de crit�rio para passar para as F�bricas
@@ -97,13 +95,13 @@ $criteria_resposta_certa->add($criteria_certa);
 /**
  * Pegando qual seria a resposta certa e em seguida seu c�digo
  */
-$respostacerta      = $fabrica_respostas->getObjects($criteria_resposta_certa);
+$respostacerta      = $answerFactory->getObjects($criteria_resposta_certa);
 $cod_resposta_certa = $respostacerta[0]->getVar('cod_resposta');
 
 /**
  * Pegando qual seria a prova em seguida seu c�digo
  */
-$pergunta  = $fabrica_perguntas->get($cod_pergunta);
+$pergunta  = $questionFactory->get($cod_pergunta);
 $cod_prova = $pergunta->getVar('cod_prova');
 
 /**
@@ -118,7 +116,7 @@ $criteria->add($criteria_usuario);
 /**
  * Determinando quantas perguntas tem a prova
  */
-$qtd_perguntas = $fabrica_perguntas->getCount($criteria_prova);
+$qtd_perguntas = $questionFactory->getCount($criteria_prova);
 
 /**
  * Colocando start para apontar para a pr�xima pergunta a menos que seja a
@@ -138,7 +136,7 @@ if (($qtd_perguntas - 1) == $start) {
  * buscamos as respostas que ele j� deu e o c�digo da
  * resposta antiga dele para esta pergunta
  */
-$resultados          = $fabrica_resultados->getObjects($criteria);
+$resultados          = $resultFactory->getObjects($criteria);
 $resultado           = $resultados[0];
 $respostascertas     = $resultado->getRespostasCertasAsArray();
 $respostaserradas    = $resultado->getRespostasErradasAsArray();
@@ -174,7 +172,7 @@ if (!($cod_resposta == $cod_resposta_antiga)) {
      * aluno
      */
     $resultado->unsetNew();
-    $fabrica_resultados->insert($resultado);
+    $resultFactory->insert($resultado);
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=' . $start, 2, $message = _MA_ASSESSMENT_SUCESSO);
 /**
  * Se a resposta que ele tinha dado antes � a mesma que ele

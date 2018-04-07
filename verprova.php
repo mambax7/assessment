@@ -35,6 +35,8 @@
  * @package assessment
  */
 
+use XoopsModules\Assessment;
+
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
@@ -44,10 +46,6 @@ include dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
 
 /**
  * Definindo arquivo de template da p�gina
@@ -63,14 +61,14 @@ $uid       = $xoopsUser->getVar('uid');
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
-$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$examFactory     = new Assessment\ExamHandler($xoopsDB);
+$resultFactory = new Assessment\ResultHandler($xoopsDB);
+$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
 
 /**
  * Fabricando o objeto prova
  */
-$prova = $fabrica_de_provas->get($cod_prova);
+$prova = $examFactory->get($cod_prova);
 
 /**
  * Verificando privil�gios do aluno para esta prova
@@ -84,7 +82,7 @@ if (!$prova->isAutorizado()) {
  */
 $fim          = $prova->getVar('data_fim', 'n');
 $tempo        = $prova->getVar('tempo', 'n');
-$fimmaistempo = $fabrica_de_provas->dataMysql2dataUnix($fim) + $tempo;
+$fimmaistempo = $examFactory->dataMysql2dataUnix($fim) + $tempo;
 
 if ($fimmaistempo < time()) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_PROIBIDO);
@@ -104,14 +102,14 @@ $criteria_resultado->add($criteria_terminou);
  * Verificando se aluno j� tinha terminado a prova antes em caso positivo
  * informa atraves de mensagem
  */
-if ($fabrica_de_resultados->getCount($criteria_resultado) > 0) {
+if ($resultFactory->getCount($criteria_resultado) > 0) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_JATERMINOU);
 }
 
 /**
  * Pegando os dados da prova e o campo de seguran�a(TOKEN)
  */
-$qtd_perguntas = $fabrica_de_perguntas->getCount($criteria_prova);
+$qtd_perguntas = $questionFactory->getCount($criteria_prova);
 $titulo        = $prova->getVar('titulo');
 $descricao     = $prova->getVar('descricao');
 $instrucoes    = $prova->getVar('instrucoes');

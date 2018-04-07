@@ -41,4 +41,4 @@
 <div>
     <{include file='db:system_notification_select.tpl'}>
 </div>
-<img align="right" src="../assets/images/mlogo.png" id="marcello_brandao">
+<img align="right" src="assets/images/mlogo.png" id="marcello_brandao">

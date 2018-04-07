@@ -48,10 +48,6 @@ $helper = Assessment\Helper::getInstance();
 /**
  * Inclus�es das classes do m�dulo
  */
-//include __DIR__ . '/class/assessment_perguntas.php';
-//include __DIR__ . '/class/assessment_provas.php';
-//include __DIR__ . '/class/assessment_respostas.php';
-//include __DIR__ . '/class/assessment_resultados.php';
 
 /**
  * Pegando cod_prova do formul�rio
@@ -68,14 +64,14 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 /**
  * Cria��o da F�brica de resultados e perguntas (padr�o de projeto factory com DAO)
  */
-$fabrica_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
-$fabrica_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
+$resultFactory = new Assessment\ResultHandler($xoopsDB);
+$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
 
 /**
  * Buscando na F�brica o resultado (padr�o de projeto factory com DAO)
  */
-$resultado = $fabrica_resultados->create(false);
-$resultado = $fabrica_resultados->get($cod_resultado);
+$resultado = $resultFactory->create(false);
+$resultado = $resultFactory->get($cod_resultado);
 
 /**
  * Calculando a nota do individuo
@@ -85,7 +81,7 @@ $resp_erradas = $resultado->getVar('resp_erradas');
 $cod_prova    = $resultado->getVar('cod_prova');
 
 $criteria      = new \Criteria('cod_prova', $cod_prova);
-$qtd_perguntas = $fabrica_perguntas->getCount($criteria);
+$qtd_perguntas = $questionFactory->getCount($criteria);
 
 $qtd_acertos = substr_count($resp_certas, ',') + 1;
 $qtd_erros   = substr_count($resp_erradas, ',') + 1;
@@ -111,7 +107,7 @@ $resultado->unsetNew();
 /**
  * Atualiza o resultado e d� uma mensagem de sucesso
  */
-if ($fabrica_resultados->insert($resultado)) {
+if ($resultFactory->insert($resultado)) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_CONGRATULATIONS);
 }
 

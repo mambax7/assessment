@@ -17,7 +17,7 @@ use XoopsModules\Assessment;
 /**
  * Class XoopsFormMPublishTextArea
  */
-class XoopsFormMPublishTextArea extends XoopsFormElement
+class XoopsFormMPublishTextArea extends \XoopsFormElement
 {
     public $value;
     public $name;
@@ -567,25 +567,25 @@ tinyMCE.init({
             }
             $form .= "</select><span id='" . $hiddenText . '\'>' . _EXAMPLE . "</span>\n";
             $form .= "<br>\n";
-            $form .= "<img onclick='javascript:setVisible(\""
+            $form .= "<img onclick='setVisible(\""
                      . $hiddenText
                      . '");makeBold("'
                      . $hiddenText
                      . "\");' onmouseover='style.cursor=\"hand\"' src='"
                      . XOOPS_URL
-                     . "/assets/images/bold.gif' alt='bold'>&nbsp;<img onclick='javascript:setVisible(\""
+                     . "/assets/images/bold.gif' alt='bold'>&nbsp;<img onclick='setVisible(\""
                      . $hiddenText
                      . '");makeItalic("'
                      . $hiddenText
                      . "\");' onmouseover='style.cursor=\"hand\"' src='"
                      . XOOPS_URL
-                     . "/assets/images/italic.gif' alt='italic'>&nbsp;<img onclick='javascript:setVisible(\""
+                     . "/assets/images/italic.gif' alt='italic'>&nbsp;<img onclick='setVisible(\""
                      . $hiddenText
                      . '");makeUnderline("'
                      . $hiddenText
                      . "\");' onmouseover='style.cursor=\"hand\"' src='"
                      . XOOPS_URL
-                     . "/assets/images/underline.gif' alt='underline'>&nbsp;<img onclick='javascript:setVisible(\""
+                     . "/assets/images/underline.gif' alt='underline'>&nbsp;<img onclick='setVisible(\""
                      . $hiddenText
                      . '");makeLineThrough("'
                      . $hiddenText

@@ -38,6 +38,8 @@
  * Definindo arquivo de template da p�gina
  */
 
+use XoopsModules\Assessment;
+
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
@@ -48,10 +50,6 @@ include dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
 
 /**
  * Definindo arquivo de template da p�gina
@@ -67,20 +65,20 @@ $uid           = $xoopsUser->getVar('uid');
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas    = new \Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_perguntas = new \Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_resultados   = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$examFactory    = new Assessment\ExamHandler($xoopsDB);
+$questionFactory = new Assessment\QuestionHandler($xoopsDB);
+$resultFactory   = new Assessment\ResultHandler($xoopsDB);
 
 /**
  * Fabricando o objeto resultado
  */
-$resultado = $fabrica_resultados->get($cod_resultado);
+$resultado = $resultFactory->get($cod_resultado);
 $cod_prova = $resultado->getVar('cod_prova');
 
 /**
  * Fabricando o objeto prova
  */
-$prova = $fabrica_de_provas->get($cod_prova);
+$prova = $examFactory->get($cod_prova);
 
 /**
  * Verificando privil�gios do aluno para esta prova
@@ -103,19 +101,19 @@ $criteria_compo->add($criteria_usuario);
 /**
  * Buscando o total de perguntas desta prova na F�brica de Perguntas
  */
-$qtd_perguntas = $fabrica_de_perguntas->getCount($criteria_prova);
+$qtd_perguntas = $questionFactory->getCount($criteria_prova);
 
 /**
  * Calculos de tempo restante, tempo gasto e hor�rio do fim da prova
  * obs: cabe passar isso para dentro da classe resultado ou prova
  */
 $horaatual            = time();
-$data_inicio_segundos = $fabrica_de_provas->dataMysql2dataUnix($resultado->getVar('data_inicio'));
+$data_inicio_segundos = $examFactory->dataMysql2dataUnix($resultado->getVar('data_inicio'));
 $tempo_prova          = $prova->getVar('tempo');
 
-$tempo_restante    = $fabrica_de_provas->converte_segundos(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
-$tempo_gasto       = $fabrica_de_provas->converte_segundos($horaatual - $data_inicio_segundos, 'H');
-$hora_fim_da_prova = $fabrica_de_provas->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
+$tempo_restante    = $examFactory->converte_segundos(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
+$tempo_gasto       = $examFactory->converte_segundos($horaatual - $data_inicio_segundos, 'H');
+$hora_fim_da_prova = $examFactory->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
 
 /**
  * Verifica��o de tempo da prova: se estourar o tempo salvar o resultado e
@@ -124,7 +122,7 @@ $hora_fim_da_prova = $fabrica_de_provas->converte_segundos($data_inicio_segundos
 if ($tempo_restante['segundos'] < 0) {
     $resultado->setVar('terminou', 1);
     $resultado->unsetNew();
-    $fabrica_resultados->insert($resultado, true);
+    $resultFactory->insert($resultado, true);
     redirect_header('index.php', 15, _MA_ASSESSMENT_ACABOU);
 }
 

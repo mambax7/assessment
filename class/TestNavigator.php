@@ -1,5 +1,5 @@
-<?php
-// $Id: navegacao.php,v 1.6 2007/03/24 17:50:52 marcellobrandao Exp $
+<?php namespace XoopsModules\Assessment;
+
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -24,12 +24,13 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
+
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 
 /**
- * Class NavegadorProva
+ * Class TestNavigator
  */
-class NavegadorProva extends XoopsPageNav
+class TestNavigator extends \XoopsPageNav
 {
     /**
      * Create navigation with images

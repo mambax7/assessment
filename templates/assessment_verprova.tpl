@@ -24,4 +24,4 @@
         <input name="enviar" type="submit" value="<{$lang_comecar}>">
     </form>
 </div>
-<img align="right" src="../assets/images/mlogo.png" id="marcello_brandao">
+<img align="right" src="assets/images/mlogo.png" id="marcello_brandao">

@@ -96,12 +96,12 @@ define('_AM_ASSESSMENT_PERGASSOC', 'Perguntas associadas');
 define('_AM_ASSESSMENT_TITULO', 'T�tulo');
 define('_AM_ASSESSMENT_FONTE', 'Fonte');
 
-//assessment_perguntas.php
+//Question.php
 define('_AM_ASSESSMENT_RESPOSTA', 'Resposta');
 define('_AM_ASSESSMENT_RESPCORRETA', 'Resposta correta');
 define('_AM_ASSESSMENT_SALVARALTERACOES', 'Salvar Altera��es');
 
-//assessment_provas.php
+//Test.php
 define('_AM_ASSESSMENT_DESCRICAO', 'Descri��o');
 define('_AM_ASSESSMENT_INSTRUCOES', 'Instru��es');
 define('_AM_ASSESSMENT_TEMPO', 'Tempo em segundos');
@@ -109,7 +109,7 @@ define('_AM_ASSESSMENT_GRUPOSACESSO', 'Grupos com acesso');
 define('_AM_ASSESSMENT_DATA_INICIO', 'Data In�cio');
 define('_AM_ASSESSMENT_DATA_FIM', 'Data Fim');
 
-//assessment_resultados
+//Result
 define('_AM_ASSESSMENT_PERGDETALHES', 'Clique no c�digo da pergunta para ver detalhes');
 define('_AM_ASSESSMENT_RESPCERTAS', 'Respostas Certas');
 define('_AM_ASSESSMENT_RESPERR', 'Respostas Erradas');

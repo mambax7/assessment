@@ -51,11 +51,6 @@ $helper = Assessment\Helper::getInstance();
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
-require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 
 /**
  * Definindo arquivo de template da p�gina
@@ -64,9 +59,9 @@ require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$examFactory     = new Assessment\ExamHandler($xoopsDB);
+$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+$resultFactory = new Assessment\ResultHandler($xoopsDB);
 
 /**
  * Buscar todas as provas, todos os resultados deste aluno e e todas as perguntas
@@ -77,17 +72,17 @@ if (isset($_GET['start'])) {
 //$criteria = new \Criteria ('cod_prova');
 //$criteria->setLimit(10);
 //$criteria->setStart($start);
-//$total_items = $fabrica_de_provas->getCount();
+//$total_items = $examFactory->getCount();
 
-//$vetor_provas = $fabrica_de_provas->getObjects($criteria);
-$vetor_provas     = $fabrica_de_provas->getObjects();
+//$vetor_provas = $examFactory->getObjects($criteria);
+$vetor_provas     = $examFactory->getObjects();
 $qtd_provas       = count($vetor_provas);
 if (is_object($GLOBALS['xoopsUser'])) {
     $uid = $GLOBALS['xoopsUser']->getVar('uid');
 
     $criteria_aluno   = new \Criteria('uid_aluno', $uid);
-    $vetor_resultados = $fabrica_de_resultados->getObjects($criteria_aluno);
-    $vetor_perguntas  = $fabrica_de_perguntas->getObjects();
+    $vetor_resultados = $resultFactory->getObjects($criteria_aluno);
+    $vetor_perguntas  = $questionFactory->getObjects();
     //echo "<pre>";
     //print_r($vetor_resultados);
     $grupos = $GLOBALS['xoopsUser']->getGroups();
@@ -102,7 +97,7 @@ if (is_object($GLOBALS['xoopsUser'])) {
         if ($prova->isAutorizado2($grupos)) {
             $fim          = $prova->getVar('data_fim', 'n');
             $tempo        = $prova->getVar('tempo', 'n');
-            $fimmaistempo = $fabrica_de_provas->dataMysql2dataUnix($fim) + $tempo;
+            $fimmaistempo = $examFactory->dataMysql2dataUnix($fim) + $tempo;
 
             if ($fimmaistempo < time()) {
                 $x[$i]['naodisponivel'] = 1;

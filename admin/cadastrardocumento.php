@@ -31,8 +31,6 @@ $helper = Assessment\Helper::getInstance();
 
 include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
-include dirname(__DIR__) . '/class/assessment_documentos.php';
-include dirname(__DIR__) . '/class/assessment_provas.php';
 global $xoopsModuleConfig;
 
 /**
@@ -54,8 +52,8 @@ if ('dhtmlext' === $helper->getConfig('editorpadrao') || 'textarea' === $helper-
     $html = 0;
 }
 
-$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
-$documento             = $fabrica_de_documentos->create();
+$documentFactory = new Assessment\DocumentHandler($xoopsDB);
+$documento             = $documentFactory->create();
 if ('' !== $perguntas) {
     $documento->setVar('cods_perguntas', implode(',', $perguntas));
 }
@@ -67,6 +65,6 @@ $documento->setVar('tipo', 0);
 $documento->setVar('fonte', $fonte);
 $documento->setVar('uid_elaborador', $uid_elaborador);
 $documento->setVar('html', $html);
-if ($fabrica_de_documentos->insert($documento)) {
+if ($documentFactory->insert($documento)) {
     redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
 }

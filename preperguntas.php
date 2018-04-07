@@ -36,6 +36,8 @@
  * @package assessment
  */
 
+use XoopsModules\Assessment;
+
 /**
  * Inclus�es do Xoops
  */
@@ -45,10 +47,7 @@ include dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
+
 
 /**
  * Pegando cod_prova do formul�rio e uid do aluno da session
@@ -66,7 +65,7 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 /**
  * Cria��o da F�brica de resultados (padr�o de projeto factory com DAO)
  */
-$fabrica_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
+$resultFactory = new Assessment\ResultHandler($xoopsDB);
 
 /**
  * Cria��o dos crit�rios para a f�brica produzir os objetos
@@ -80,11 +79,11 @@ $criteria->add($criteria_aluno);
  * Verifica se o resultado j� foi criado anteriormente e sen�o
  * cria o resultado, se sim informa que a prova est� em andamento j�
  */
-if ($fabrica_resultados->getCount($criteria) < 1) {
-    $resultado = $fabrica_resultados->create();
+if ($resultFactory->getCount($criteria) < 1) {
+    $resultado = $resultFactory->create();
     $resultado->setVar('uid_aluno', $uid);
     $resultado->setVar('cod_prova', $cod_prova);
-    $fabrica_resultados->insert($resultado);
+    $resultFactory->insert($resultado);
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=0', 8, _MA_ASSESSMENT_CONTAGEMSTART);
 } else {
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=0', 8, _MA_ASSESSMENT_PROVAEMANDAMENTO);

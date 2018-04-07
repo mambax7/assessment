@@ -36,14 +36,13 @@
  * @version 1.0
  * @package assessment
  */
+
+use XoopsModules\Assessment;
+
 /**
  * Arquivo de cabe�alho da administra��o do Xoops
  */
 include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
-include dirname(__DIR__) . '/class/assessment_perguntas.php';
-include dirname(__DIR__) . '/class/assessment_provas.php';
-require_once dirname(__DIR__) . '/class/assessment_respostas.php';
-require_once dirname(__DIR__) . '/class/assessment_documentos.php';
 
 /**
  * Fun��o que desenha o cabe�alho da administra��o do Xoops
@@ -59,14 +58,14 @@ $cod_prova = $_POST['cod_prova'];
 /**
  * Cria��o das f�bricas dos objetos que vamos precisar
  */
-$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
-$fabrica_de_provas->clonarProva($cod_prova);
+$examFactory     = new Assessment\ExamHandler($xoopsDB);
+$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+$documentFactory = new Assessment\DocumentHandler($xoopsDB);
+$examFactory->clonarProva($cod_prova);
 $cod_prova_clone = $xoopsDB->getInsertId();
 $criteria        = new \Criteria('cod_prova', $cod_prova);
-$fabrica_de_perguntas->clonarPerguntas($criteria, $cod_prova_clone);
-$fabrica_de_documentos->clonarDocumentos($criteria, $cod_prova_clone);
+$questionFactory->clonarPerguntas($criteria, $cod_prova_clone);
+$documentFactory->clonarDocumentos($criteria, $cod_prova_clone);
 
 redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova_clone, 2, _AM_ASSESSMENT_SUCESSO);
 //fechamento das tags de if l� de cim�o verifica��o se os arquivos do phppp existem

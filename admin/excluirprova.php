@@ -33,6 +33,9 @@
  * @version 1.0
  * @package assessment/admin
  */
+
+use XoopsModules\Assessment;
+
 /**
  * Arquivo de cabe�alho da administra��o do Xoops
  */
@@ -47,11 +50,6 @@ require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 /**
  * Inclus�es das classes do m�dulo
  */
-include dirname(__DIR__) . '/class/assessment_perguntas.php';
-include dirname(__DIR__) . '/class/assessment_provas.php';
-include dirname(__DIR__) . '/class/assessment_respostas.php';
-include dirname(__DIR__) . '/class/assessment_resultados.php';
-include dirname(__DIR__) . '/class/assessment_documentos.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
 
 /**
@@ -81,11 +79,11 @@ if (1 == $segunda_vez) {
     /**
      * Cria��o das F�bricas de objetos que vamos precisar
      */
-    $fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
-    $fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
-    $fabrica_de_respostas  = new \Xoopsassessment_respostasHandler($xoopsDB);
-    $fabrica_de_resultados = new \Xoopsassessment_resultadosHandler($xoopsDB);
-    $fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
+    $questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+    $examFactory     = new Assessment\ExamHandler($xoopsDB);
+    $answerFactory  = new Assessment\AnswerHandler($xoopsDB);
+    $resultFactory = new Assessment\ResultHandler($xoopsDB);
+    $documentFactory = new Assessment\DocumentHandler($xoopsDB);
 
     /**
      * Cria��o de objetos de crit�rio para passar para as F�bricas
@@ -96,29 +94,29 @@ if (1 == $segunda_vez) {
      * Buscamos na f�brica quantos documentos vamos excluir, os exclu�mos
      * e ent�o damos uma mensagem informando quantos apagamos
      */
-    $qtd_documentos_apagados = $fabrica_de_documentos->getCount($criteria);
-    $fabrica_de_documentos->deleteAll($criteria);
+    $qtd_documentos_apagados = $documentFactory->getCount($criteria);
+    $documentFactory->deleteAll($criteria);
     echo $qtd_documentos_apagados . _AM_ASSESSMENT_DOCUMENTOSPAGADOS . ' <br>';
 
     /**
      * Buscamos na f�brica quantos resultados vamos excluir, os exclu�mos
      * e ent�o damos uma mensagem informando quantos apagamos
      */
-    $qtd_resultados_apagados = $fabrica_de_resultados->getCount($criteria);
-    $fabrica_de_resultados->deleteAll($criteria);
+    $qtd_resultados_apagados = $resultFactory->getCount($criteria);
+    $resultFactory->deleteAll($criteria);
     echo $qtd_resultados_apagados . _AM_ASSESSMENT_RESULTAPAGADOS . '<br>';
 
     /**
      * Buscamos na f�brica as perguntas da prova, tiramos delas as respostas
      * exclu�mos as respostas
      */
-    $perguntas = $fabrica_de_perguntas->getObjects($criteria);
+    $perguntas = $questionFactory->getObjects($criteria);
 
     foreach ($perguntas as $pergunta) {
         ++$i;
         $cod_pergunta      = $pergunta->getVar('cod_pergunta');
         $criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
-        $fabrica_de_respostas->deleteAll($criteria_pergunta);
+        $answerFactory->deleteAll($criteria_pergunta);
         printf(_AM_ASSESSMENT_RESPDAPERG, $i);
         echo '<br>';
     }
@@ -126,14 +124,14 @@ if (1 == $segunda_vez) {
      * Buscamos na f�brica quantos resultados vamos excluir, os exclu�mos
      * e ent�o damos uma mensagem informando quantos apagamos
      */
-    $qtd_perguntas_apagadas = $fabrica_de_perguntas->getCount($criteria);
-    $fabrica_de_perguntas->deleteAll($criteria);
+    $qtd_perguntas_apagadas = $questionFactory->getCount($criteria);
+    $questionFactory->deleteAll($criteria);
     echo $qtd_perguntas_apagadas . _AM_ASSESSMENT_PERGUNTASAPAGADAS . '<br>';
 
     /**
      * Enfim depois de ter exclu�do tudo exclu�moso principal, a prova
      */
-    $fabrica_de_provas->deleteAll($criteria);
+    $examFactory->deleteAll($criteria);
 
     redirect_header('index.php', 8, _AM_ASSESSMENT_SUCESSO);
 

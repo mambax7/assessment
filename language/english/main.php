@@ -47,7 +47,7 @@ define('_MA_ASSESSMENT_RESPOSTA_REPETIDA', 'You had answered exactly the same be
 define('_MA_ASSESSMENT_JATERMINOU', "You had already finished this exam and now you have to wait for the teacher's validation");
 define('_MA_ASSESSMENT_PROVAVAZIA', 'This exam has no questions, yet');
 define('_MA_ASSESSMENT_ENCERRARPROVA', 'Finish the exam');
-define('_MA_ASSESSMENT_TEXTOSAPOIO', 'Documents:');
+define('_MA_ASSESSMENT_TEXTOSAPOIO', 'Document:');
 define('_MA_ASSESSMENT_PERGUNTA', 'Question');
 define('_MA_ASSESSMENT_RESPOSTAS', 'Answers:');
 define('_MA_ASSESSMENT_RESPOSTA', 'Answer');
@@ -90,4 +90,4 @@ define('_MA_ASSESSMENT_TOKENEXPIRED', 'Your time to send the form has expired, s
 
 define('dias_por_mes', (((365 * 3) + 366) / 4) / 12);
 
-//class/assessment_perguntas.php
+//class/Question.php

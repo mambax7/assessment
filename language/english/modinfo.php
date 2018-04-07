@@ -35,7 +35,7 @@ define('_MI_ASSESSMENT_DESC', 'This module enables you to create questions, answ
 // Names of admin menu items
 define('_MI_ASSESSMENT_ADMENU1', 'Exams');
 define('_MI_ASSESSMENT_ADMENU2', 'Results');
-define('_MI_ASSESSMENT_ADMENU3', 'Documents');
+define('_MI_ASSESSMENT_ADMENU3', 'Document');
 define('_MI_ASSESSMENT_HOME', 'Home');
 define('_MI_ASSESSMENT_ABOUT', 'About');
 

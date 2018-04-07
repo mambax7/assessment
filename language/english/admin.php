@@ -82,7 +82,7 @@ define('_AM_ASSESSMENT_RESULTPROVA', 'Result per exam');
 define('_AM_ASSESSMENT_RESPALUNO', "Student's answer");
 define('_AM_ASSESSMENT_EDITAR', 'Edit');
 define('_AM_ASSESSMENT_CADASTRAR', 'Submit');
-define('_AM_ASSESSMENT_ACERTOU', 'Right: ');
+define('_AM_ASSESSMENT_ACERTOU', 'Correct: ');
 define('_AM_ASSESSMENT_ERROU', 'Wrong:');
 define('_AM_ASSESSMENT_SEMREPONDER', 'Blank:');
 define('_AM_ASSESSMENT_DEUMTOTALDE', 'out of a total of');
@@ -93,12 +93,12 @@ define('_AM_ASSESSMENT_PERGASSOC', 'Associated questions');
 define('_AM_ASSESSMENT_TITULO', 'Title');
 define('_AM_ASSESSMENT_FONTE', 'Source');
 
-//assessment_perguntas.php
+//Question.php
 define('_AM_ASSESSMENT_RESPOSTA', 'Answer');
 define('_AM_ASSESSMENT_RESPCORRETA', 'Right answer');
 define('_AM_ASSESSMENT_SALVARALTERACOES', 'Save changes');
 
-//assessment_provas.php
+//Test.php
 define('_AM_ASSESSMENT_DESCRICAO', 'Description');
 define('_AM_ASSESSMENT_INSTRUCOES', 'Instructions');
 define('_AM_ASSESSMENT_TEMPO', 'Time in seconds');
@@ -106,9 +106,9 @@ define('_AM_ASSESSMENT_GRUPOSACESSO', 'Groups with access');
 define('_AM_ASSESSMENT_DATA_INICIO', 'Availability date');
 define('_AM_ASSESSMENT_DATA_FIM', 'Unavailability date');
 
-//assessment_resultados
+//Result
 define('_AM_ASSESSMENT_PERGDETALHES', 'Click on the ID of the question to see more details');
-define('_AM_ASSESSMENT_RESPCERTAS', 'Right answers');
+define('_AM_ASSESSMENT_RESPCERTAS', 'Correct answers');
 define('_AM_ASSESSMENT_RESPERR', 'Wrong answers');
 define('_AM_ASSESSMENT_SUGESTNOTA', 'Grade suggestion');
 define('_AM_ASSESSMENT_NOTAFINAL', 'Final grade');

@@ -88,4 +88,4 @@ define('_AM_ASSESSMENT_RESPOSTAEMBRANCO', 'Voc� enviou a resposta em Branco');
 //gerais
 define('_AM_ASSESSMENT_TOKENEXPIRED', 'Tempo para envio do formul�rio esgotado, envie novamente');
 
-//class/assessment_perguntas.php
+//class/Question.php

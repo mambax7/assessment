@@ -36,9 +36,6 @@
  */
 
 use XoopsModules\Assessment;
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
-
 /**
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
@@ -51,15 +48,15 @@ $xoopsOption['template_main'] = 'assessment_perguntas.tpl';
 
 include dirname(dirname(__DIR__)) . '/header.php';
 
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+
 /**
  * Inclus�es das classes do m�dulo
  */
-include __DIR__ . '/class/assessment_perguntas.php';
-include __DIR__ . '/class/assessment_provas.php';
-include __DIR__ . '/class/assessment_respostas.php';
-include __DIR__ . '/class/assessment_resultados.php';
-include __DIR__ . '/class/assessment_documentos.php';
-include __DIR__ . '/class/navegacao.php'; // classe derivada da pagenav do xoops para exibir as perguntas que j� foram respondidas
+
+//include __DIR__ . '/class/navegacao.php'; // classe derivada da pagenav do xoops para exibir as perguntas que j� foram respondidas
+
 
 /**
  * Inclus�o de classe de barra de navega��o
@@ -77,16 +74,16 @@ $start     = $_GET['start'];
 /**
  * Cria��o das F�bricas de objetos que vamos precisar
  */
-$fabrica_de_provas     = new \Xoopsassessment_provasHandler($xoopsDB);
-$fabrica_resultados    = new \Xoopsassessment_resultadosHandler($xoopsDB);
-$fabrica_de_respostas  = new \Xoopsassessment_respostasHandler($xoopsDB);
-$fabrica_de_perguntas  = new \Xoopsassessment_perguntasHandler($xoopsDB);
-$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
+$examFactory     = new Assessment\ExamHandler($xoopsDB);
+$resultFactory    = new Assessment\ResultHandler($xoopsDB);
+$answerFactory  = new Assessment\AnswerHandler($xoopsDB);
+$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+$documentFactory = new Assessment\DocumentHandler($xoopsDB);
 
 /**
  * Buscando na f�brica a prova a que esta pergunta pertence
  */
-$prova = $fabrica_de_provas->get($cod_prova);
+$prova = $examFactory->get($cod_prova);
 
 /**
  * Verificando privil�gios do aluno para esta prova
@@ -100,7 +97,7 @@ if (!$prova->isAutorizado()) {
  */
 $fim          = $prova->getVar('data_fim', 'n');
 $tempo        = $prova->getVar('tempo', 'n');
-$fimmaistempo = $fabrica_de_provas->dataMysql2dataUnix($fim) + $tempo;
+$fimmaistempo = $examFactory->dataMysql2dataUnix($fim) + $tempo;
 
 if ($fimmaistempo < time()) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_PROIBIDO);
@@ -118,14 +115,14 @@ $criteria_terminou  = new \Criteria('terminou', 1);
 $criteria_resultado = new \CriteriaCompo($criteria_aluno);
 $criteria_resultado->add($criteria_prova);
 $criteria_resultado->add($criteria_terminou);
-if ($fabrica_resultados->getCount($criteria_resultado) > 0) {
+if ($resultFactory->getCount($criteria_resultado) > 0) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_JATERMINOU);
 }
 /**
  * Verificando se a prova j� tem perguntas cadastradas se n�o
  * tiver , n�o deixa aluno ter acesso
  */
-$qtd_perguntas = $fabrica_de_perguntas->getCount($criteria_prova);
+$qtd_perguntas = $questionFactory->getCount($criteria_prova);
 if ($qtd_perguntas < 1) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_PROVAVAZIA);
 }
@@ -137,20 +134,19 @@ $criteria_compo = new \CriteriaCompo($criteria_prova);
 $criteria_compo->add($criteria_aluno);
 
 /**
- * Buscando na f�brica a quantidade de resultados desta prova para este aluno
- * para logo em seguida verificar se j� existe este objeto, n�o exisitndo
- * joga de volta para a introdu��o. O aluno n�o pode pular a instrocu��o por
- * quest�es funcionais
+ * Finding in the factory the amount of results of this test for this student
+ * to immediately check if there is already this object, not existing
+ * play back to the introduction. The learner can not skip the functional test
  */
-$qtd_resultados = $fabrica_resultados->getCount($criteria_compo);
+$qtd_resultados = $resultFactory->getCount($criteria_compo);
 if ($qtd_resultados < 1) {
-    redirect_header('verprova.php?cod_prova=' . $cod_prova, 5, 'Voc� n�o pode pular a parte de iniciar prova');
+    redirect_header('verprova.php?cod_prova=' . $cod_prova, 5, 'You can not skip the start test part' ); //'Voc� n�o pode pular a parte de iniciar prova');
 }
 
 /**
  * Buscando o objeto resultado desta prova deste aluno na f�brica
  */
-$resultados = $fabrica_resultados->getObjects($criteria_compo);
+$resultados = $resultFactory->getObjects($criteria_compo);
 $resultado  = $resultados[0];
 
 /**
@@ -163,21 +159,21 @@ $serverXX = abs((int)($GLOBALS['xoopsConfig']['server_TZ'] * 3600.0));
 //echo $serverXX . 'server TZ </br>';
 //echo 'Local: ' . date('r') . 'n<br>GMT: ' . gmdate('r') . '<br>';
 
-$data_inicio_segundos = $fabrica_de_provas->dataMysql2dataUnix($resultado->getVar('data_inicio'));
+$data_inicio_segundos = $examFactory->dataMysql2dataUnix($resultado->getVar('data_inicio'));
 //echo $data_inicio_segundos . 'data_inicio_segundos </br>';
 
 $tempo_prova = $prova->getVar('tempo');
 //echo $tempo_prova . 'tempo_prova   </br>';
 
-$tempo_restante = $fabrica_de_provas->converte_segundos(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
+$tempo_restante = $examFactory->converte_segundos(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
 //echo $tempo_restante . 'tempo_restante </br>';
 //var_dump($tempo_restante);
 
-$tempo_gasto = $fabrica_de_provas->converte_segundos($horaatual - $data_inicio_segundos, 'H');
+$tempo_gasto = $examFactory->converte_segundos($horaatual - $data_inicio_segundos, 'H');
 //echo $tempo_gasto . 'tempo_gasto  </br>';
 //var_dump($$tempo_gasto);
 
-$hora_fim_da_prova = $fabrica_de_provas->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
+$hora_fim_da_prova = $examFactory->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
 //echo $hora_fim_da_prova . 'hora_fim_da_prova  </br>';
 //var_dump($hora_fim_da_prova);
 /**
@@ -191,7 +187,7 @@ if ($tempo_restante['segundos'] < 0) {
     if (1 == $helper->getConfig('notadireta')) {
         $resultado->setVar('fechada', 1);
     }
-    $fabrica_resultados->insert($resultado, true);
+    $resultFactory->insert($resultado, true);
     redirect_header('index.php', 5, _MA_ASSESSMENT_ACABOU);
 }
 
@@ -202,14 +198,14 @@ $titulo_prova = $prova->getVar('titulo', 's');
  * buscando as perguntas da prova, depois separando
  * a nossa pergunta e enfim pegando o c�digo dela que vamos precisar
  */
-$perguntas    = $fabrica_de_perguntas->getObjects($criteria_prova);
+$perguntas    = $questionFactory->getObjects($criteria_prova);
 $pergunta     = $perguntas[$start];
 $cod_pergunta = $pergunta->getVar('cod_pergunta');
 
 /**
  * buscando documentos a serem exibidos antes da pergunta
  */
-$documentos =& $fabrica_de_documentos->getDocumentosProvaPergunta($cod_prova, $cod_pergunta);
+$documentos =& $documentFactory->getDocumentosProvaPergunta($cod_prova, $cod_pergunta);
 
 /**
  * Cria��o de objetos de crit�rio para passar para as F�bricas
@@ -219,7 +215,7 @@ $criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
 /**
  * buscando as respostas a serem exibidas
  */
-$respostas = $fabrica_de_respostas->getObjects($criteria_pergunta);
+$respostas = $answerFactory->getObjects($criteria_pergunta);
 
 /**
  * buscar resposta anterior a esta pergunta caso
@@ -237,12 +233,12 @@ $cod_resultado = $resultado->getVar('cod_resultado');
  * que j� foram respondidas em vermelho.
  */
 $cod_perguntas_respondidas = $resultado->getCodPerguntasAsArray();
-$cod_perguntas             =& $fabrica_de_perguntas->getCodObjects($criteria_prova);
-$navegacao                 = new NavegadorProva($qtd_perguntas, 1, $start, 'start', 'cod_prova=' . $cod_prova);
+$cod_perguntas             = $questionFactory->getCodObjects($criteria_prova);
+$navegacao                 = new Assessment\TestNavigator($qtd_perguntas, 1, $start, 'start', 'cod_prova=' . $cod_prova);
 $barra_navegacao           = $navegacao->renderImageNav($cod_perguntas, $cod_perguntas_respondidas, $helper->getConfig('qtdmenu'));
 
 //Montando o Formul�rio
-$formulario = $fabrica_de_perguntas->renderFormResponder('form_resposta.php', $pergunta, $respostas, $cod_resposta_anterior);
+$formulario = $questionFactory->renderFormResponder('form_resposta.php', $pergunta, $respostas, $cod_resposta_anterior);
 $formulario->assign($xoopsTpl);
 
 //sanitizing

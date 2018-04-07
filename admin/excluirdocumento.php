@@ -24,11 +24,11 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
+
+use XoopsModules\Assessment;
+
 include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
-include dirname(__DIR__) . '/class/assessment_perguntas.php';
-include dirname(__DIR__) . '/class/assessment_provas.php';
-include dirname(__DIR__) . '/class/assessment_documentos.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
 
 /**
@@ -41,9 +41,9 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 $cod_documento = $_POST['cod_documento'];
 $cod_prova     = $_POST['cod_prova'];
 
-$fabrica_de_documentos = new \Xoopsassessment_documentosHandler($xoopsDB);
+$documentFactory = new Assessment\DocumentHandler($xoopsDB);
 $criteria              = new \Criteria('cod_documento', $cod_documento);
 
-if ($fabrica_de_documentos->deleteAll($criteria)) {
+if ($documentFactory->deleteAll($criteria)) {
     redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
 }

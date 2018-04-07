@@ -18,24 +18,23 @@
  * @version      $Id $
  */
 
-$path = dirname(dirname(dirname(__DIR__)));
-//require_once $path . '/mainfile.php';
-//require_once $path . '/include/cp_functions.php';
-require_once $path . '/include/cp_header.php';
+use XoopsModules\Assessment;
 
-global $xoopsModule;
+require_once __DIR__ . '/../../../include/cp_header.php';
 
-$moduleDirName = $GLOBALS['xoopsModule']->getVar('dirname');
+require_once __DIR__ . '/../include/common.php';
 
-//if functions.php file exist
-//require_once dirname(__DIR__) . '/include/functions.php';
+$moduleDirName = basename(dirname(__DIR__));
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
+$utility = new Assessment\Utility();
+
+/** @var Xmf\Module\Admin $adminObject */
+$adminObject = \Xmf\Module\Admin::getInstance();
 
 // Load language files
-xoops_loadLanguage('admin', $moduleDirName);
-xoops_loadLanguage('modinfo', $moduleDirName);
-xoops_loadLanguage('main', $moduleDirName);
+$helper->loadLanguage('admin');
+$helper->loadLanguage('modinfo');
+$helper->loadLanguage('main');
 
-$pathIcon16      = \Xmf\Module\Admin::iconUrl('', 16);
-$pathIcon16      = \Xmf\Module\Admin::iconUrl('', 32);
-$pathModuleAdmin = XOOPS_ROOT_PATH . '/' . $xoopsModule->getInfo('dirmoduleadmin');
-require_once $pathModuleAdmin . '/moduleadmin/moduleadmin.php';
+
