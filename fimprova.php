@@ -76,8 +76,9 @@ $resultado = $resultFactory->get($cod_resultado);
 $cod_prova = $resultado->getVar('cod_prova');
 
 /**
- * Fabricando o objeto prova
+ * Create Exam object
  */
+/** @var \XoopsModules\Assessment\Exam $prova */
 $prova = $examFactory->get($cod_prova);
 
 /**

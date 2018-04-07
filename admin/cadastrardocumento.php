@@ -26,12 +26,13 @@
 //  ------------------------------------------------------------------------ //
 
 use XoopsModules\Assessment;
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
 
 include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 global $xoopsModuleConfig;
+
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
 
 /**
  * Security check validating TOKEN

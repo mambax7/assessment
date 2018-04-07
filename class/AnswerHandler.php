@@ -166,7 +166,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_respostass from the database
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement} conditions to be met
+     * @param null|\CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} conditions to be met
      * @param bool            $id_as_key use the UID as key for the array?
      *
      * @param bool            $as_object

@@ -59,26 +59,27 @@ $cod_prova = $_GET['cod_prova'];
 $uid       = $xoopsUser->getVar('uid');
 
 /**
- * Cria��o das F�bricas de objetos que vamos precisar
+ * Creation of the object factories that we will need
  */
 $examFactory     = new Assessment\ExamHandler($xoopsDB);
 $resultFactory = new Assessment\ResultHandler($xoopsDB);
 $questionFactory  = new Assessment\QuestionHandler($xoopsDB);
 
 /**
- * Fabricando o objeto prova
+ * Create Exam object
  */
+/** @var \XoopsModules\Assessment\Exam $prova */
 $prova = $examFactory->get($cod_prova);
 
 /**
- * Verificando privil�gios do aluno para esta prova
+ *  Verifying Student Privileges for this Exam
  */
 if (!$prova->isAutorizado()) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_PROIBIDO);
 }
 
 /**
- * Verificando prova j� expirou
+ * Verifying Exam has expired
  */
 $fim          = $prova->getVar('data_fim', 'n');
 $tempo        = $prova->getVar('tempo', 'n');
@@ -89,7 +90,7 @@ if ($fimmaistempo < time()) {
 }
 
 /**
- * Cria��o de objetos de crit�rio para passar para as F�bricas
+ * Creating of Criteria objects to be passed to object factories
  */
 $criteria_prova     = new \Criteria('cod_prova', $cod_prova);
 $criteria_aluno     = new \Criteria('uid_aluno', $uid);

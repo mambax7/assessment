@@ -63,7 +63,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
      *
      * @param  mixed $id     ID
      * @param  array $fields fields to fetch
-     * @return \XoopsObject {@link \XoopsObject}
+     * @return bool|\XoopsObject {@link \XoopsObject}
      */
     public function get($id = null, $fields = null)
     {

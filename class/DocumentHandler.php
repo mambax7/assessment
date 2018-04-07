@@ -182,7 +182,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_documentoss from the database
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement} conditions to be met
+     * @param null|\CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} conditions to be met
      * @param bool            $id_as_key use the UID as key for the array?
      *
      * @param bool            $as_object
@@ -236,6 +236,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         $criteria         = new \Criteria('cod_prova', $cod_prova);
         $cod_documentos   = [];
         $documentos_prova = $this->getObjects($criteria);
+        $myts = \MyTextSanitizer::getInstance();
         $i                = 0;
         foreach ($documentos_prova as $documento_prova) {
             $cods_perguntas = explode(',', $documento_prova->getVar('cods_perguntas'));
@@ -250,7 +251,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
                     //$documentos[$i]['documento']= text_filter($documento_prova->getVar('documento',"n"),true);
                     $documentos[$i]['documento'] = $documento_prova->getVar('documento', 'n');
                 } else {
-                    $documentos[$i]['documento'] = text_filter($documento_prova->getVar('documento', 's'), true);
+                    $documentos[$i]['documento'] = $myts->textFilter($documento_prova->getVar('documento', 's'), true);
                 }
                 ++$i;
             }
@@ -336,15 +337,8 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
 
         $form->setExtra('enctype="multipart/form-data"');
 
-        if (!is_object($GLOBALS['xoopsModule']) || 'assessment' !== $GLOBALS['xoopsModule']->getVar('dirname')) {
-            $modhandler    = &xoops_getHandler('module');
-            $module        =& $modhandler->getByDirname('assessment');
-            $configHandler = &xoops_getHandler('config');
-            $moduleConfig  =& $configHandler->getConfigsByCat(0, $module->getVar('mid'));
-        } else {
-            $moduleConfig =& $GLOBALS['xoopsModuleConfig'];
-        }
-        $editor = $moduleConfig['editorpadrao'];
+        $helper = Assessment\Helper::getInstance();
+        $editor = $helper->getConfig('editorpadrao');
 
         // Add the editor selection box
         // If dohtml is disabled, set $noHtml = true
@@ -413,6 +407,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         $campo_codprova     = new \XoopsFormHidden('campo_codprova', $cod_prova);
         $form->setExtra('enctype="multipart/form-data"');
 
+        $helper = Assessment\Helper::getInstance();
         $editor = $helper->getConfig('editorpadrao');
 
         // Add the editor selection box

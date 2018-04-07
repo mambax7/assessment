@@ -88,6 +88,7 @@ $prova = $examFactory->get($cod_prova);
 /**
  * Verificando privil�gios do aluno para esta prova
  */
+/** @var \XoopsModules\Assessment\Exam $prova */
 if (!$prova->isAutorizado()) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_PROIBIDO);
 }

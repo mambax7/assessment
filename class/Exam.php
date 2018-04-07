@@ -125,14 +125,14 @@ class Exam extends \XoopsObject
     /**
      * Verifica se aluno pode acessar esta prova
      *
-     * @param object member $aluno
+     * @param \XoopsUser $aluno
      *
      * @return bool true se autorizado e false se n�o autorizado
      */
     public function isAutorizado($aluno = null)
     {
         global $xoopsUser, $xoopsDB;
-        if (null == $aluno) {
+        if (null === $aluno) {
             $aluno = $xoopsUser;
         }
         $acesso    = $this->getVar('acesso', 'n');
