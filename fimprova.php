@@ -72,6 +72,7 @@ $resultFactory   = new Assessment\ResultHandler($xoopsDB);
 /**
  * Fabricando o objeto resultado
  */
+/** @var \XoopsModules\Assessment\Result $resultado */
 $resultado = $resultFactory->get($cod_resultado);
 $cod_prova = $resultado->getVar('cod_prova');
 
@@ -136,6 +137,7 @@ $cod_resultado = $resultado->getVar('cod_resultado');
 /**
  * Buscando titulo da prova. descricao e quantidade de perguntas respondidas
  */
+
 $qtd_respostas = $resultado->contarRespostas();
 $titulo        = $prova->getVar('titulo');
 $descricao     = $prova->getVar('descricao');

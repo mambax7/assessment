@@ -52,7 +52,7 @@ $helper = Assessment\Helper::getInstance();
 /**
  * Pegando cod_prova do formul�rio
  */
-$cod_resultado = $_POST['cod_resultado'];
+$cod_resultado = \Xmf\Request::getInt('cod_resultado', 0, 'POST');
 
 /**
  * Security check validating TOKEN
@@ -94,8 +94,8 @@ if ('' == $resp_erradas[0]) {
 $nota_sugest = round(100 * $qtd_acertos / $qtd_perguntas, 2);
 
 /**
- * Atualizando o resultado para que a prova fique indispon�vel para o aluno ou
- * se assim for definido nas preferencias saia logo o resultado
+ * Update the result so that the exam is unavailable to the student or
+ * if it's so defined in the preferences, exit the result immediately
  */
 $resultado->setVar('nota_final', $nota_sugest);
 $resultado->setVar('terminou', 1);
@@ -105,13 +105,13 @@ if (1 == $helper->getConfig('notadireta')) {
 $resultado->unsetNew();
 
 /**
- * Atualiza o resultado e d� uma mensagem de sucesso
+ * Update the result and give a success message
  */
 if ($resultFactory->insert($resultado)) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_CONGRATULATIONS);
 }
 
 /**
- * Inclus�o de arquivo de fechamento da p�gina
+ * Include a footer
  */
 include dirname(dirname(__DIR__)) . '/footer.php';

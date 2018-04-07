@@ -132,6 +132,7 @@ class Exam extends \XoopsObject
     public function isAutorizado($aluno = null)
     {
         global $xoopsUser, $xoopsDB;
+        /** @var \XoopsUser $aluno */
         if (null === $aluno) {
             $aluno = $xoopsUser;
         }
