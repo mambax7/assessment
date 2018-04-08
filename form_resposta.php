@@ -34,6 +34,7 @@
  * @package assessment
  */
 
+use Xmf\Request;
 use XoopsModules\Assessment;
 
 /**
@@ -67,14 +68,14 @@ $uid = $xoopsUser->getVar('uid');
  * Se o aluno n�o escolheu nenhuma resposta faz ele voltar para a p�gina
  */
 if ('' == $cod_resposta) {
-    redirect_header($_SERVER['HTTP_REFERER'], 5, _MA_ASSESSMENT_RESPOSTAEMBRANCO);
+    redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _MA_ASSESSMENT_RESPOSTAEMBRANCO);
 }
 
 /**
  * Security check validating TOKEN
  */
 if (!$GLOBALS['xoopsSecurity']->check()) {
-    redirect_header($_SERVER['HTTP_REFERER'], 5, _MA_ASSESSMENT_TOKENEXPIRED);
+    redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _MA_ASSESSMENT_TOKENEXPIRED);
 }
 
 /**

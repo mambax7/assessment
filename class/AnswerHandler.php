@@ -121,7 +121,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
             $format .= ' WHERE cod_resposta = %u';
             $sql    = sprintf($format, $this->db->prefix('assessment_respostas'), $cod_resposta, $cod_pergunta, $this->db->quoteString($titulo), $iscerta, $now, $now, $this->db->quoteString($uid_elaboradores), $isativa, $cod_resposta);
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -151,7 +151,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_resposta = %u', $this->db->prefix('assessment_respostas'), $answer->getVar('cod_resposta'));
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);

@@ -25,6 +25,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
 
+use Xmf\Request;
 use XoopsModules\Assessment;
 
 include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
@@ -34,7 +35,7 @@ require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
  * Security check validating TOKEN
  */
 if (!$GLOBALS['xoopsSecurity']->check()) {
-    redirect_header($_SERVER['HTTP_REFERER'], 5, _AM_ASSESSMENT_TOKENEXPIRED);
+    redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 $examFactory      = new Assessment\ExamHandler($xoopsDB);
 $instrucoes             = $_POST['campo_instrucoes'];
@@ -54,11 +55,11 @@ $data_hora_inicio_UNIX = $examFactory->dataMysql2dataUnix($data_hora_inicio_MYSQ
 $data_hora_fim_UNIX    = $examFactory->dataMysql2dataUnix($data_hora_fim_MYSQL);
 
 if ($data_hora_inicio_UNIX > $data_hora_fim_UNIX) {
-    redirect_header($_SERVER['HTTP_REFERER'], 5, _AM_ASSESSMENT_DATAINICIOMAIORQFIM);
+    redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_DATAINICIOMAIORQFIM);
 }
 /*if (!(is_int($tempo) & $tempo>0 )) {
 
-                 redirect_header($_SERVER['HTTP_REFERER'], 5, $tempo." n�o � um n�mero inteiro. ");
+                 redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, $tempo." n�o � um n�mero inteiro. ");
                     }*/
 $uid_elaborador = $xoopsUser->getVar('uid');
 

@@ -36,6 +36,7 @@
  * @package assessment
  */
 
+use Xmf\Request;
 use XoopsModules\Assessment;
 
 /**
@@ -59,7 +60,7 @@ $uid       = $xoopsUser->getVar('uid');
  * Security check validating TOKEN
  */
 if (!$GLOBALS['xoopsSecurity']->check()) {
-    redirect_header($_SERVER['HTTP_REFERER'], 5, _MA_ASSESSMENT_TOKENEXPIRED);
+    redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _MA_ASSESSMENT_TOKENEXPIRED);
 }
 
 /**

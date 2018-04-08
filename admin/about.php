@@ -22,9 +22,9 @@ require_once __DIR__ . '/admin_header.php';
 
 xoops_cp_header();
 
-$aboutAdmin = new ModuleAdmin();
+$aboutAdmin = \Xmf\Module\Admin::getInstance();
 
-echo $aboutAdmin->addNavigation('about.php');
-echo $aboutAdmin->renderAbout('xoopsfoundation@gmail.com', false);
+$aboutAdmin->displayNavigation('about.php');
+$aboutAdmin->renderAbout('xoopsfoundation@gmail.com', false);
 
 require_once __DIR__ . '/admin_footer.php';

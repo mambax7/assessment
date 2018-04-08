@@ -44,7 +44,7 @@ use XoopsModules\Assessment;
  * Arquivos de cabe�alho do Xoops para carregar ...
  */
 include dirname(dirname(__DIR__)) . '/mainfile.php';
-$xoopsOption['template_main'] = 'assessment_fimprova.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'assessment_fimprova.tpl';
 include dirname(dirname(__DIR__)) . '/header.php';
 
 /**
@@ -54,7 +54,7 @@ include dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Definindo arquivo de template da p�gina
  */
-$xoopsOption['template_main'] = 'assessment_fimprova.tpl';
+//$GLOBALS['xoopsOption']['template_main'] = 'assessment_fimprova.tpl';
 
 /**
  * Pegando cod_resultado do formul�rio e uid do aluno da session

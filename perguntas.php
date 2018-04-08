@@ -44,7 +44,7 @@ include dirname(dirname(__DIR__)) . '/mainfile.php';
 /**
  * Definindo arquivo de template da p�gina
  */
-$xoopsOption['template_main'] = 'assessment_perguntas.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'assessment_perguntas.tpl';
 
 include dirname(dirname(__DIR__)) . '/header.php';
 

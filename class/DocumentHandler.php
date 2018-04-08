@@ -137,7 +137,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
             $format .= ' WHERE cod_documento = %u';
             $sql    = sprintf($format, $this->db->prefix('assessment_documentos'), $cod_documento, $this->db->quoteString($titulo), $tipo, $cod_prova, $this->db->quoteString($cods_perguntas), $this->db->quoteString($documento), $uid_elaborador, $this->db->quoteString($fonte), $html, $cod_documento);
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -167,7 +167,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_documento = %u', $this->db->prefix('assessment_documentos'), $document->getVar('cod_documento'));
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);

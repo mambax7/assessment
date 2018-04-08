@@ -10,7 +10,7 @@ include dirname(dirname(__DIR__)) . '/header.php';
 //aqui come�a o conte�do principal
 //echo('uiohaiufuihfaui<br>');
 //echo ($helper->getConfig('ploft'));
-$xoopsOption['template_main'] = 'meumodulo_lista.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'meumodulo_lista.tpl';
 $xoopsTpl->assign('valor1', $helper->getConfig('ploft'));
 
 $sql = 'SELECT teste_id,teste_nome FROM ' . $xoopsDB->prefix('meumodulo_tabela1');

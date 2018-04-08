@@ -136,7 +136,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
                 $cod_resultado
             );
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -166,7 +166,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_resultado = %u', $this->db->prefix('assessment_resultados'), $result->getVar('cod_resultado'));
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);

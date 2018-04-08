@@ -42,7 +42,7 @@ use XoopsModules\Assessment;
  */
 include dirname(dirname(__DIR__)) . '/mainfile.php';
 
-$xoopsOption['template_main'] = 'assessment_index.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'assessment_index.tpl';
 include dirname(dirname(__DIR__)) . '/header.php';
 
 $moduleDirName = basename(__DIR__);

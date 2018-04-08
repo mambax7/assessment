@@ -50,7 +50,7 @@ include dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Definindo arquivo de template da p�gina
  */
-$xoopsOption['template_main'] = 'assessment_verprova.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'assessment_verprova.tpl';
 
 /**
  * Pegando cod_prova do formul�rio e uid do aluno da session

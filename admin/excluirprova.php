@@ -33,7 +33,7 @@
  * @version 1.0
  * @package assessment/admin
  */
-
+use Xmf\Request;
 use XoopsModules\Assessment;
 
 /**
@@ -74,7 +74,7 @@ if (1 == $segunda_vez) {
      * Security check validating TOKEN
      */
     if (!$GLOBALS['xoopsSecurity']->check()) {
-        redirect_header($_SERVER['HTTP_REFERER'], 5, _AM_ASSESSMENT_TOKENEXPIRED);
+        redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
     }
     /**
      * Cria��o das F�bricas de objetos que vamos precisar

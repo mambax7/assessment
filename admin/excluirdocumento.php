@@ -25,6 +25,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
 
+use Xmf\Request;
 use XoopsModules\Assessment;
 
 include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
@@ -35,7 +36,7 @@ require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
  * Security check validating TOKEN
  */
 if (!$GLOBALS['xoopsSecurity']->check()) {
-    redirect_header($_SERVER['HTTP_REFERER'], 5, _AM_ASSESSMENT_TOKENEXPIRED);
+    redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
 $cod_documento = $_POST['cod_documento'];

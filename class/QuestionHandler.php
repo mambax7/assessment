@@ -127,7 +127,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
             $format .= ' WHERE cod_pergunta = %u';
             $sql    = sprintf($format, $this->db->prefix('assessment_perguntas'), $cod_pergunta, $cod_prova, $this->db->quoteString($titulo), $now, $now, $this->db->quoteString($uid_elaborador), $ordem, $cod_pergunta);
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -157,7 +157,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_pergunta = %u', $this->db->prefix('assessment_perguntas'), $question->getVar('cod_pergunta'));
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -425,7 +425,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
      *
      * @return mixed
      */
-    public function pegarultimocodigo(&$db)
+    public function pegarultimocodigo($db)
     {
         return $db->getInsertId();
     }

@@ -373,7 +373,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
      *
      * @return mixed
      */
-    public function pegarultimocodigo(&$db)
+    public function pegarultimocodigo($db)
     {
         return $db->getInsertId();
     }

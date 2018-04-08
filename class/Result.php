@@ -194,7 +194,7 @@ class Result extends \XoopsObject
     {
         $x = [];
         foreach ($respostasCertas as $chave => $valor) {
-            if (!(null == $chave)) {
+            if (!(null === $chave)) {
                 $x[] = $chave . '-' . $valor;
             }
         }
@@ -210,7 +210,7 @@ class Result extends \XoopsObject
     {
         $x = [];
         foreach ($respostasErradas as $chave => $valor) {
-            if (!(null == $chave)) {
+            if (!(null === $chave)) {
                 $x[] = $chave . '-' . $valor;
             }
         }

@@ -401,7 +401,7 @@ function listarperguntas()
     $barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtditens'), $startper, 'startper', 'op=' . $_GET['op'] . '&' . 'cod_prova=' . $_GET['cod_prova']);
 
     echo "<table class='outer' width='100%'><tr><th colspan=3>" . _AM_ASSESSMENT_LISTAPERGASSOC . '</th></tr>';
-    if (null == $vetor_perguntas) {
+    if (null === $vetor_perguntas) {
         echo "<tr><td class='odd'>" . _AM_ASSESSMENT_SEMPERGUNTA . '</td></tr>';
     }
     foreach ($vetor_perguntas as $pergunta) {
@@ -459,8 +459,8 @@ function editarpergunta()
     global $xoopsDB;
     $cod_pergunta = $_GET['cod_pergunta'];
     //    loadModuleAdminMenu(1,"migalhas3");
-    $mainAdmin = new ModuleAdmin();
-    echo $mainAdmin->addNavigation('main.php?op=editar_pergunta');
+    $mainAdmin = \Xmf\Module\Admin::getInstance();
+    echo $mainAdmin->displayNavigation('main.php?op=editar_pergunta');
     $criteria = new \Criteria('cod_pergunta', $cod_pergunta);
     $criteria->setSort('cod_resposta');
     $criteria->setOrder('ASC');
@@ -567,8 +567,8 @@ switch ($op) {
 
     case 'manter_documentos':
         //            loadModuleAdminMenu(3,"-> "._AM_ASSESSMENT_DOCUMENTO);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php?op=manter_documentos');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php?op=manter_documentos');
         listarDocumentos();
         cadastrarDocumento();
         seloqualidade();
@@ -576,15 +576,15 @@ switch ($op) {
 
     case 'manter_provas':
         //            loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php?op=manter_provas');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php?op=manter_provas');
 
-        //        $mainAdmin = new ModuleAdmin();
-        //        echo $mainAdmin->addNavigation('main.php?op=manter_provas');
+        //        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        //        echo $mainAdmin->displayNavigation('main.php?op=manter_provas');
         //        $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . " " . _AM_ASSESSMENT_PERGUNTA, '#cadastrar_pergunta', 'add');
         //        $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . " " . _AM_ASSESSMENT_DOCUMENTO, '#cadastrar_documento', 'add');
         //    $mainAdmin->addItemButton(_MI_ASSESSMENT_ADMENU1, "{$currentFile}?op==manter_provas", 'list');
-        //        echo $mainAdmin->renderButton('left');
+        //        echo $mainAdmin->displayButton('left');
 
         listarprovas();
         cadastrarprova();
@@ -593,37 +593,37 @@ switch ($op) {
 
     case 'manter_resultados':
         //            loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_RESULTADO);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php?op=manter_resultados');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php?op=manter_resultados');
         listarResultados();
         seloqualidade();
         break;
 
     case 'resultados_prova':
         //          loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_RESULTPROVA);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php?op=manter_prova');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php?op=manter_prova');
         listarResultados();
         seloqualidade();
         break;
 
     case 'ver_detalhe_pergunta':
         //            loadModuleAdminMenu(2,_AM_ASSESSMENT_RESPALUNO);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php?op=ver_detalhe_pergunta');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php?op=ver_detalhe_pergunta');
         verDetalhePergunta($_GET['cod_pergunta'], $_GET['cod_resposta']);
         seloqualidade();
         break;
 
     case 'editar_prova':
         //            loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA." - "._AM_ASSESSMENT_EDITAR);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php?op=manter_provas');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php?op=manter_provas');
         $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PERGUNTA, '#cadastrar_pergunta', 'add');
         $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_DOCUMENTO, '#cadastrar_documento', 'add');
         $mainAdmin->addItemButton(_MI_ASSESSMENT_ADMENU1, "{$currentFile}?op==manter_provas", 'list');
 
-        echo $mainAdmin->renderButton('left');
+        echo $mainAdmin->displayButton('left');
 
         //        echo "<a href=#cadastrar_pergunta>" . _AM_ASSESSMENT_CADASTRAR . " " . _AM_ASSESSMENT_PERGUNTA . "</a> | <a href=#cadastrar_documento>" . _AM_ASSESSMENT_CADASTRAR
         //            . " " . _AM_ASSESSMENT_DOCUMENTO . "</a>";
@@ -644,23 +644,23 @@ switch ($op) {
 
     case 'editar_resultado':
         //            loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_PROVA." "._AM_ASSESSMENT_EDITAR);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php');
         editarResultado();
         seloqualidade();
         break;
 
     case 'editar_documento':
         //            loadModuleAdminMenu(3,"-> "._AM_ASSESSMENT_DOCUMENTO." "._AM_ASSESSMENT_EDITAR);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php');
         editarDocumento();
         seloqualidade();
         break;
 
     case 'editar_pergunta':
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php');
         editarpergunta();
         seloqualidade();
         break;
@@ -669,8 +669,8 @@ switch ($op) {
 
     default:
         //        loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA);
-        $mainAdmin = new ModuleAdmin();
-        echo $mainAdmin->addNavigation('main.php');
+        $mainAdmin = \Xmf\Module\Admin::getInstance();
+        echo $mainAdmin->displayNavigation('main.php');
         listarprovas();
         cadastrarprova();
         seloqualidade();
