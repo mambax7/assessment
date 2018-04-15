@@ -1,11 +1,12 @@
 <?php
 
 use XoopsModules\Assessment;
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
 
 include dirname(dirname(__DIR__)) . '/mainfile.php';
 include dirname(dirname(__DIR__)) . '/header.php';
+
+/** @var Assessment\Helper $helper */
+$helper = Assessment\Helper::getInstance();
 
 //aqui come�a o conte�do principal
 //echo('uiohaiufuihfaui<br>');

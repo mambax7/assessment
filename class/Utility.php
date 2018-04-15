@@ -27,7 +27,6 @@ use Xmf\Request;
 use XoopsModules\Assessment;
 use XoopsModules\Assessment\Common;
 
-require_once __DIR__ . '/../include/common.php';
 
 /**
  * Class Utility

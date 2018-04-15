@@ -18,7 +18,7 @@
  * @version      $Id $
  */
 
-$pathIcon32      = Xmf\Module\Admin::iconUrl('', 32);
+$pathIcon32      = \Xmf\Module\Admin::iconUrl('', 32);
 
 echo "<div class='adminfooter'>\n"
      ."  <div style='text-align: center;'>\n"

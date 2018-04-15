@@ -52,6 +52,7 @@ $resultado->setVar('terminou', 1);
 $resultado->setVar('fechada', 1);
 
 $resultado->unsetNew();
+/** @var \XoopsNotificationHandler $notificationHandler */
 $notificationHandler = xoops_getHandler('notification');
 $notificationHandler->triggerEvent('prova', $cod_resultado, 'prova_corrigida');
 if ($resultFactory->insert($resultado)) {
