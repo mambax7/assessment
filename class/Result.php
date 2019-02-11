@@ -70,7 +70,6 @@ class Result extends \XoopsObject
         }
     }
 
-
     /**
      * @return array
      */
@@ -81,7 +80,9 @@ class Result extends \XoopsObject
         $par_respostas = [];
         foreach ($respostas as $resposta) {
             $x                    = explode('-', $resposta);
-            $par_respostas[$x[0]] = @$x[1];
+            if (isset($x[1])) {
+                $par_respostas[$x[0]] = $x[1];
+            }
         }
 
         return $par_respostas;
@@ -92,6 +93,7 @@ class Result extends \XoopsObject
      */
     public function getRespostasErradasAsArray()
     {
+        $respostas     = [];
         $respostas     = explode(',', $this->getVar('resp_erradas'));
         $par_respostas = [];
         foreach ($respostas as $resposta) {

@@ -240,7 +240,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
      *
      * @return array
      */
-    public function getAll($criteria = [], $asobject = false, $sort = 'cod_prova', $order = 'ASC', $limit = 0, $start = 0)
+    public function getAll2($criteria = [], $asobject = false, $sort = 'cod_prova', $order = 'ASC', $limit = 0, $start = 0)
     {
         $ret         = [];
         $where_query = '';

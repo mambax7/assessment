@@ -154,14 +154,14 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_resultadoss from the database
      *
-     * @param \Criteria $criteria  {@link \Criteria} conditions to be met
+     * @param \CriteriaElement|\Criteria $criteria  {@link \CriteriaElement} conditions to be met
      * @param bool             $id_as_key use the UID as key for the array?
      *
      * @param bool             $as_object
      * @return array array of <a href='psi_element://$result'>$result</a> objects
      *                                    objects
      */
-    public function &getObjects(\Criteria $criteria = null, $id_as_key = false, $as_object = true)
+    public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
     {
         $ret   = [];
         $limit = $start = 0;
@@ -195,14 +195,14 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_results matching a condition
      *
-     * @param \Criteria $criteria {@link \Criteria} to match
+     * @param \CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} to match
      *
      * @return int count of Questions
      */
-    public function getCount(\Criteria $criteria = null)
+    public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_resultados');
-        if ($criteria instanceof \Criteria) {
+        if ($criteria instanceof \CriteriaCompo) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -225,7 +225,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
      *
      * @return array
      */
-    public function getAll($criteria = [], $asobject = false, $sort = 'cod_resultado', $order = 'ASC', $limit = 0, $start = 0)
+    public function getAll2($criteria = [], $asobject = false, $sort = 'cod_resultado', $order = 'ASC', $limit = 0, $start = 0)
     {
         $ret         = [];
         $where_query = '';
@@ -258,13 +258,13 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * delete assessment_resultadoss matching a set of conditions
      *
-     * @param \Criteria $criteria {@link \Criteria}
+     * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_resultados');
         if ($criteria instanceof \Criteria) {
@@ -277,7 +277,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
         return true;
     }
 
-    /* cria form de edi��o de resultado
+    /* creation of result edit form
 *
 * @param string $action caminho para arquivo que ...
 * @param object $question {@link Question}
@@ -316,14 +316,14 @@ class ResultHandler extends \XoopsPersistableObjectHandler
 
         foreach ($vetor_resp_certas as $resp) {
             $detalhe_resp_certa = explode('-', $resp);
-            $texto_resp_certas  .= '<a href=main.php?op=ver_detalhe_pergunta&cod_pergunta=' . $detalhe_resp_certa[0] . '&cod_resposta=' . $detalhe_resp_certa[1] . '>' . $detalhe_resp_certa[0] . ' </a> ';
+            $texto_resp_certas  .= '<a href=main.php?op=ver_detalhe_pergunta&cod_pergunta=' . $detalhe_resp_certa[0] . '&cod_resposta=' . (isset($detalhe_resp_certa[1]) ? $detalhe_resp_certa[1]:'') . '>' . $detalhe_resp_certa[0] . ' </a> ';
         }
         $texto_resp_erradas = _AM_ASSESSMENT_PERGDETALHES . ' <br>';
         $vetor_resp_erradas = explode(',', $resp_erradas);
 
         foreach ($vetor_resp_erradas as $resp2) {
             $detalhe_resp_errada = explode('-', $resp2);
-            $texto_resp_erradas  .= '<a href=main.php?op=ver_detalhe_pergunta&cod_pergunta=' . $detalhe_resp_errada[0] . '&cod_resposta=' . $detalhe_resp_errada[1] . '>' . $detalhe_resp_errada[0] . ' </a> ';
+            $texto_resp_erradas  .= '<a href=main.php?op=ver_detalhe_pergunta&cod_pergunta=' . $detalhe_resp_errada[0] . '&cod_resposta=' . (isset($detalhe_resp_errada[1])?$detalhe_resp_errada[1]:'') . '>' . $detalhe_resp_errada[0] . ' </a> ';
         }
 
         if ('' == $vetor_resp_certas[0]) {

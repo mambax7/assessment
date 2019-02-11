@@ -219,6 +219,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     {
         $criteria         = new \Criteria('cod_prova', $cod_prova);
         $cod_documentos   = [];
+        $documentos   = [];
         $documentos_prova = $this->getObjects($criteria);
         $myts             = \MyTextSanitizer::getInstance();
         $i                = 0;
@@ -247,14 +248,14 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_documentoss matching a condition
      *
-     * @param \Criteria $criteria {@link \Criteria} to match
+     * @param \CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} to match
      *
      * @return int count of assessment_documentoss
      */
-    public function getCount(\Criteria $criteria = null)
+    public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_documentos');
-        if ($criteria instanceof \Criteria) {
+        if ($criteria instanceof \CriteriaCompo) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -277,7 +278,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      *
      * @return array
      */
-    public function getAll($criteria = [], $asobject = false, $sort = 'cod_documento', $order = 'ASC', $limit = 0, $start = 0)
+    public function getAll2($criteria = [], $asobject = false, $sort = 'cod_documento', $order = 'ASC', $limit = 0, $start = 0)
     {
         $ret         = [];
         $where_query = '';
@@ -310,13 +311,13 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * delete assessment_documentoss matching a set of conditions
      *
-     * @param \Criteria $criteria {@link \Criteria}
+     * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_documentos');
         if ($criteria instanceof \Criteria) {

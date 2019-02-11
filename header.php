@@ -17,6 +17,9 @@
  * @since
  * @author     XOOPS Development Team
  */
+
+use XoopsModules\Assessment;
+
 require  dirname(dirname(__DIR__)) . '/mainfile.php';
 //require XOOPS_ROOT_PATH . '/header.php';
 

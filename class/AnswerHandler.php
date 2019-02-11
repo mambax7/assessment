@@ -195,14 +195,14 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_respostass matching a condition
      *
-     * @param \Criteria $criteria {@link \Criteria} to match
+     * @param \CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} to match
      *
      * @return int count of Questions
      */
-    public function getCount(\Criteria $criteria = null)
+    public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_respostas');
-        if ($criteria instanceof \Criteria) {
+        if ($criteria instanceof \CriteriaCompo) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -225,7 +225,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
      *
      * @return array
      */
-    public function getAll($criteria = [], $asobject = false, $sort = 'cod_resposta', $order = 'ASC', $limit = 0, $start = 0)
+    public function getAll2($criteria = [], $asobject = false, $sort = 'cod_resposta', $order = 'ASC', $limit = 0, $start = 0)
     {
         $ret         = [];
         $where_query = '';
@@ -258,13 +258,13 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     /**
      * delete assessment_respostass matching a set of conditions
      *
-     * @param \Criteria $criteria {@link \Criteria}
+     * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_respostas');
         if ($criteria instanceof \Criteria) {

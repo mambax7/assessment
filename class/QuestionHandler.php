@@ -158,14 +158,14 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_perguntas from the database
      *
-     * @param null|\Criteria $criteria  {@link \Criteria} conditions to be met
+     * @param \CriteriaElement|\Criteria $criteria  {@link \CriteriaElement} conditions to be met
      * @param bool                                 $id_as_key use the UID as key for the array?
      *
      * @param bool                                 $as_object
      * @return array array of <a href='psi_element://Question'>Question</a> objects
      *                                                        objects
      */
-    public function &getObjects(\Criteria $criteria = null, $id_as_key = false, $as_object = true)
+    public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
     {
         $ret   = [];
         $limit = $start = 0;
@@ -228,14 +228,14 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_perguntass matching a condition
      *
-     * @param \Criteria $criteria {@link \Criteria} to match
+     * @param \CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} to match
      *
      * @return int count of Questions
      */
-    public function getCount(\Criteria $criteria = null)
+    public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_perguntas');
-        if ($criteria instanceof \Criteria) {
+        if ($criteria instanceof \CriteriaElement) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -258,7 +258,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
      *
      * @return array
      */
-    public function getAll($criteria = [], $asobject = false, $sort = 'cod_pergunta', $order = 'ASC', $limit = 0, $start = 0)
+    public function getAll2($criteria = [], $asobject = false, $sort = 'cod_pergunta', $order = 'ASC', $limit = 0, $start = 0)
     {
         $ret         = [];
         $where_query = '';
@@ -291,13 +291,13 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * delete Questions matching a set of conditions
      *
-     * @param \Criteria $criteria {@link \Criteria}
+     * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_perguntas');
         if ($criteria instanceof \Criteria) {

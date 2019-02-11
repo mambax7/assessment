@@ -191,7 +191,7 @@ $cod_pergunta = $pergunta->getVar('cod_pergunta');
 /**
  * looking for documents to be displayed before the question
  */
-$documentos = &$documentFactory->getDocumentosProvaPergunta($cod_prova, $cod_pergunta);
+$documentos = $documentFactory->getDocumentosProvaPergunta($cod_prova, $cod_pergunta);
 
 /**
  * Creating Criteria Objects to Move to Factories
