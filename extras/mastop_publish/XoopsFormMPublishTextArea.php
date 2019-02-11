@@ -649,7 +649,7 @@ tinyMCE.init({
                     }
                 }
             }
-            $ret .= "&nbsp;[<a href='#moresmiley' onclick='javascript:openWithSelfMain(\"" . XOOPS_URL . '/misc.php?action=showpopups&amp;type=smilies&amp;target=' . $this->getName() . "\",\"smilies\",300,475);'>" . _MORE . '</a>]';
+            $ret .= "&nbsp;[<a href='#moresmiley' onclick='openWithSelfMain(\"" . XOOPS_URL . '/misc.php?action=showpopups&amp;type=smilies&amp;target=' . $this->getName() . "\",\"smilies\",300,475);'>" . _MORE . '</a>]';
         } else {
             $myts   = \MyTextSanitizer::getInstance();
             $smiles = &$myts->getSmileys();
