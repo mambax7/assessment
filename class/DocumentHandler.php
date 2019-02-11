@@ -122,7 +122,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
             $format .= ' WHERE cod_documento = %u';
             $sql    = sprintf($format, $this->db->prefix('assessment_documentos'), $cod_documento, $this->db->quoteString($titulo), $tipo, $cod_prova, $this->db->quoteString($cods_perguntas), $this->db->quoteString($documento), $uid_elaborador, $this->db->quoteString($fonte), $html, $cod_documento);
         }
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -152,7 +152,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_documento = %u', $this->db->prefix('assessment_documentos'), $document->getVar('cod_documento'));
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -179,7 +179,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_documentos');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \CriteriaElement) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -247,14 +247,14 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_documentoss matching a condition
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement} to match
+     * @param \Criteria $criteria {@link \Criteria} to match
      *
      * @return int count of assessment_documentoss
      */
-    public function getCount(\CriteriaElement $criteria = null)
+    public function getCount(\Criteria $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_documentos');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -310,16 +310,16 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * delete assessment_documentoss matching a set of conditions
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement}
+     * @param \Criteria $criteria {@link \Criteria}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_documentos');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {

@@ -111,7 +111,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
             $sql    = sprintf($format, $this->db->prefix('assessment_provas'), $cod_prova, $this->db->quoteString($data_criacao), $this->db->quoteString($data_update), $this->db->quoteString($titulo), $this->db->quoteString($descricao), $this->db->quoteString($instrucoes),
                               $this->db->quoteString($acesso), $this->db->quoteString($tempo), $this->db->quoteString($uid_elaboradores), $this->db->quoteString($data_inicio), $this->db->quoteString($data_fim), $cod_prova);
         }
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -141,7 +141,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_prova = %u', $this->db->prefix('assessment_provas'), $test->getVar('cod_prova'));
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -181,7 +181,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_provas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \CriteriaElement) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' !== $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -217,7 +217,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
     public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_provas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \CriteriaElement) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -282,7 +282,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_provas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \CriteriaElement) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -369,11 +369,11 @@ class ExamHandler extends \XoopsPersistableObjectHandler
     }
 
     /**
-     * @param \XoopsDatabase|null $db
+     * @param \XoopsMySQLDatabase|null $db
      *
      * @return mixed
      */
-    public function pegarultimocodigo(\XoopsDatabase $db = null)
+    public function pegarultimocodigo(\XoopsMySQLDatabase $db = null)
     {
         if (null !== $db) {
             return $db->getInsertId();

@@ -154,19 +154,19 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_resultadoss from the database
      *
-     * @param \CriteriaElement $criteria  {@link \CriteriaElement} conditions to be met
+     * @param \Criteria $criteria  {@link \Criteria} conditions to be met
      * @param bool             $id_as_key use the UID as key for the array?
      *
      * @param bool             $as_object
      * @return array array of <a href='psi_element://$result'>$result</a> objects
      *                                    objects
      */
-    public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
+    public function &getObjects(\Criteria $criteria = null, $id_as_key = false, $as_object = true)
     {
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_resultados');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -195,14 +195,14 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_results matching a condition
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement} to match
+     * @param \Criteria $criteria {@link \Criteria} to match
      *
      * @return int count of Questions
      */
-    public function getCount(\CriteriaElement $criteria = null)
+    public function getCount(\Criteria $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_resultados');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -258,16 +258,16 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * delete assessment_resultadoss matching a set of conditions
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement}
+     * @param \Criteria $criteria {@link \Criteria}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_resultados');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -388,7 +388,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
         $qtd_provas = $this->getCount($criteria);
         $ret['qtd'] = $qtd_provas;
         $sql        = 'SELECT max(nota_final),min(nota_final),avg(nota_final) FROM ' . $this->db->prefix('assessment_resultados');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);

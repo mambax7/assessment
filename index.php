@@ -67,6 +67,8 @@ if (is_object($GLOBALS['xoopsUser'])) {
      */
     $x = [];
     $i = 0;
+
+    /** @var \XoopsModules\Assessment\Exam $prova */
     foreach ($vetor_provas as $prova) {
         $cod_prova = $prova->getVar('cod_prova');
 

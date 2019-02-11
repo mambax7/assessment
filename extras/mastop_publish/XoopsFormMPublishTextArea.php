@@ -19,6 +19,8 @@ use XoopsModules\Assessment;
  */
 class XoopsFormMPublishTextArea extends \XoopsFormElement
 {
+    /** @var XoopsMySQLDatabase $db */
+    public $db;
     public $value;
     public $name;
     public $width     = '100%';
@@ -32,6 +34,7 @@ class XoopsFormMPublishTextArea extends \XoopsFormElement
      */
     public function __construct($configs)
     {
+        $this->db = \XoopsDatabaseFactory::getDatabaseConnection();
         if (!empty($configs)) {
             foreach ($configs as $key => $val) {
                 if (method_exists($this, 'set' . ucfirst($key))) {
@@ -635,9 +638,8 @@ tinyMCE.init({
             $smiles = &$myts->getSmileys();
             $ret    = '';
             if (empty($smileys)) {
-                $db = \XoopsDatabaseFactory::getDatabaseConnection();
-                if ($result = $db->query('SELECT * FROM ' . $db->prefix('smiles') . ' WHERE display=1')) {
-                    while (false !== ($smiles = $db->fetchArray($result))) {
+                if (false !== ($result = $this->db->query('SELECT * FROM ' . $this->db->prefix('smiles') . ' WHERE display=1'))) {
+                    while (false !== ($smiles = $this->db->fetchArray($result))) {
                         $ret .= "<img onclick='xoopsCodeSmilie(\"" . $this->getName() . '", " ' . $smiles['code'] . " \");' onmouseover='style.cursor=\"hand\"' src='" . XOOPS_UPLOAD_URL . '/' . htmlspecialchars($smiles['smile_url'], ENT_QUOTES) . '\' alt=\'\'>';
                     }
                 }
@@ -655,9 +657,8 @@ tinyMCE.init({
             $smiles = &$myts->getSmileys();
             $ret    = '';
             if (empty($smileys)) {
-                $db = \XoopsDatabaseFactory::getDatabaseConnection();
-                if ($result = $db->query('SELECT * FROM ' . $db->prefix('smiles') . ' WHERE display=1')) {
-                    while (false !== ($smiles = $db->fetchArray($result))) {
+                if (false !== ($result = $this->db->query('SELECT * FROM ' . $this->db->prefix('smiles') . ' WHERE display=1'))) {
+                    while (false !== ($smiles = $this->db->fetchArray($result))) {
                         $ret .= "<img onclick=\"tinyMCE.execCommand('mceInsertContent',false,'<img src=\'"
                                 . XOOPS_UPLOAD_URL
                                 . '/'

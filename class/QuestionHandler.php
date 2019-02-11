@@ -113,7 +113,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
             $format .= ' WHERE cod_pergunta = %u';
             $sql    = sprintf($format, $this->db->prefix('assessment_perguntas'), $cod_pergunta, $cod_prova, $this->db->quoteString($titulo), $now, $now, $this->db->quoteString($uid_elaborador), $ordem, $cod_pergunta);
         }
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -143,7 +143,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_pergunta = %u', $this->db->prefix('assessment_perguntas'), $question->getVar('cod_pergunta'));
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -158,19 +158,19 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_perguntas from the database
      *
-     * @param null|\CriteriaElement|\CriteriaCompo $criteria  {@link \CriteriaElement} conditions to be met
+     * @param null|\Criteria $criteria  {@link \Criteria} conditions to be met
      * @param bool                                 $id_as_key use the UID as key for the array?
      *
      * @param bool                                 $as_object
      * @return array array of <a href='psi_element://Question'>Question</a> objects
      *                                                        objects
      */
-    public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
+    public function &getObjects(\Criteria $criteria = null, $id_as_key = false, $as_object = true)
     {
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_perguntas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -199,17 +199,17 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve Question from the database
      *
-     * @param object $criteria  {@link CriteriaElement} conditions to be met
+     * @param \Criteria $criteria  {@link \Criteria} conditions to be met
      * @param bool   $id_as_key use the UID as key for the array?
      *
      * @return array array of {@link Question} objects
      */
-    public function &getCodObjects($criteria = null, $id_as_key = false)
+    public function &getCodObjects(\Criteria $criteria = null, $id_as_key = false)
     {
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT cod_pergunta FROM ' . $this->db->prefix('assessment_perguntas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -228,14 +228,14 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_perguntass matching a condition
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement} to match
+     * @param \Criteria $criteria {@link \Criteria} to match
      *
      * @return int count of Questions
      */
-    public function getCount(\CriteriaElement $criteria = null)
+    public function getCount(\Criteria $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_perguntas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -291,16 +291,16 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * delete Questions matching a set of conditions
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement}
+     * @param \Criteria $criteria {@link \Criteria}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_perguntas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -448,11 +448,11 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     }
 
     /**
-     * @param \XoopsDatabase|null $db
+     * @param \XoopsMySQLDatabase|null $db
      *
      * @return mixed
      */
-    public function pegarultimocodigo(\XoopsDatabase $db = null)
+    public function pegarultimocodigo(\XoopsMySQLDatabase $db = null)
     {
         if (null !== $db) {
             return $db->getInsertId();
@@ -462,11 +462,11 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * Copy the questions and save them! Clone proof
      *
-     * @param object $criteria {@link CriteriaElement} to match
+     * @param \Criteria $criteria {@link \Criteria} to match
      *
      * @param        $cod_prova
      */
-    public function clonarPerguntas($criteria, $cod_prova)
+    public function clonarPerguntas(\Criteria $criteria, $cod_prova)
     {
         global $xoopsDB;
         $answerFactory = new Assessment\AnswerHandler($xoopsDB);

@@ -34,7 +34,7 @@ $cod_documento   = \Xmf\Request::getString('campo_coddocumento', '', 'POST');
 $cod_prova       = \Xmf\Request::getString('campo_codprova', '', 'POST');
 $uid_elaborador  = $xoopsUser->getVar('uid');
 $html            = 1;
-if ('dhtmlext' === $helper->getConfig('editorpadrao') || 'textarea' === $helper->getConfig('editorpadrao')) {
+if (in_array($helper->getConfig('editorpadrao'), ['dhtmlext', 'textarea'])) {
     $html = 0;
 }
 

@@ -130,7 +130,8 @@ if ($qtd_resultados < 1) {
  * Searching for the object of this student's test in the factory
  */
 $resultados = $resultFactory->getObjects($criteria_compo);
-$resultado  = $resultados[0];
+/** @var \XoopsModules\Assessment\Result $resultado */
+$resultado = $resultados[0];
 
 /**
  * Calculations of remaining time, time spent and time of the end of the test

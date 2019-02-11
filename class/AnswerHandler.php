@@ -109,7 +109,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
             $format .= ' WHERE cod_resposta = %u';
             $sql    = sprintf($format, $this->db->prefix('assessment_respostas'), $cod_resposta, $cod_pergunta, $this->db->quoteString($titulo), $iscerta, $now, $now, $this->db->quoteString($uid_elaboradores), $isativa, $cod_resposta);
         }
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -139,7 +139,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
             return false;
         }
         $sql = sprintf('DELETE FROM `%s` WHERE cod_resposta = %u', $this->db->prefix('assessment_respostas'), $answer->getVar('cod_resposta'));
-        if (false !== $force) {
+        if ($force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -166,7 +166,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_respostas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \CriteriaElement) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -195,14 +195,14 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     /**
      * count assessment_respostass matching a condition
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement} to match
+     * @param \Criteria $criteria {@link \Criteria} to match
      *
      * @return int count of Questions
      */
-    public function getCount(\CriteriaElement $criteria = null)
+    public function getCount(\Criteria $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_respostas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -258,16 +258,16 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     /**
      * delete assessment_respostass matching a set of conditions
      *
-     * @param \CriteriaElement $criteria {@link \CriteriaElement}
+     * @param \Criteria $criteria {@link \Criteria}
      *
      * @param bool             $force
      * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
-    public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
+    public function deleteAll(\Criteria $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_respostas');
-        if (null !== $criteria && $criteria instanceof \CriteriaElement) {
+        if ($criteria instanceof \Criteria) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
