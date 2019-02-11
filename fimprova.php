@@ -87,9 +87,9 @@ $horaatual            = time();
 $data_inicio_segundos = $examFactory->dataMysql2dataUnix($resultado->getVar('data_inicio'));
 $tempo_prova          = $prova->getVar('tempo');
 
-$tempo_restante    = $examFactory->converte_segundos(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
-$tempo_gasto       = $examFactory->converte_segundos($horaatual - $data_inicio_segundos, 'H');
-$hora_fim_da_prova = $examFactory->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
+$tempo_restante    = $examFactory->convertSeconds(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
+$tempo_gasto       = $examFactory->convertSeconds($horaatual - $data_inicio_segundos, 'H');
+$hora_fim_da_prova = $examFactory->convertSeconds($data_inicio_segundos + $tempo_prova, 'H');
 
 /**
  * Test time check: if the time burst saves the result and warns the student

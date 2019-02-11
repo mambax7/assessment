@@ -401,7 +401,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
      *
      * @return mixed
      */
-    public function converte_segundos($total_segundos, $inicio = 'Y')
+    public function convertSeconds($total_segundos, $inicio = 'Y')
     {
         /**
          * @autor: Carlos H. Reche

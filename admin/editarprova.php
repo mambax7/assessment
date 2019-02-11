@@ -31,10 +31,10 @@ $cod_prova              = \Xmf\Request::getString('campo_cod_prova', '', 'POST')
 $acesso                 = \Xmf\Request::getString('campo_grupo', '', 'POST');
 $tempo                  = \Xmf\Request::getString('campo_tempo', '', 'POST');
 $datahorainicio         = \Xmf\Request::getString('campo_data_inicio', '', 'POST');
-$horainicio             = $examFactory->converte_segundos($datahorainicio['time'], 'H');
+$horainicio             = $examFactory->convertSeconds($datahorainicio['time'], 'H');
 $data_hora_inicio_MYSQL = $datahorainicio['date'] . ' ' . $horainicio['horas'] . ':' . $horainicio['minutos'] . ':' . $horainicio['segundos'];
 $datahorafim            = \Xmf\Request::getString('campo_data_fim', '', 'POST');
-$horafim                = $examFactory->converte_segundos($datahorafim['time'], 'H');
+$horafim                = $examFactory->convertSeconds($datahorafim['time'], 'H');
 $data_hora_fim_MYSQL    = $datahorafim['date'] . ' ' . $horafim['horas'] . ':' . $horafim['minutos'] . ':' . $horainicio['segundos'];
 
 $data_hora_inicio_UNIX = $examFactory->dataMysql2dataUnix($data_hora_inicio_MYSQL);

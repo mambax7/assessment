@@ -149,15 +149,15 @@ $serverXX = abs((int)($GLOBALS['xoopsConfig']['server_TZ'] * 3600.0));
 $tempo_prova = $prova->getVar('tempo');
 //echo $tempo_prova . 'tempo_prova   </br>';
 
-$tempo_restante = $examFactory->converte_segundos(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
+$tempo_restante = $examFactory->convertSeconds(($data_inicio_segundos + $tempo_prova) - $horaatual, 'H');
 //echo $tempo_restante . 'tempo_restante </br>';
 //var_dump($tempo_restante);
 
-$tempo_gasto = $examFactory->converte_segundos($horaatual - $data_inicio_segundos, 'H');
+$tempo_gasto = $examFactory->convertSeconds($horaatual - $data_inicio_segundos, 'H');
 //echo $tempo_gasto . 'tempo_gasto  </br>';
 //var_dump($$tempo_gasto);
 
-$hora_fim_da_prova = $examFactory->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
+$hora_fim_da_prova = $examFactory->convertSeconds($data_inicio_segundos + $tempo_prova, 'H');
 //echo $hora_fim_da_prova . 'hora_fim_da_prova  </br>';
 //var_dump($hora_fim_da_prova);
 
