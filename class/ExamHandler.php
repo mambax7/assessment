@@ -412,27 +412,27 @@ class ExamHandler extends \XoopsPersistableObjectHandler
 
         if ('Y' === $inicio) {
             $array['anos']  = floor($total_segundos / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12));
-            $total_segundos = ($total_segundos % (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12));
+            $total_segundos %= (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12);
             $comecou        = true;
         }
         if (('m' === $inicio) || (true === $comecou)) {
             $array['meses'] = floor($total_segundos / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH));
-            $total_segundos = ($total_segundos % (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH));
+            $total_segundos %= (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH);
             $comecou        = true;
         }
         if (('d' === $inicio) || (true === $comecou)) {
             $array['dias']  = floor($total_segundos / (60 * 60 * 24));
-            $total_segundos = ($total_segundos % (60 * 60 * 24));
+            $total_segundos %= (60 * 60 * 24);
             $comecou        = true;
         }
         if (('H' === $inicio) || (true === $comecou)) {
             $array['horas'] = floor($total_segundos / (60 * 60));
-            $total_segundos = ($total_segundos % (60 * 60));
+            $total_segundos %= (60 * 60);
             $comecou        = true;
         }
         if (('i' === $inicio) || (true === $comecou)) {
             $array['minutos'] = floor($total_segundos / 60);
-            $total_segundos   = ($total_segundos % 60);
+            $total_segundos   %= 60;
             $comecou          = true;
         }
         $array['segundos'] = $total_segundos;
