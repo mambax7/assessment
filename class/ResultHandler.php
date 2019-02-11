@@ -214,6 +214,47 @@ class ResultHandler extends \XoopsPersistableObjectHandler
         return $count;
     }
 
+
+    /**
+     * @param array  $criteria
+     * @param bool   $asobject
+     * @param string $sort
+     * @param string $order
+     * @param int    $limit
+     * @param int    $start
+     *
+     * @return array
+     */
+    public function getAll($criteria = [], $asobject = false, $sort = 'cod_resultado', $order = 'ASC', $limit = 0, $start = 0)
+    {
+        $ret         = [];
+        $where_query = '';
+        if ($criteria && is_array($criteria)) {
+            $where_query = ' WHERE';
+            foreach ($criteria as $c) {
+                $where_query .= " $c AND";
+            }
+            $where_query = mb_substr($where_query, 0, -4);
+        } elseif (!is_array($criteria) && $criteria) {
+            $where_query = ' WHERE ' . $criteria;
+        }
+        if (!$asobject) {
+            $sql    = 'SELECT cod_resultado FROM ' . $this->db->prefix('assessment_resultados') . "$where_query ORDER BY $sort $order";
+            $result = $this->db->query($sql, $limit, $start);
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
+                $ret[] = $myrow['assessment_resultados_id'];
+            }
+        } else {
+            $sql    = 'SELECT * FROM ' . $this->db->prefix('assessment_resultados') . "$where_query ORDER BY $sort $order";
+            $result = $this->db->query($sql, $limit, $start);
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
+                $ret[] = new Assessment\Result($myrow);
+            }
+        }
+
+        return $ret;
+    }
+
     /**
      * delete assessment_resultadoss matching a set of conditions
      *
