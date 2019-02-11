@@ -23,8 +23,8 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$cod_documento = $_POST['cod_documento'];
-$cod_prova     = $_POST['cod_prova'];
+$cod_documento = \Xmf\Request::getString('cod_documento', '', 'POST');
+$cod_prova     = \Xmf\Request::getString('cod_prova', '', 'POST');
 
 $documentFactory = new Assessment\DocumentHandler($xoopsDB);
 $criteria        = new \Criteria('cod_documento', $cod_documento);

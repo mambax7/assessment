@@ -34,7 +34,7 @@ require XOOPS_ROOT_PATH.'/header.php';
 /**
  * Taking form_programs of the form and uid of the session student
  */
-$cod_prova = $_GET['cod_prova'];
+$cod_prova = \Xmf\Request::getString('cod_prova', '', 'GET');
 $uid       = $xoopsUser->getVar('uid');
 
 /**

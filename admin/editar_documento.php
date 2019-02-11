@@ -26,12 +26,12 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$documento_texto = $_POST['campo_documento'];
-$fonte           = $_POST['campo_fonte'];
-$titulo          = $_POST['campo_titulo'];
-$perguntas       = $_POST['campo_perguntas'];
-$cod_documento   = $_POST['campo_coddocumento'];
-$cod_prova       = $_POST['campo_codprova'];
+$documento_texto = \Xmf\Request::getString('campo_documento', '', 'POST');
+$fonte           = \Xmf\Request::getString('campo_fonte', '', 'POST');
+$titulo          = \Xmf\Request::getString('campo_titulo', '', 'POST');
+$perguntas       = \Xmf\Request::getString('campo_perguntas', '', 'POST');
+$cod_documento   = \Xmf\Request::getString('campo_coddocumento', '', 'POST');
+$cod_prova       = \Xmf\Request::getString('campo_codprova', '', 'POST');
 $uid_elaborador  = $xoopsUser->getVar('uid');
 $html            = 1;
 if ('dhtmlext' === $helper->getConfig('editorpadrao') || 'textarea' === $helper->getConfig('editorpadrao')) {

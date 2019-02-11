@@ -24,10 +24,10 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$nota_final    = $_POST['campo_nota_final'];
-$nivel         = $_POST['campo_nivel'];
-$obs           = $_POST['campo_observacoes'];
-$cod_resultado = $_POST['campo_cod_resultado'];
+$nota_final    = \Xmf\Request::getString('campo_nota_final', '', 'POST');
+$nivel         = \Xmf\Request::getString('campo_nivel', '', 'POST');
+$obs           = \Xmf\Request::getString('campo_observacoes', '', 'POST');
+$cod_resultado = \Xmf\Request::getString('campo_cod_resultado', '', 'POST');
 
 $resultFactory = new Assessment\ResultHandler($xoopsDB);
 $resultado     = $resultFactory->get($cod_resultado);

@@ -24,14 +24,14 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$cod_prova              = $_POST['campo_cod_prova'];
-$titulo                 = $_POST['campo_titulo'];
-$ordem                  = $_POST['campo_ordem'];
-$tit_resposta_certa     = $_POST['campo_resposta1'];
-$tit_resposta_errada[1] = $_POST['campo_resposta2'];
-$tit_resposta_errada[2] = $_POST['campo_resposta3'];
-$tit_resposta_errada[3] = $_POST['campo_resposta4'];
-$tit_resposta_errada[4] = $_POST['campo_resposta5'];
+$cod_prova              = \Xmf\Request::getString('campo_cod_prova', '', 'POST');
+$titulo                 = \Xmf\Request::getString('campo_titulo', '', 'POST');
+$ordem                  = \Xmf\Request::getString('campo_ordem', '', 'POST');
+$tit_resposta_certa     = \Xmf\Request::getString('campo_resposta1', '', 'POST');
+$tit_resposta_errada[1] = \Xmf\Request::getString('campo_resposta2', '', 'POST');
+$tit_resposta_errada[2] = \Xmf\Request::getString('campo_resposta3', '', 'POST');
+$tit_resposta_errada[3] = \Xmf\Request::getString('campo_resposta4', '', 'POST');
+$tit_resposta_errada[4] = \Xmf\Request::getString('campo_resposta5', '', 'POST');
 
 $uid_elaborador  = $xoopsUser->getVar('uid');
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);

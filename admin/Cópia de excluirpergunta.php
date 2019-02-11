@@ -7,7 +7,7 @@ require_once __DIR__ . '/admin_header.php';
 //require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 
 
-$cod_prova = $_POST['cod_prova'];
+$cod_prova = \Xmf\Request::getString('cod_prova', '', 'POST');
 
 $criteria        = new \Criteria('cod_prova', $cod_prova);
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);

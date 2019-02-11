@@ -33,7 +33,7 @@ require_once dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Taking cod_result of the form and uid of the session student
  */
-$cod_resultado = $_GET['cod_resultado'];
+$cod_resultado = \Xmf\Request::getString('cod_resultado', '', 'GET');
 $uid           = $xoopsUser->getVar('uid');
 
 /**

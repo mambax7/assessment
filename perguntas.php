@@ -49,9 +49,9 @@ require_once dirname(dirname(__DIR__)) . '/class/pagenav.php';
  * the start   the possibility that the proof is, the question
  *
  */
-$cod_prova = $_GET['cod_prova'];
+$cod_prova = \Xmf\Request::getString('cod_prova', '', 'GET');
 $uid       = $xoopsUser->getVar('uid');
-$start     = $_GET['start'];
+$start     = \Xmf\Request::getString('start', '', 'GET');
 
 /**
  * Creation of the factories of objects that we will need

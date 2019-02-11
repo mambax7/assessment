@@ -334,7 +334,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
         $form->addElement($campo_titulo, true);
         $botao_enviar       = new \XoopsFormButton('', 'botao_submit', _AM_ASSESSMENT_SALVARALTERACOES, 'submit');
         $campo_cod_pergunta = new \XoopsFormHidden('campo_cod_pergunta', $cod_pergunta);
-        $campo_prova_valor = new \XoopsFormHidden('campo_cod_prova', $cod_prova);
+        $campo_prova_valor  = new \XoopsFormHidden('campo_cod_prova', $cod_prova);
 
         $i = 1;
         foreach ($respostas as $resposta) {
@@ -377,7 +377,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     public function renderFormResponder($action, $pergunta, $respostas = [], $param_cod_resposta = 0)
     {
         global $_GET;
-        $start        = $_GET['start'];
+        $start        = \Xmf\Request::getString('start', '', 'GET');
         $cod_prova    = $pergunta->getVar('cod_prova');
         $titulo       = $pergunta->getVar('titulo');
         $cod_pergunta = $pergunta->getVar('cod_pergunta');
@@ -413,7 +413,9 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
      */
     public function pegarultimocodigo(\XoopsDatabase $db = null)
     {
-        return $db->getInsertId();
+        if (null !== $db) {
+            return $db->getInsertId();
+        }
     }
 
     /**

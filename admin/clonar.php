@@ -40,7 +40,7 @@ require_once __DIR__ . '/admin_header.php';
  * Fun��o que permite clonar uma prova copiando os seus dados suas perguntas e as respostas destas
  * perguntas
  */
-$cod_prova = $_POST['cod_prova'];
+$cod_prova = \Xmf\Request::getString('cod_prova', '', 'POST');
 /**
  * Cria��o das f�bricas dos objetos que vamos precisar
  */

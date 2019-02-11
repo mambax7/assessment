@@ -23,20 +23,20 @@ require_once __DIR__ . '/admin_header.php';
 if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
-$titulo                 = $_POST['campo_titulo'];
-$cod_pergunta           = $_POST['campo_cod_pergunta'];
-$tit_resposta_certa     = $_POST['campo_resposta1'];
-$tit_resposta_errada[1] = $_POST['campo_resposta2'];
-$tit_resposta_errada[2] = $_POST['campo_resposta3'];
-$tit_resposta_errada[3] = $_POST['campo_resposta4'];
-$tit_resposta_errada[4] = $_POST['campo_resposta5'];
-$cod_resposta_certa     = $_POST['campo_cod_resp1'];
-$cod_resposta_errada[1] = $_POST['campo_cod_resp2'];
-$cod_resposta_errada[2] = $_POST['campo_cod_resp3'];
-$cod_resposta_errada[3] = $_POST['campo_cod_resp4'];
-$cod_resposta_errada[4] = $_POST['campo_cod_resp5'];
+$titulo                 = \Xmf\Request::getString('campo_titulo', '', 'POST');
+$cod_pergunta           = \Xmf\Request::getString('campo_cod_pergunta', '', 'POST');
+$tit_resposta_certa     = \Xmf\Request::getString('campo_resposta1', '', 'POST');
+$tit_resposta_errada[1] = \Xmf\Request::getString('campo_resposta2', '', 'POST');
+$tit_resposta_errada[2] = \Xmf\Request::getString('campo_resposta3', '', 'POST');
+$tit_resposta_errada[3] = \Xmf\Request::getString('campo_resposta4', '', 'POST');
+$tit_resposta_errada[4] = \Xmf\Request::getString('campo_resposta5', '', 'POST');
+$cod_resposta_certa     = \Xmf\Request::getString('campo_cod_resp1', '', 'POST');
+$cod_resposta_errada[1] = \Xmf\Request::getString('campo_cod_resp2', '', 'POST');
+$cod_resposta_errada[2] = \Xmf\Request::getString('campo_cod_resp3', '', 'POST');
+$cod_resposta_errada[3] = \Xmf\Request::getString('campo_cod_resp4', '', 'POST');
+$cod_resposta_errada[4] = \Xmf\Request::getString('campo_cod_resp5', '', 'POST');
 
-$ordem = $_POST['campo_ordem'];
+$ordem = \Xmf\Request::getString('campo_ordem', '', 'POST');
 
 $uid_elaborador  = $xoopsUser->getVar('uid');
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);

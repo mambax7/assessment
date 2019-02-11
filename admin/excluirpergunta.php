@@ -25,7 +25,7 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$cod_pergunta = $_POST['cod_pergunta'];
+$cod_pergunta = \Xmf\Request::getString('cod_pergunta', '', 'POST');
 
 $answerFactory = new Assessment\AnswerHandler($xoopsDB);
 $criteria      = new \Criteria('cod_pergunta', $cod_pergunta);

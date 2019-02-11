@@ -43,8 +43,8 @@ require_once __DIR__ . '/admin_header.php';
 /**
  * Pegando cod_prova do formul�rio e uid do aluno da session
  */
-$cod_prova   = $_POST['cod_prova'];
-$segunda_vez = $_POST['segunda_vez'];
+$cod_prova   = \Xmf\Request::getString('cod_prova', '', 'POST');
+$segunda_vez = \Xmf\Request::getString('segunda_vez', '', 'POST');
 
 /**
  * Ao excluir uma prova voc� precisa excluir as perguntas ligadas � ela, os

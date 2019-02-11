@@ -333,7 +333,9 @@ class ExamHandler extends \XoopsPersistableObjectHandler
      */
     public function pegarultimocodigo(\XoopsDatabase $db = null)
     {
-        return $db->getInsertId();
+        if (null !== $db) {
+            return $db->getInsertId();
+        }
     }
 
     /**

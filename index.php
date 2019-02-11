@@ -43,7 +43,7 @@ $resultFactory   = new Assessment\ResultHandler($xoopsDB);
  * Find all the tests, all the results of this student and all questions
  */
 if (\Xmf\Request::hasVar('start', 'GET')) {
-    $start = $_GET['start'];
+    $start = \Xmf\Request::getString('start', '', 'GET');
 }
 //$criteria = new \Criteria ('cod_prova');
 //$criteria->setLimit(10);
