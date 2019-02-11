@@ -1,5 +1,5 @@
 <?php
-// $Id: excluirprova.php,v 1.5 2007/03/24 14:41:40 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -43,8 +43,8 @@ require_once __DIR__ . '/admin_header.php';
 /**
  * Pegando cod_prova do formul�rio e uid do aluno da session
  */
-$cod_prova   = \Xmf\Request::getString('cod_prova', '', 'POST');
-$segunda_vez = \Xmf\Request::getString('segunda_vez', '', 'POST');
+$cod_prova   = \Xmf\Request::getInt('cod_prova', 0, 'POST');
+$segunda_vez = \Xmf\Request::getInt('segunda_vez', 0, 'POST');
 
 /**
  * Ao excluir uma prova voc� precisa excluir as perguntas ligadas � ela, os
@@ -128,21 +128,21 @@ if (1 == $segunda_vez) {
     xoops_cp_footer();
 } else {
     /**
-     * Fun��o que desenha o cabe�alho da administra��o do Xoops
+     * Function that draws the Xoops administration header
      */
     xoops_cp_header();
 
     /**
-     * Parametro para a fun��o do xoops que monta a confirma��o
+     * Parameter for the funnel of the xoops mounting the confirmation
      */
     $hiddens = ['cod_prova' => $cod_prova, 'segunda_vez' => 1];
 
     /**
-     * Fun��o que confirma se o professor deseja mesmo excluir a prova
+     * Function that confirms if the teacher really wants to exclude the proof
      */
     xoops_confirm($hiddens, '', _AM_ASSESSMENT_CONFIRMAEXCLUSAOPROVAS, _AM_ASSESSMENT_SIMCONFIRMAEXCLUSAOPROVAS);
     /**
-     * Fun��o que fecha o desenho da adminsitra��o do Xoops
+     * Function that closes the design of the Xoops administration
      */
     xoops_cp_footer();
 }

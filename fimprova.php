@@ -1,5 +1,5 @@
 <?php
-// $Id: fimprova.php,v 1.15 2007/03/24 20:08:53 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -33,7 +33,7 @@ require_once dirname(dirname(__DIR__)) . '/header.php';
 /**
  * Taking cod_result of the form and uid of the session student
  */
-$cod_resultado = \Xmf\Request::getString('cod_resultado', '', 'GET');
+$cod_resultado = \Xmf\Request::getInt('cod_resultado', 0, 'GET');
 $uid           = $xoopsUser->getVar('uid');
 
 /**

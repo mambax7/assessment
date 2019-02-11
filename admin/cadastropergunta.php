@@ -1,5 +1,5 @@
 <?php
-// $Id: cadastropergunta.php,v 1.9 2007/03/24 14:41:40 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -24,9 +24,9 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$cod_prova              = \Xmf\Request::getString('campo_cod_prova', '', 'POST');
+$cod_prova              = \Xmf\Request::getInt('campo_cod_prova', 0, 'POST');
 $titulo                 = \Xmf\Request::getString('campo_titulo', '', 'POST');
-$ordem                  = \Xmf\Request::getString('campo_ordem', '', 'POST');
+$ordem                  = \Xmf\Request::getInt('campo_ordem', 0, 'POST');
 $tit_resposta_certa     = \Xmf\Request::getString('campo_resposta1', '', 'POST');
 $tit_resposta_errada[1] = \Xmf\Request::getString('campo_resposta2', '', 'POST');
 $tit_resposta_errada[2] = \Xmf\Request::getString('campo_resposta3', '', 'POST');

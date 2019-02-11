@@ -1,5 +1,5 @@
 <?php
-// $Id: clonar.php,v 1.2 2007/03/24 14:41:40 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -40,7 +40,7 @@ require_once __DIR__ . '/admin_header.php';
  * Fun��o que permite clonar uma prova copiando os seus dados suas perguntas e as respostas destas
  * perguntas
  */
-$cod_prova = \Xmf\Request::getString('cod_prova', '', 'POST');
+$cod_prova = \Xmf\Request::getInt('cod_prova', '', 'POST');
 /**
  * Cria��o das f�bricas dos objetos que vamos precisar
  */

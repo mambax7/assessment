@@ -1,5 +1,5 @@
 <?php
-// $Id: excluirdocumento.php,v 1.5 2007/03/24 14:41:40 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -23,8 +23,8 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$cod_documento = \Xmf\Request::getString('cod_documento', '', 'POST');
-$cod_prova     = \Xmf\Request::getString('cod_prova', '', 'POST');
+$cod_documento = \Xmf\Request::getInt('cod_documento', 0, 'POST');
+$cod_prova     = \Xmf\Request::getInt('cod_prova', 0, 'POST');
 
 $documentFactory = new Assessment\DocumentHandler($xoopsDB);
 $criteria        = new \Criteria('cod_documento', $cod_documento);

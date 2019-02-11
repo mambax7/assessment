@@ -418,7 +418,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     public function renderFormResponder($action, $pergunta, $respostas = [], $param_cod_resposta = 0)
     {
         global $_GET;
-        $start        = \Xmf\Request::getString('start', '', 'GET');
+        $start        = \Xmf\Request::getInt('start', 0, 'GET');
         $cod_prova    = $pergunta->getVar('cod_prova');
         $titulo       = $pergunta->getVar('titulo');
         $cod_pergunta = $pergunta->getVar('cod_pergunta');

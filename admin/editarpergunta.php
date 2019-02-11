@@ -1,5 +1,5 @@
 <?php
-// $Id: editarpergunta.php,v 1.6 2007/03/24 14:41:40 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -36,7 +36,7 @@ $cod_resposta_errada[2] = \Xmf\Request::getString('campo_cod_resp3', '', 'POST')
 $cod_resposta_errada[3] = \Xmf\Request::getString('campo_cod_resp4', '', 'POST');
 $cod_resposta_errada[4] = \Xmf\Request::getString('campo_cod_resp5', '', 'POST');
 
-$ordem = \Xmf\Request::getString('campo_ordem', '', 'POST');
+$ordem = \Xmf\Request::getInt('campo_ordem', 0, 'POST');
 
 $uid_elaborador  = $xoopsUser->getVar('uid');
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);

@@ -29,7 +29,7 @@ require __DIR__ . '/header.php';
 /**
  * Taking form_programs of the form and uid of the session student
  */
-$cod_prova = \Xmf\Request::getString('cod_prova', '', 'POST');
+$cod_prova = \Xmf\Request::getInt('cod_prova', '', 'POST');
 $uid       = $xoopsUser->getVar('uid');
 
 /**

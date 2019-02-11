@@ -1,5 +1,5 @@
 <?php
-// $Id: admin.php,v 1.2 2007/03/24 14:41:55 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code

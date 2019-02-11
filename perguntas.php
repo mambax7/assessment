@@ -1,5 +1,5 @@
 <?php
-// $Id: perguntas.php,v 1.18 2007/03/24 20:08:53 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -49,9 +49,9 @@ require_once dirname(dirname(__DIR__)) . '/class/pagenav.php';
  * the start   the possibility that the proof is, the question
  *
  */
-$cod_prova = \Xmf\Request::getString('cod_prova', '', 'GET');
+$cod_prova = \Xmf\Request::getInt('cod_prova', '', 'GET');
 $uid       = $xoopsUser->getVar('uid');
-$start     = \Xmf\Request::getString('start', '', 'GET');
+$start     = \Xmf\Request::getInt('start', 0, 'GET');
 
 /**
  * Creation of the factories of objects that we will need

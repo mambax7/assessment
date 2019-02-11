@@ -1,5 +1,5 @@
 <?php
-// $Id: index.php,v 1.13 2007/03/24 20:08:53 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -42,9 +42,9 @@ $resultFactory   = new Assessment\ResultHandler($xoopsDB);
 /**
  * Find all the tests, all the results of this student and all questions
  */
-if (\Xmf\Request::hasVar('start', 'GET')) {
-    $start = \Xmf\Request::getString('start', '', 'GET');
-}
+
+$start = \Xmf\Request::getInt('start', 0, 'GET');
+
 //$criteria = new \Criteria ('cod_prova');
 //$criteria->setLimit(10);
 //$criteria->setStart($start);

@@ -1,5 +1,5 @@
 <?php
-// $Id: excluirpergunta.php,v 1.5 2007/03/24 14:41:40 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -25,7 +25,7 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _AM_ASSESSMENT_TOKENEXPIRED);
 }
 
-$cod_pergunta = \Xmf\Request::getString('cod_pergunta', '', 'POST');
+$cod_pergunta = \Xmf\Request::getInt('cod_pergunta', 0, 'POST');
 
 $answerFactory = new Assessment\AnswerHandler($xoopsDB);
 $criteria      = new \Criteria('cod_pergunta', $cod_pergunta);

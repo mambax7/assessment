@@ -1,5 +1,5 @@
 <?php
-// $Id: notification_update.php,v 1.1 2007/03/24 00:27:17 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code

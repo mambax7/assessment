@@ -1,5 +1,5 @@
 <?php
-// $Id: verprova.php,v 1.10 2007/03/24 20:08:54 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -34,7 +34,7 @@ require XOOPS_ROOT_PATH.'/header.php';
 /**
  * Taking form_programs of the form and uid of the session student
  */
-$cod_prova = \Xmf\Request::getString('cod_prova', '', 'GET');
+$cod_prova = \Xmf\Request::getInt('cod_prova', '', 'GET');
 $uid       = $xoopsUser->getVar('uid');
 
 /**

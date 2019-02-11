@@ -2,7 +2,6 @@
 
 namespace XoopsModules\Assessment;
 
-// $Id: assessment_documentos.php,v 1.10 2007/03/24 17:50:52 marcellobrandao Exp $
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code

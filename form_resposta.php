@@ -1,5 +1,5 @@
 <?php
-// $Id: form_resposta.php,v 1.6 2007/03/24 14:41:41 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code

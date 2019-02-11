@@ -1,5 +1,5 @@
 <?php
-// $Id: editarprova.php,v 1.9 2007/03/24 20:08:53 marcellobrandao Exp $
+
 /*
  You may not change or alter any portion of this comment or credits
  of supporting developers from this source code or any supporting source code
@@ -27,13 +27,13 @@ $examFactory            = new Assessment\ExamHandler($xoopsDB);
 $instrucoes             = \Xmf\Request::getString('campo_instrucoes', '', 'POST');
 $descricao              = \Xmf\Request::getString('campo_descricao', '', 'POST');
 $titulo                 = \Xmf\Request::getString('campo_titulo', '', 'POST');
-$cod_prova              = \Xmf\Request::getString('campo_cod_prova', '', 'POST');
-$acesso                 = \Xmf\Request::getString('campo_grupo', '', 'POST');
-$tempo                  = \Xmf\Request::getString('campo_tempo', '', 'POST');
-$datahorainicio         = \Xmf\Request::getString('campo_data_inicio', '', 'POST');
+$cod_prova              = \Xmf\Request::getInt('campo_cod_prova', 0, 'POST');
+$acesso                 = \Xmf\Request::getArray('campo_grupo', [], 'POST');
+$tempo                  = \Xmf\Request::getInt('campo_tempo', 0, 'POST');
+$datahorainicio         = \Xmf\Request::getArray('campo_data_inicio', [], 'POST');
 $horainicio             = $examFactory->convertSeconds($datahorainicio['time'], 'H');
 $data_hora_inicio_MYSQL = $datahorainicio['date'] . ' ' . $horainicio['horas'] . ':' . $horainicio['minutos'] . ':' . $horainicio['segundos'];
-$datahorafim            = \Xmf\Request::getString('campo_data_fim', '', 'POST');
+$datahorafim            = \Xmf\Request::getArray('campo_data_fim', [], 'POST');
 $horafim                = $examFactory->convertSeconds($datahorafim['time'], 'H');
 $data_hora_fim_MYSQL    = $datahorafim['date'] . ' ' . $horafim['horas'] . ':' . $horafim['minutos'] . ':' . $horainicio['segundos'];
 
