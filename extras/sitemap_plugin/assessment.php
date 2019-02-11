@@ -4,6 +4,7 @@
  */
 function b_sitemap_assessment()
 {
+    /** @var \XoopsMySQLDatabase $db */
     $db = \XoopsDatabaseFactory::getDatabaseConnection();
 
     $myts = \MyTextSanitizer::getInstance();

@@ -122,6 +122,7 @@ if (($qtd_perguntas - 1) == $start) {
  * ancient answer to this question
  */
 $resultados          = $resultFactory->getObjects($criteria);
+/** @var \XoopsModules\Assessment\Result $resultado */
 $resultado           = $resultados[0];
 $respostascertas     = $resultado->getRespostasCertasAsArray();
 $respostaserradas    = $resultado->getRespostasErradasAsArray();

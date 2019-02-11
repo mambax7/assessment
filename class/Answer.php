@@ -23,6 +23,8 @@ use XoopsModules\Assessment;
  */
 class Answer extends \XoopsObject
 {
+
+    /** @var \XoopsMySQLDatabase $db */
     public $db;
 
     // constructor
@@ -77,7 +79,6 @@ class Answer extends \XoopsObject
      */
     public function getAllassessment_respostass($criteria = [], $asobject = false, $sort = 'cod_resposta', $order = 'ASC', $limit = 0, $start = 0)
     {
-        $db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $ret         = [];
         $where_query = '';
         if ($criteria && is_array($criteria)) {
@@ -90,15 +91,15 @@ class Answer extends \XoopsObject
             $where_query = ' WHERE ' . $criteria;
         }
         if (!$asobject) {
-            $sql    = 'SELECT cod_resposta FROM ' . $db->prefix('assessment_respostas') . "$where_query ORDER BY $sort $order";
-            $result = $db->query($sql, $limit, $start);
-            while (false !== ($myrow = $db->fetchArray($result))) {
+            $sql    = 'SELECT cod_resposta FROM ' . $this->db->prefix('assessment_respostas') . "$where_query ORDER BY $sort $order";
+            $result = $this->db->query($sql, $limit, $start);
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $ret[] = $myrow['assessment_respostas_id'];
             }
         } else {
-            $sql    = 'SELECT * FROM ' . $db->prefix('assessment_respostas') . "$where_query ORDER BY $sort $order";
-            $result = $db->query($sql, $limit, $start);
-            while (false !== ($myrow = $db->fetchArray($result))) {
+            $sql    = 'SELECT * FROM ' . $this->db->prefix('assessment_respostas') . "$where_query ORDER BY $sort $order";
+            $result = $this->db->query($sql, $limit, $start);
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $ret[] = new Assessment\Answer($myrow);
             }
         }

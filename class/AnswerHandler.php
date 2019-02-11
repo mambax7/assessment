@@ -57,11 +57,12 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     public function get($id = null, $fields = null)
     {
         $sql = 'SELECT * FROM ' . $this->db->prefix('assessment_respostas') . ' WHERE cod_resposta=' . $id;
+
         if (!$result = $this->db->query($sql)) {
             return false;
         }
         $numrows = $this->db->getRowsNum($result);
-        if (1 == $numrows) {
+        if (1 === $numrows) {
             $answer = new Assessment\Answer();
             $answer->assignVars($this->db->fetchArray($result));
 

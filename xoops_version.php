@@ -22,8 +22,8 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
 require_once __DIR__ . '/preloads/autoloader.php';
 
 $modversion['version']       = 1.1;
-$modversion['module_status'] = 'Beta 2';
-$modversion['release_date']  = '2017/02/07';
+$modversion['module_status'] = 'Beta RC1';
+$modversion['release_date']  = '2019/02/10';
 $modversion['name']          = _MI_ASSESSMENT_NAME;
 $modversion['description']   = _MI_ASSESSMENT_DESC;
 $modversion['credits']       = 'Equipe Simcity Brasil';
@@ -55,47 +55,59 @@ $modversion['system_menu'] = 1;
 $modversion['adminindex']  = 'admin/index.php';
 $modversion['adminmenu']   = 'admin/menu.php';
 
-$modversion['config'][1]['name']        = 'qtdmenu';
-$modversion['config'][1]['title']       = '_MI_ASSESSMENT_CONFIG1_TITLE';
-$modversion['config'][1]['description'] = '_MI_ASSESSMENT_CONFIG1_DESC';
-$modversion['config'][1]['formtype']    = 'select';
-$modversion['config'][1]['valuetype']   = 'int';
-$modversion['config'][1]['default']     = 5;
-$modversion['config'][1]['options']     = ['5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25, '30' => 30];
+$modversion['config'][] = [
+    'name'        => 'qtdmenu',
+    'title'       => '_MI_ASSESSMENT_CONFIG1_TITLE',
+    'description' => '_MI_ASSESSMENT_CONFIG1_DESC',
+    'formtype'    => 'select',
+    'valuetype'   => 'int',
+    'default'     => 5,
+    'options'     => ['5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25, '30' => 30],
+];
 
 xoops_load('xoopseditorhandler');
-$editorHandler                          = XoopsEditorHandler::getInstance();
-$modversion['config'][2]['name']        = 'editorpadrao';
-$modversion['config'][2]['title']       = '_MI_ASSESSMENT_CONFIG2_TITLE';
-$modversion['config'][2]['description'] = '_MI_ASSESSMENT_CONFIG2_DESC';
-$modversion['config'][2]['formtype']    = 'select';
-$modversion['config'][2]['valuetype']   = 'text';
-$modversion['config'][2]['default']     = 'dhtmlext';
-$modversion['config'][2]['options']     = array_flip($editorHandler->getList());
+$editorHandler = XoopsEditorHandler::getInstance();
 
-//$modversion['config'][2]['options'] = array('dhtmlext' => 'Extended DHTML Form', 'textarea' => 'Plain Text', 'FCKeditor' => 'FCKeditor', 'tinymce' => 'tinymce', 'koivi' => 'koivi', 'mastoppublish'=>'mastoppublish');
-//$modversion['config'][2]['options'] = array('Extended DHTML Form' => 'dhtmlext', 'Plain Text' => 'textarea', 'FCKeditor' => 'FCKeditor', 'tinymce' => 'tinymce', 'koivi' => 'koivi','mastoppublish'=>'mastoppublish');
+$modversion['config'][] = [
+    'name'        => 'editorpadrao',
+    'title'       => '_MI_ASSESSMENT_CONFIG2_TITLE',
+    'description' => '_MI_ASSESSMENT_CONFIG2_DESC',
+    'formtype'    => 'select',
+    'valuetype'   => 'text',
+    'default'     => 'dhtmlext',
+    'options'     => array_flip($editorHandler->getList()),
+];
 
-$modversion['config'][3]['name']        = 'notadireta';
-$modversion['config'][3]['title']       = '_MI_ASSESSMENT_CONFIG3_TITLE';
-$modversion['config'][3]['description'] = '_MI_ASSESSMENT_CONFIG3_DESC';
-$modversion['config'][3]['formtype']    = 'yesno';
+//'options'     => array('dhtmlext' => 'Extended DHTML Form', 'textarea' => 'Plain Text', 'FCKeditor' => 'FCKeditor', 'tinymce' => 'tinymce', 'koivi' => 'koivi', 'mastoppublish'=>'mastoppublish'),
+//'options'     => array('Extended DHTML Form' => 'dhtmlext', 'Plain Text' => 'textarea', 'FCKeditor' => 'FCKeditor', 'tinymce' => 'tinymce', 'koivi' => 'koivi','mastoppublish'=>'mastoppublish'),
+$modversion['config'][] = [
+    'name'        => 'notadireta',
+    'title'       => '_MI_ASSESSMENT_CONFIG3_TITLE',
+    'description' => '_MI_ASSESSMENT_CONFIG3_DESC',
+    'formtype'    => 'yesno',
+];
 
-$modversion['config'][4]['name']        = 'qtditens';
-$modversion['config'][4]['title']       = '_MI_ASSESSMENT_CONFIG4_TITLE';
-$modversion['config'][4]['description'] = '_MI_ASSESSMENT_CONFIG4_DESC';
-$modversion['config'][4]['formtype']    = 'select';
-$modversion['config'][4]['valuetype']   = 'int';
-$modversion['config'][4]['default']     = 5;
-$modversion['config'][4]['options']     = ['5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50];
+$modversion['config'][] = [
+    'name'        => 'qtditens',
+    'title'       => '_MI_ASSESSMENT_CONFIG4_TITLE',
+    'description' => '_MI_ASSESSMENT_CONFIG4_DESC',
+    'formtype'    => 'select',
+    'valuetype'   => 'int',
+    'default'     => 5,
+    'options'     => ['5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50],
+];
+
 /*
-$modversion['config'][5]['name'] = 'qtdindex';
-$modversion['config'][5]['title'] = '_MI_ASSESSMENT_CONFIG5_TITLE';
-$modversion['config'][5]['description'] = '_MI_ASSESSMENT_CONFIG5_DESC';
-$modversion['config'][5]['formtype'] = 'select';
-$modversion['config'][5]['valuetype'] = 'int';
-$modversion['config'][5]['default'] = 5;
-$modversion['config'][5]['options'] = array('5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50);
+ $modversion['config'][] = [
+'name' =>  'qtdindex',
+'title' =>  '_MI_ASSESSMENT_CONFIG5_TITLE',
+'description' =>  '_MI_ASSESSMENT_CONFIG5_DESC',
+'formtype' =>  'select',
+'valuetype' =>  'int',
+'default' =>  5,
+'options'     => array('5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50),
+];
+
                                                                                                                   */
 
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';

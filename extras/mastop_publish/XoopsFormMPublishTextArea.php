@@ -152,8 +152,10 @@ class XoopsFormMPublishTextArea extends \XoopsFormElement
         $helper->loadLanguage('admin');
         $helper->loadLanguage('modinfo');
 
+        /** @var \XoopsModuleHandler $moduleHandler */
         $moduleHandler = xoops_getHandler('module');
         $module        = $moduleHandler->getByDirname(MPU_MOD_DIR);
+        /** @var \XoopsConfigHandler $configHandler */
         $configHandler = xoops_getHandler('config');
         $moduleConfig  = $configHandler->getConfigsByCat(0, $module->getVar('mid'));
         $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;

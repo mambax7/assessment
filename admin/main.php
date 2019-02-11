@@ -425,6 +425,7 @@ function cadastrarprova()
 {
     global $xoopsDB;
     //    $examFactory = new Assessment\ExamHandler($xoopsDB);
+    /** @var \XoopsModules\Assessment\ExamHandler $examFactory */
     $examFactory = Assessment\Helper::getInstance()->getHandler('Exam');
     $examFactory->renderFormCadastrar('cadastroprova.php');
 }
