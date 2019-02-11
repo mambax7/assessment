@@ -143,7 +143,6 @@ class Exam extends \XoopsObject
     /**
      * Verifica se aluno pode acessar esta prova
      *
-     * @param vetorgrupos
      * @param mixed $grupos
      *
      * @return bool true se autorizado e false se n�o autorizado

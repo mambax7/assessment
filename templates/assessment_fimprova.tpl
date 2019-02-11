@@ -1,4 +1,4 @@
-<div id="breadcrump"><a href="../index.php"><{$nome_modulo}></a> > <a href="../verprova.php?cod_prova=<{$cod_prova}>"><{$titulo}></a></div>
+<div id="breadcrump"><a href="./index.php"><{$nome_modulo}></a> > <a href="./verprova.php?cod_prova=<{$cod_prova}>"><{$titulo}></a></div>
 <hr>
 <div id="Titulo">
     <fieldset>

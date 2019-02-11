@@ -1,4 +1,4 @@
-<div id="breadcrump"><a href="index.php"><{$nome_modulo}></a> > <a href="verprova.php?cod_prova=<{$cod_prova}>"><{$titulo}></a> > <a
+<div id="breadcrump"><a href="index.php"><{$nome_modulo}></a> <a href="verprova.php?cod_prova=<{$cod_prova}>"><{$titulo}></a> > <a
             href="perguntas.php?cod_prova=<{$cod_prova}>&start=<{$start}>"><{$lang_pergunta}> <{$start+1}></a></div>
 <hr>
 <div><h3><{$titulo}></h3>
