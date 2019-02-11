@@ -21,8 +21,8 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 require_once __DIR__ . '/preloads/autoloader.php';
 
-$modversion['version']       = 1.1;
-$modversion['module_status'] = 'Beta RC1';
+$modversion['version']       = 1.11;
+$modversion['module_status'] = 'Beta 2';
 $modversion['release_date']  = '2019/02/10';
 $modversion['name']          = _MI_ASSESSMENT_NAME;
 $modversion['description']   = _MI_ASSESSMENT_DESC;
