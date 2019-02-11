@@ -18,14 +18,14 @@
  * @version      $Id $
  */
 
-use XoopsModules\Assessment;
-
-// require_once  dirname(__DIR__) . '/class/Helper.php';
 //require_once  dirname(__DIR__) . '/include/common.php';
-$helper = Assessment\Helper::getInstance();
+/** @var \XoopsModules\Assessment\Helper $helper */
+$helper = \XoopsModules\Assessment\Helper::getInstance();
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
-$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+if (is_object($helper->getModule())) {
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+}
 
 $adminmenu[] = [
     'title' => _MI_ASSESSMENT_HOME,

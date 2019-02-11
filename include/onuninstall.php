@@ -16,7 +16,6 @@ use XoopsModules\Assessment;
  *
  * @return bool true if ready to uninstall, false if not
  */
-
 function xoops_module_pre_uninstall_assessment(\XoopsModule $module)
 {
     // Do some synchronization
@@ -24,7 +23,6 @@ function xoops_module_pre_uninstall_assessment(\XoopsModule $module)
 }
 
 /**
- *
  * Performs tasks required during uninstallation of the module
  * @param XoopsModule $module {@link XoopsModule}
  *
@@ -32,19 +30,18 @@ function xoops_module_pre_uninstall_assessment(\XoopsModule $module)
  */
 function xoops_module_uninstall_assessment(\XoopsModule $module)
 {
-//    return true;
+    //    return true;
 
-    $moduleDirName = basename(dirname(__DIR__));
-    $moduleDirNameUpper = strtoupper($moduleDirName);
-     $helper      =Assessment\Helper::getInstance();
+    $moduleDirName      = basename(dirname(__DIR__));
+    $moduleDirNameUpper = mb_strtoupper($moduleDirName);
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    $helper = \XoopsModules\Assessment\Helper::getInstance();
 
     /** @var Assessment\Utility $utility */
-    $utility     = new Assessment\Utility();
-
+    $utility = new Assessment\Utility();
 
     $success = true;
     $helper->loadLanguage('admin');
-
 
     //------------------------------------------------------------------
     // Remove uploads folder (and all subfolders) if they exist

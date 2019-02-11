@@ -1,34 +1,20 @@
 <?php
 // $Id: verprova.php,v 1.10 2007/03/24 20:08:54 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 /**
- * verprova.php, Respons�vel por gerar o formul�rio de abertura da prova
+ * verprova.php, Responsible for generating the test opening form
  *
- * Este arquivo exibe as instru��es da prova que o aluno est� fazendo e o permite
- * que ele crie um resultado para a sua prova
+ * This file displays the instructions of the test that the student is doing and allows
+ * him to create a result for his test
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
@@ -38,22 +24,15 @@
 use XoopsModules\Assessment;
 
 /**
- * Arquivos de cabe�alho do Xoops para carregar ...
- */
-include dirname(dirname(__DIR__)) . '/mainfile.php';
-include dirname(dirname(__DIR__)) . '/header.php';
-
-/**
- * Inclus�es das classes do m�dulo
- */
-
-/**
- * Definindo arquivo de template da p�gina
+ * Xoops head files to load ...
  */
 $GLOBALS['xoopsOption']['template_main'] = 'assessment_verprova.tpl';
+require __DIR__ . '/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
+
 
 /**
- * Pegando cod_prova do formul�rio e uid do aluno da session
+ * Taking form_programs of the form and uid of the session student
  */
 $cod_prova = $_GET['cod_prova'];
 $uid       = $xoopsUser->getVar('uid');
@@ -62,8 +41,8 @@ $uid       = $xoopsUser->getVar('uid');
  * Creation of the object factories that we will need
  */
 $examFactory     = new Assessment\ExamHandler($xoopsDB);
-$resultFactory = new Assessment\ResultHandler($xoopsDB);
-$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+$resultFactory   = new Assessment\ResultHandler($xoopsDB);
+$questionFactory = new Assessment\QuestionHandler($xoopsDB);
 
 /**
  * Create Exam object
@@ -100,15 +79,14 @@ $criteria_resultado->add($criteria_prova);
 $criteria_resultado->add($criteria_terminou);
 
 /**
- * Verificando se aluno j� tinha terminado a prova antes em caso positivo
- * informa atraves de mensagem
+ * Checking if student had already finished the test before in case of a positive inform by message
  */
 if ($resultFactory->getCount($criteria_resultado) > 0) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_JATERMINOU);
 }
 
 /**
- * Pegando os dados da prova e o campo de seguran�a(TOKEN)
+ * Taking the test data and the safety field(TOKEN)
  */
 $qtd_perguntas = $questionFactory->getCount($criteria_prova);
 $titulo        = $prova->getVar('titulo');
@@ -118,10 +96,9 @@ $nome_modulo   = $xoopsModule->getVar('name');
 $campo_token   = $GLOBALS['xoopsSecurity']->getTokenHTML();
 
 /**
- * Atribuindo vari�veis ao template
- * obs: poderia ter sido feito direto na �tapa anterior
- * mas por quest�es de leitura de c�digo separei os dois
- * depois podemos pensar em juntar numa se��o s�
+* Assigning Variables to the template
+ * obs: could have been made direct in the "previous tab" but for code reading issues I separated the two
+ * then we can think of joining in a section s
  */
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name') . ' - ' . $titulo);
 $xoopsTpl->assign('campo_token', $campo_token);
@@ -136,6 +113,6 @@ $xoopsTpl->assign('lang_comecar', _MA_ASSESSMENT_COMECAR);
 $xoopsTpl->assign('lang_prova', _MA_ASSESSMENT_PROVA);
 
 /**
- * Inclus�o de arquivo de fechamento da p�gina
+ * Including page closing file
  */
-include dirname(dirname(__DIR__)) . '/footer.php';
+require_once dirname(dirname(__DIR__)) . '/footer.php';

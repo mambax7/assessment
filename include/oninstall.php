@@ -22,7 +22,6 @@ use XoopsModules\Assessment;
 //require_once __DIR__ . '/setup.php';
 
 /**
- *
  * Prepares system prior to attempting to install module
  * @param XoopsModule $module {@link XoopsModule}
  *
@@ -30,14 +29,14 @@ use XoopsModules\Assessment;
  */
 function xoops_module_pre_install_assessment(\XoopsModule $module)
 {
-    include  dirname(__DIR__) . '/preloads/autoloader.php';
+    require_once dirname(__DIR__) . '/preloads/autoloader.php';
     /** @var Assessment\Utility $utility */
-    $utility = new \XoopsModules\Assessment\Utility();
+    $utility      = new \XoopsModules\Assessment\Utility();
     $xoopsSuccess = $utility::checkVerXoops($module);
     $phpSuccess   = $utility::checkVerPhp($module);
 
-    if (false !== $xoopsSuccess && false !==  $phpSuccess) {
-        $moduleTables =& $module->getInfo('tables');
+    if (false !== $xoopsSuccess && false !== $phpSuccess) {
+        $moduleTables = &$module->getInfo('tables');
         foreach ($moduleTables as $table) {
             $GLOBALS['xoopsDB']->queryF('DROP TABLE IF EXISTS ' . $GLOBALS['xoopsDB']->prefix($table) . ';');
         }
@@ -47,7 +46,6 @@ function xoops_module_pre_install_assessment(\XoopsModule $module)
 }
 
 /**
- *
  * Performs tasks required during installation of the module
  * @param XoopsModule $module {@link XoopsModule}
  *
@@ -55,12 +53,13 @@ function xoops_module_pre_install_assessment(\XoopsModule $module)
  */
 function xoops_module_install_assessment(\XoopsModule $module)
 {
-    require_once   dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
-    require_once   dirname(__DIR__) . '/include/config.php';
+    require_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
+    require_once dirname(__DIR__) . '/include/config.php';
 
     $moduleDirName = basename(dirname(__DIR__));
 
-    $helper       = Assessment\Helper::getInstance();
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    $helper       = \XoopsModules\Assessment\Helper::getInstance();
     $utility      = new Assessment\Utility();
     $configurator = new Assessment\Common\Configurator();
     // Load language files
@@ -69,8 +68,8 @@ function xoops_module_install_assessment(\XoopsModule $module)
 
     // default Permission Settings ----------------------
     global $xoopsModule;
-    $moduleId     = $xoopsModule->getVar('mid');
-    $moduleId2    = $helper->getModule()->mid();
+    $moduleId  = $xoopsModule->getVar('mid');
+    // $moduleId2 = $helper->getModule()->mid();
     /** @var \XoopsGroupPermHandler $grouppermHandler */
     $grouppermHandler = xoops_getHandler('groupperm');
     // access rights ------------------------------------------
@@ -90,15 +89,15 @@ function xoops_module_install_assessment(\XoopsModule $module)
 
     //  ---  COPY blank.png FILES ---------------
     if (count($configurator->copyBlankFiles) > 0) {
-        $file =  dirname(__DIR__) . '/assets/images/blank.png';
+        $file = dirname(__DIR__) . '/assets/images/blank.png';
         foreach (array_keys($configurator->copyBlankFiles) as $i) {
             $dest = $configurator->copyBlankFiles[$i] . '/blank.png';
             $utility::copyFile($file, $dest);
         }
     }
     //delete .html entries from the tpl table
-    $sql = 'DELETE FROM ' . $xoopsDB->prefix('tplfile') . " WHERE `tpl_module` = '" . $xoopsModule->getVar('dirname', 'n') . "' AND `tpl_file` LIKE '%.html%'";
-    $xoopsDB->queryF($sql);
+    $sql = 'DELETE FROM ' . $GLOBALS['xoopsDB']->prefix('tplfile') . " WHERE `tpl_module` = '" . $xoopsModule->getVar('dirname', 'n') . "' AND `tpl_file` LIKE '%.html%'";
+    $GLOBALS['xoopsDB']->queryF($sql);
 
     return true;
 }

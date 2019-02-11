@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Assessment;
+<?php
+
+namespace XoopsModules\Assessment;
 
 /*
  Utility Class Definition
@@ -22,11 +24,6 @@
  * @author       Mamba <mambax7@gmail.com>
  * @since        File available since version 1.54
  */
-
-use Xmf\Request;
-use XoopsModules\Assessment;
-use XoopsModules\Assessment\Common;
-
 
 /**
  * Class Utility

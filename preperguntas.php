@@ -1,35 +1,20 @@
 <?php
-// $Id: preperguntas.php,v 1.5 2007/03/24 14:41:41 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 /**
- * preperguntas.php, Respons�vel pelo processamento da abertura de prova
+ * prepergunta.php, Responsible for processing the proof opening
  *
- * Este arquivo processa a abertura da prova criando um resultado para aluno
- * pela primeira vez. Este resultado ser� atualizado durante as respostas do ]
- * usu�rio e na adminsitra��o quando o aluno estiver recebendo a sua nota
+ * This file processes the opening of the proof creating a result for the student
+ * for the first time. This result will be updated during the user's responses and in the administration when the student is receiving his grade
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
@@ -39,19 +24,10 @@
 use Xmf\Request;
 use XoopsModules\Assessment;
 
-/**
- * Inclus�es do Xoops
- */
-include dirname(dirname(__DIR__)) . '/mainfile.php';
-include dirname(dirname(__DIR__)) . '/header.php';
+require __DIR__ . '/header.php';
 
 /**
- * Inclus�es das classes do m�dulo
- */
-
-
-/**
- * Pegando cod_prova do formul�rio e uid do aluno da session
+ * Taking form_programs of the form and uid of the session student
  */
 $cod_prova = $_POST['cod_prova'];
 $uid       = $xoopsUser->getVar('uid');
@@ -64,12 +40,12 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 }
 
 /**
- * Cria��o da F�brica de resultados (padr�o de projeto factory com DAO)
+ * Creation of the Results Factory (factory project pattern with DAO)
  */
 $resultFactory = new Assessment\ResultHandler($xoopsDB);
 
 /**
- * Cria��o dos crit�rios para a f�brica produzir os objetos
+ * Creation of the criteria for the factory to produce the objects
  */
 $criteria_prova = new \Criteria('cod_prova', $cod_prova);
 $criteria_aluno = new \Criteria('uid_aluno', $uid);
@@ -77,8 +53,8 @@ $criteria       = new \CriteriaCompo($criteria_prova);
 $criteria->add($criteria_aluno);
 
 /**
- * Verifica se o resultado j� foi criado anteriormente e sen�o
- * cria o resultado, se sim informa que a prova est� em andamento j�
+ * Checks whether the result has already been created before and if
+ * creates the result, if it informs that the proof is in progress j
  */
 if ($resultFactory->getCount($criteria) < 1) {
     $resultado = $resultFactory->create();
@@ -91,6 +67,6 @@ if ($resultFactory->getCount($criteria) < 1) {
 }
 
 /**
- * Inclus�o de arquivo de fechamento da p�gina
+ * Including page closing file
  */
-include dirname(dirname(__DIR__)) . '/footer.php';
+require_once dirname(dirname(__DIR__)) . '/footer.php';

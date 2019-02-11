@@ -2,16 +2,17 @@
 
 use XoopsModules\Assessment;
 
-include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
-require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
+require_once __DIR__ . '/admin_header.php';
+
+//require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
+
 
 $cod_prova = $_POST['cod_prova'];
 
-$criteria             = new \Criteria('cod_prova', $cod_prova);
+$criteria        = new \Criteria('cod_prova', $cod_prova);
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-$examFactory    = new Assessment\ExamHandler($xoopsDB);
-$answerFactory = new Assessment\AnswerHandler($xoopsDB);
+$examFactory     = new Assessment\ExamHandler($xoopsDB);
+$answerFactory   = new Assessment\AnswerHandler($xoopsDB);
 
 $perguntas = $questionFactory->getObjects($criteria);
 

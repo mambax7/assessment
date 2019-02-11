@@ -1,35 +1,21 @@
 <?php
 // $Id: index.php,v 1.13 2007/03/24 20:08:53 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 /**
- * index.php, Respons�vel por listar as provas do usu�rio
+ * index.php, Responsible for listing user proofs
  *
- * Este arquivo lista as provas do usu�rio e exibe quais est�o dispon�veis
- * para realiza��o, quais est�o sendo corrigidas e quais
- *commad
+ * This file lists user proofs and shows which ones are available
+ * for accomplishment, which are being corrected, and which command
+ *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
  * @package assessment
@@ -37,36 +23,26 @@
 
 use XoopsModules\Assessment;
 
-/**
- * Arquivos de cabe�alho do Xoops para carregar ...
- */
-include dirname(dirname(__DIR__)) . '/mainfile.php';
-
 $GLOBALS['xoopsOption']['template_main'] = 'assessment_index.tpl';
-include dirname(dirname(__DIR__)) . '/header.php';
+require __DIR__ . '/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 $moduleDirName = basename(__DIR__);
-$helper = Assessment\Helper::getInstance();
+/** @var \XoopsModules\Assessment\Helper $helper */
+$helper = \XoopsModules\Assessment\Helper::getInstance();
+
 
 /**
- * Inclus�es das classes do m�dulo
- */
-
-/**
- * Definindo arquivo de template da p�gina
- */
-
-/**
- * Cria��o das F�bricas de objetos que vamos precisar
+ * Creation of the factories of objects that we will need
  */
 $examFactory     = new Assessment\ExamHandler($xoopsDB);
-$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
-$resultFactory = new Assessment\ResultHandler($xoopsDB);
+$questionFactory = new Assessment\QuestionHandler($xoopsDB);
+$resultFactory   = new Assessment\ResultHandler($xoopsDB);
 
 /**
- * Buscar todas as provas, todos os resultados deste aluno e e todas as perguntas
+ * Find all the tests, all the results of this student and all questions
  */
-if (isset($_GET['start'])) {
+if (\Xmf\Request::hasVar('start', 'GET')) {
     $start = $_GET['start'];
 }
 //$criteria = new \Criteria ('cod_prova');
@@ -75,8 +51,8 @@ if (isset($_GET['start'])) {
 //$total_items = $examFactory->getCount();
 
 //$vetor_provas = $examFactory->getObjects($criteria);
-$vetor_provas     = $examFactory->getObjects();
-$qtd_provas       = count($vetor_provas);
+$vetor_provas = $examFactory->getObjects();
+$qtd_provas   = count($vetor_provas);
 if (is_object($GLOBALS['xoopsUser'])) {
     $uid = $GLOBALS['xoopsUser']->getVar('uid');
 
@@ -87,7 +63,7 @@ if (is_object($GLOBALS['xoopsUser'])) {
     //print_r($vetor_resultados);
     $grupos = $GLOBALS['xoopsUser']->getGroups();
     /**
-     * loop passar prova por prova
+     * loop pass proof by test
      */
     $x = [];
     $i = 0;
@@ -107,7 +83,7 @@ if (is_object($GLOBALS['xoopsUser'])) {
 
             $vetor_resultados_terminou = [];
             foreach ($vetor_resultados as $resultado) {
-                if (1 == $resultado->getVar('terminou') & $resultado->getVar('cod_prova') == $cod_prova) {
+                if (1 == $resultado->getVar('terminou') && $resultado->getVar('cod_prova') == $cod_prova) {
                     $vetor_resultados_terminou[] = $resultado;
                 }
             }
@@ -162,5 +138,5 @@ $xoopsTpl->assign('lang_fim', _MA_ASSESSMENT_FIM);
 $xoopsTpl->assign('lang_tempoencerrado', _MA_ASSESSMENT_TEMPOENCERRADO);
 $xoopsTpl->assign('lang_disponibilidade', _MA_ASSESSMENT_DISPONIBILIDADE);
 
-//Fecha a p�gina com seu rodap�. Inclus�o Obrigat�ria
-include dirname(dirname(__DIR__)) . '/footer.php';
+//Close the page with your footer. Inclusion Required
+require_once dirname(dirname(__DIR__)) . '/footer.php';

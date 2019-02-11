@@ -1,14 +1,11 @@
 <?php
 
-use XoopsModules\Assessment;
+require __DIR__ . '/header.php';
 
-include dirname(dirname(__DIR__)) . '/mainfile.php';
-include dirname(dirname(__DIR__)) . '/header.php';
+/** @var \XoopsModules\Assessment\Helper $helper */
+$helper = \XoopsModules\Assessment\Helper::getInstance();
 
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
-
-//aqui come�a o conte�do principal
+//here begins the main content
 //echo('uiohaiufuihfaui<br>');
 //echo ($helper->getConfig('ploft'));
 $GLOBALS['xoopsOption']['template_main'] = 'meumodulo_lista.tpl';
@@ -26,5 +23,5 @@ while (false !== (list($id, $nome) = $xoopsDB->fetchRow($rs))) {
 
 $xoopsTpl->assign('valor2', $vetorresultados);
 
-//Fecha a p�gina com seu rodap�. Inclus�o Obrigat�ria
-include dirname(dirname(__DIR__)) . '/footer.php';
+//Close the page with your footer. Inclusion Required
+require_once dirname(dirname(__DIR__)) . '/footer.php';

@@ -143,7 +143,6 @@ class XoopsFormMPublishTextArea extends \XoopsFormElement
      *
      * @return string HTML
      */
-
     public function render()
     {
         global $xoopsUser, $xoopsConfig;
@@ -631,7 +630,7 @@ tinyMCE.init({
     {
         if (!$visual) {
             $myts   = \MyTextSanitizer::getInstance();
-            $smiles =& $myts->getSmileys();
+            $smiles = &$myts->getSmileys();
             $ret    = '';
             if (empty($smileys)) {
                 $db = \XoopsDatabaseFactory::getDatabaseConnection();
@@ -651,7 +650,7 @@ tinyMCE.init({
             $ret .= "&nbsp;[<a href='#moresmiley' onclick='javascript:openWithSelfMain(\"" . XOOPS_URL . '/misc.php?action=showpopups&amp;type=smilies&amp;target=' . $this->getName() . "\",\"smilies\",300,475);'>" . _MORE . '</a>]';
         } else {
             $myts   = \MyTextSanitizer::getInstance();
-            $smiles =& $myts->getSmileys();
+            $smiles = &$myts->getSmileys();
             $ret    = '';
             if (empty($smileys)) {
                 $db = \XoopsDatabaseFactory::getDatabaseConnection();

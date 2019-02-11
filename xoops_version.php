@@ -17,10 +17,9 @@
  * @author       XOOPS Development Team
  * @version      $Id $
  */
-
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-include __DIR__ . '/preloads/autoloader.php';
+require_once __DIR__ . '/preloads/autoloader.php';
 
 $modversion['version']       = 1.1;
 $modversion['module_status'] = 'Beta 2';
@@ -47,7 +46,7 @@ $modversion['min_xoops']           = '2.5.9';
 $modversion['min_admin']           = '1.2';
 $modversion['min_db']              = [
     'mysql'  => '5.0.7',
-    'mysqli' => '5.0.7'
+    'mysqli' => '5.0.7',
 ];
 
 $modversion['hasMain']     = 1;

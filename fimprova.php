@@ -1,76 +1,50 @@
 <?php
 // $Id: fimprova.php,v 1.15 2007/03/24 20:08:53 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
 /**
- * fimprova.php, Respons�vel por gerar o formul�rio de encerramento da prova
+ * fimprova.php, Responsible for generating the test closing form
  *
- * Este arquivo exibe um relat�rio da prova que o aluno est� fazendo e o permite
- * que encerre a prova
+ * This file displays a report of the test that the student is doing and allows him
+ * to finish the test
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
  * @package assessment
  */
-/**
- * Definindo arquivo de template da p�gina
- */
+
 
 use XoopsModules\Assessment;
 
 /**
- * Arquivos de cabe�alho do Xoops para carregar ...
+ * Xoops head files to load ...
  */
-include dirname(dirname(__DIR__)) . '/mainfile.php';
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
 $GLOBALS['xoopsOption']['template_main'] = 'assessment_fimprova.tpl';
-include dirname(dirname(__DIR__)) . '/header.php';
+require_once dirname(dirname(__DIR__)) . '/header.php';
 
 /**
- * Inclus�es das classes do m�dulo
- */
-
-/**
- * Definindo arquivo de template da p�gina
- */
-//$GLOBALS['xoopsOption']['template_main'] = 'assessment_fimprova.tpl';
-
-/**
- * Pegando cod_resultado do formul�rio e uid do aluno da session
+ * Taking cod_result of the form and uid of the session student
  */
 $cod_resultado = $_GET['cod_resultado'];
 $uid           = $xoopsUser->getVar('uid');
 
 /**
- * Cria��o das F�bricas de objetos que vamos precisar
+ * Creation of the factories of objects that we will need
  */
-$examFactory    = new Assessment\ExamHandler($xoopsDB);
+$examFactory     = new Assessment\ExamHandler($xoopsDB);
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);
 $resultFactory   = new Assessment\ResultHandler($xoopsDB);
 
 /**
- * Fabricando o objeto resultado
+ * Making the Result Object
  */
 /** @var \XoopsModules\Assessment\Result $resultado */
 $resultado = $resultFactory->get($cod_resultado);
@@ -83,17 +57,17 @@ $cod_prova = $resultado->getVar('cod_prova');
 $prova = $examFactory->get($cod_prova);
 
 /**
- * Verificando privil�gios do aluno para esta prova
+ * Verifying Student Privileges for this Test
  */
 if (!$prova->isAutorizado()) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_PROIBIDO);
 }
 
-//Vamos agora pegar o numero de perguntas da prova e quantas o aluno respondeu
-//e quantas ele deixou em branco para lembr�-lo e confirmar que ele quer encerrar a prova
+// Let's now get the number of test questions and how many the student answered
+// and how many he left blank to remind him and confirm that he wants to end the race
 
 /**
- * Cria��o de objetos de crit�rio para passar para as F�bricas
+ * Creating Criteria Objects to Move to Factories
  */
 $criteria_prova   = new \Criteria('cod_prova', $cod_prova);
 $criteria_usuario = new \Criteria('uid_aluno', $uid);
@@ -101,13 +75,13 @@ $criteria_compo   = new \CriteriaCompo($criteria_prova);
 $criteria_compo->add($criteria_usuario);
 
 /**
- * Buscando o total de perguntas desta prova na F�brica de Perguntas
+ * Seeking the total questions of this test in the Question Factory
  */
 $qtd_perguntas = $questionFactory->getCount($criteria_prova);
 
 /**
- * Calculos de tempo restante, tempo gasto e hor�rio do fim da prova
- * obs: cabe passar isso para dentro da classe resultado ou prova
+ * Calculations of remaining time, time spent and time of the end of the test
+ * obs: it is necessary to pass this into the class result or proof
  */
 $horaatual            = time();
 $data_inicio_segundos = $examFactory->dataMysql2dataUnix($resultado->getVar('data_inicio'));
@@ -118,8 +92,7 @@ $tempo_gasto       = $examFactory->converte_segundos($horaatual - $data_inicio_s
 $hora_fim_da_prova = $examFactory->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
 
 /**
- * Verifica��o de tempo da prova: se estourar o tempo salvar o resultado e
- * avisar o aluno
+ * Test time check: if the time burst saves the result and warns the student
  */
 if ($tempo_restante['segundos'] < 0) {
     $resultado->setVar('terminou', 1);
@@ -129,42 +102,39 @@ if ($tempo_restante['segundos'] < 0) {
 }
 
 /**
- * Se o tempo n�o tiver estourado ainda precisamos do
- * cod_resultado para salvar o resultado se o aluno quiser
+ * If the time has not burst we still need the cod_result to save the result if the student wants
  */
 $cod_resultado = $resultado->getVar('cod_resultado');
 
 /**
- * Buscando titulo da prova. descricao e quantidade de perguntas respondidas
+ * Seeking title of proof. description and number of questions answered
  */
-
 $qtd_respostas = $resultado->contarRespostas();
 $titulo        = $prova->getVar('titulo');
 $descricao     = $prova->getVar('descricao');
 
 /**
- * Buscando campo de seguran�a para o formul�rio
+ * Looking for a field of insurance or for form
  */
 $campo_token = $GLOBALS['xoopsSecurity']->getTokenHTML();
 
-//nome do m�dulo
+//module name
 $nome_modulo = $xoopsModule->getVar('name');
 
 /**
- * Atribuindo vari�veis ao template
- * obs: poderia ter sido feito direto na �tapa anterior
- * mas por quest�es de leitura de c�digo separei os dois
- * depois podemos pensar em juntar numa se��o s�
+ * Assigning Variables to the template
+ * obs: could have been made direct in the "previous tab" but for code reading issues I separated the two
+ * then we can think of joining in a section s
  */
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name') . ' - ' . $titulo);
-$xoopsTpl->assign('nome_modulo', $nome_modulo); //Nome do m�dulo para o breadcrump
-$xoopsTpl->assign('titulo', $titulo); //T�tulo da prova
-$xoopsTpl->assign('descricao', $descricao); //Descri��o da prova
-$xoopsTpl->assign('cod_prova', $cod_prova); //Codigo da prova(para voltar para a prova caso desista de terminar a prova agora
-$xoopsTpl->assign('qtd_perguntas', $qtd_perguntas); // qtd de perguntas na prova
-$xoopsTpl->assign('qtd_respostas', $qtd_respostas); //qtd de respostas na prova
-$xoopsTpl->assign('cod_resultado', $cod_resultado); //Para terminar a prova o proximo script precisa deste dado
-$xoopsTpl->assign('tempo_gasto', $tempo_gasto); //Quanto tempo desde o inicio da prova
+$xoopsTpl->assign('nome_modulo', $nome_modulo); //Name of the module for breadcrump
+$xoopsTpl->assign('titulo', $titulo); //Title of the test
+$xoopsTpl->assign('descricao', $descricao); //Description of proof
+$xoopsTpl->assign('cod_prova', $cod_prova); //Code of the test (to return to the test if you give up finishing the test nowa
+$xoopsTpl->assign('qtd_perguntas', $qtd_perguntas); // # of questions in the test
+$xoopsTpl->assign('qtd_respostas', $qtd_respostas); //# of answers in the test
+$xoopsTpl->assign('cod_resultado', $cod_resultado); //To finish the test the next script needs this data
+$xoopsTpl->assign('tempo_gasto', $tempo_gasto); //How long since the start of the race
 $xoopsTpl->assign('lang_temporestante', sprintf(_MA_ASSESSMENT_TEMPORESTANTECOMPOSTO, $tempo_restante['horas'], $tempo_restante['minutos']));
 $xoopsTpl->assign('lang_andamento', sprintf(_MA_ASSESSMENT_ANDAMENTO, $qtd_respostas, $qtd_perguntas));
 $xoopsTpl->assign('lang_terminou', sprintf(_MA_ASSESSMENT_TERMINOU, $tempo_gasto['horas'], $tempo_gasto['minutos']));
@@ -178,6 +148,6 @@ $xoopsTpl->assign('lang_prova', _MA_ASSESSMENT_PROVA);
 $xoopsTpl->assign('campo_token', $campo_token);
 
 /**
- * Inclus�o de arquivo de fechamento da p�gina
+ * Including page closing file
  */
-include dirname(dirname(__DIR__)) . '/footer.php';
+require_once dirname(dirname(__DIR__)) . '/footer.php';

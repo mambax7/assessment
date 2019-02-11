@@ -1,29 +1,15 @@
 <?php
 // $Id: excluirprova.php,v 1.5 2007/03/24 14:41:40 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 /**
  * excluirprova.php, Excluir a prova
  *
@@ -33,24 +19,26 @@
  * @version 1.0
  * @package assessment/admin
  */
+
 use Xmf\Request;
 use XoopsModules\Assessment;
 
 /**
  * Arquivo de cabe�alho da administra��o do Xoops
  */
-include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+require_once __DIR__ . '/admin_header.php';
+//require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 
 /**
  * Arquivo que cont�m v�rias fun��es interessantes , principalmente a de
  * criar o cabe�alho do menu com as abinhas
  */
-require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
+//require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 
 /**
  * Inclus�es das classes do m�dulo
  */
-require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
+//require_once dirname(dirname(dirname(__DIR__))) . '/class/criteria.php';
 
 /**
  * Pegando cod_prova do formul�rio e uid do aluno da session
@@ -64,7 +52,6 @@ $segunda_vez = $_POST['segunda_vez'];
  * sem volta. Por isso vamos usar uma confirma��o e confirmando excluir tudo.
  */
 if (1 == $segunda_vez) {
-
     /**
      * Fun��o que desenha o cabe�alho da administra��o do Xoops
      */
@@ -79,10 +66,10 @@ if (1 == $segunda_vez) {
     /**
      * Cria��o das F�bricas de objetos que vamos precisar
      */
-    $questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+    $questionFactory = new Assessment\QuestionHandler($xoopsDB);
     $examFactory     = new Assessment\ExamHandler($xoopsDB);
-    $answerFactory  = new Assessment\AnswerHandler($xoopsDB);
-    $resultFactory = new Assessment\ResultHandler($xoopsDB);
+    $answerFactory   = new Assessment\AnswerHandler($xoopsDB);
+    $resultFactory   = new Assessment\ResultHandler($xoopsDB);
     $documentFactory = new Assessment\DocumentHandler($xoopsDB);
 
     /**
@@ -140,7 +127,6 @@ if (1 == $segunda_vez) {
      */
     xoops_cp_footer();
 } else {
-
     /**
      * Fun��o que desenha o cabe�alho da administra��o do Xoops
      */

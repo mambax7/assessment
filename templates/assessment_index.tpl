@@ -10,14 +10,14 @@
 
 
     <{foreach from=$vetor_provas item=prova}>
-        <{if (($prova.fechada == 0) & ($prova.terminou == 1)) }>
+        <{if (($prova.fechada == 0) && ($prova.terminou == 1)) }>
         <tr class=<{cycle values="odd,even"
         }>>
             <td><img src=assets/images/prova.png align="left">
                 <strong><{$prova.tit_prova}></strong></td>
             <td colspan='2'><{$lang_emcorrecao}></td>
             </tr><{/if}>
-        <{if (($prova.fechada == 1) & ($prova.terminou == 1)) }>
+        <{if (($prova.fechada == 1) && ($prova.terminou == 1)) }>
             <tr class=<{cycle values="odd,even"
             }>>
                 <td width="50%"><img src=assets/images/prova.png align="left">
@@ -28,7 +28,7 @@
                 </td>
             </tr>
         <{/if}>
-        <{if (($prova.fechada == 0) & ($prova.terminou == 0) & ($prova.naodisponivel == 1)) }>
+        <{if (($prova.fechada == 0) && ($prova.terminou == 0) && ($prova.naodisponivel == 1)) }>
             <tr class=<{cycle values="odd,even"
             }>>
                 <td><img src=assets/images/prova.png align="left"><strong><{$prova.tit_prova}></strong> <br>
@@ -42,7 +42,7 @@
                 </td>
             </tr>
         <{/if}>
-        <{if (($prova.fechada == 0) & ($prova.terminou == 0) & ($prova.naodisponivel == 0)) }>
+        <{if (($prova.fechada == 0) && ($prova.terminou == 0) && ($prova.naodisponivel == 0)) }>
             <tr class=<{cycle values="odd,even"
             }>>
                 <td><img src=assets/images/prova.png align="left"><a href=verprova.php?cod_prova=<{$prova.cod_prova}>>

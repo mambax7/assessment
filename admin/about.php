@@ -17,14 +17,11 @@
  * @author       XOOPS Development Team
  * @version      $Id $
  */
-
 require_once __DIR__ . '/admin_header.php';
-
 xoops_cp_header();
 
-$aboutAdmin = \Xmf\Module\Admin::getInstance();
-
-$aboutAdmin->displayNavigation('about.php');
-$aboutAdmin->renderAbout('xoopsfoundation@gmail.com', false);
+$adminObject->displayNavigation(basename(__FILE__));
+$adminObject->setPaypal('xoopsfoundation@gmail.com');
+$adminObject->displayAbout(false);
 
 require_once __DIR__ . '/admin_footer.php';

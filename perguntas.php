@@ -1,34 +1,19 @@
 <?php
 // $Id: perguntas.php,v 1.18 2007/03/24 20:08:53 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 /**
- * perguntas.php, Respons�vel por exibir a pergunta da vez
- *
- * Este arquivo prepara o formul�rio com a pergunta e se houver um
- * documento para ele ele tamb�m o exibe
+ * questions.php, Responsible for displaying the question at once
+ * This file prepares the form with the question and if there is a
+ * document for it it also displays it
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
@@ -36,57 +21,54 @@
  */
 
 use XoopsModules\Assessment;
-/**
- * Arquivos de cabe�alho do Xoops para carregar ...
- */
-include dirname(dirname(__DIR__)) . '/mainfile.php';
 
 /**
- * Definindo arquivo de template da p�gina
+ * Xoops header files to load ...
  */
 $GLOBALS['xoopsOption']['template_main'] = 'assessment_perguntas.tpl';
+require __DIR__ . '/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
-include dirname(dirname(__DIR__)) . '/header.php';
 
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
+/** @var \XoopsModules\Assessment\Helper $helper */
+$helper = \XoopsModules\Assessment\Helper::getInstance();
 
 /**
- * Inclus�es das classes do m�dulo
+ * Inclusions of module classes
  */
 
-//include __DIR__ . '/class/navegacao.php'; // classe derivada da pagenav do xoops para exibir as perguntas que j� foram respondidas
-
+//require_once __DIR__. '/class/navegacao.php'; // class derived from xoops pagenav to display the questions that have already been answered
 
 /**
- * Inclus�o de classe de barra de navega��o
+ * Inclusion of navigation bar class
  */
 require_once dirname(dirname(__DIR__)) . '/class/pagenav.php';
 
 /**
- * Pegando cod_prova  e start do GET e uid do aluno da session
- * o start � a possi��o em que a prova est�, a quest�o
+ * Picking cod_prova and start from GET and student uid from session
+ * the start   the possibility that the proof is, the question
+ *
  */
 $cod_prova = $_GET['cod_prova'];
 $uid       = $xoopsUser->getVar('uid');
 $start     = $_GET['start'];
 
 /**
- * Cria��o das F�bricas de objetos que vamos precisar
+ * Creation of the factories of objects that we will need
  */
 $examFactory     = new Assessment\ExamHandler($xoopsDB);
-$resultFactory    = new Assessment\ResultHandler($xoopsDB);
-$answerFactory  = new Assessment\AnswerHandler($xoopsDB);
-$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+$resultFactory   = new Assessment\ResultHandler($xoopsDB);
+$answerFactory   = new Assessment\AnswerHandler($xoopsDB);
+$questionFactory = new Assessment\QuestionHandler($xoopsDB);
 $documentFactory = new Assessment\DocumentHandler($xoopsDB);
 
 /**
- * Buscando na f�brica a prova a que esta pergunta pertence
+ * Searching the factory for proof that this question belongs to
  */
 $prova = $examFactory->get($cod_prova);
 
 /**
- * Verificando privil�gios do aluno para esta prova
+ * Verifying Student Privileges for this Test
  */
 /** @var \XoopsModules\Assessment\Exam $prova */
 if (!$prova->isAutorizado()) {
@@ -94,7 +76,7 @@ if (!$prova->isAutorizado()) {
 }
 
 /**
- * Verificando prova j� expirou
+ * Verifying proof has expired
  */
 $fim          = $prova->getVar('data_fim', 'n');
 $tempo        = $prova->getVar('tempo', 'n');
@@ -105,8 +87,8 @@ if ($fimmaistempo < time()) {
 }
 
 /**
- * Verificando se aluno j� tinha terminado a prova antes em caso positivo
- * informa atraves de mensagem
+ * Checking if student had already finished the test before in case of a positive
+ * inform by message
  */
 $criteria_prova = new \Criteria('cod_prova', $cod_prova);
 $criteria_prova->setOrder('ASC');
@@ -120,8 +102,8 @@ if ($resultFactory->getCount($criteria_resultado) > 0) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_JATERMINOU);
 }
 /**
- * Verificando se a prova j� tem perguntas cadastradas se n�o
- * tiver , n�o deixa aluno ter acesso
+ * Checking if the test already has registered questions if it does not
+ * does not allow the student to have access
  */
 $qtd_perguntas = $questionFactory->getCount($criteria_prova);
 if ($qtd_perguntas < 1) {
@@ -129,7 +111,7 @@ if ($qtd_perguntas < 1) {
 }
 
 /**
- * Cria��o de objetos de crit�rio para passar para as F�bricas
+ * Creating Criteria Objects to Move to Factories
  */
 $criteria_compo = new \CriteriaCompo($criteria_prova);
 $criteria_compo->add($criteria_aluno);
@@ -141,18 +123,18 @@ $criteria_compo->add($criteria_aluno);
  */
 $qtd_resultados = $resultFactory->getCount($criteria_compo);
 if ($qtd_resultados < 1) {
-    redirect_header('verprova.php?cod_prova=' . $cod_prova, 5, 'You can not skip the start test part' ); //'Voc� n�o pode pular a parte de iniciar prova');
+    redirect_header('verprova.php?cod_prova=' . $cod_prova, 5, 'You can not skip the start test part');
 }
 
 /**
- * Buscando o objeto resultado desta prova deste aluno na f�brica
+ * Searching for the object of this student's test in the factory
  */
 $resultados = $resultFactory->getObjects($criteria_compo);
 $resultado  = $resultados[0];
 
 /**
- * Calculos de tempo restante, tempo gasto e hor�rio do fim da prova
- * obs: cabe passar isso para dentro da classe resultado ou prova
+ * Calculations of remaining time, time spent and time of the end of the test
+ * obs: it is necessary to pass this into the class result or proof
  */
 $horaatual = time() - 18000;
 //echo $horaatual . 'horaatual </br>';
@@ -160,8 +142,9 @@ $serverXX = abs((int)($GLOBALS['xoopsConfig']['server_TZ'] * 3600.0));
 //echo $serverXX . 'server TZ </br>';
 //echo 'Local: ' . date('r') . 'n<br>GMT: ' . gmdate('r') . '<br>';
 
-$data_inicio_segundos = $examFactory->dataMysql2dataUnix($resultado->getVar('data_inicio'));
-//echo $data_inicio_segundos . 'data_inicio_segundos </br>';
+
+    $data_inicio_segundos = $examFactory->dataMysql2dataUnix($resultado->getVar('data_inicio'));
+    //echo $data_inicio_segundos . 'data_inicio_segundos </br>';
 
 $tempo_prova = $prova->getVar('tempo');
 //echo $tempo_prova . 'tempo_prova   </br>';
@@ -177,10 +160,11 @@ $tempo_gasto = $examFactory->converte_segundos($horaatual - $data_inicio_segundo
 $hora_fim_da_prova = $examFactory->converte_segundos($data_inicio_segundos + $tempo_prova, 'H');
 //echo $hora_fim_da_prova . 'hora_fim_da_prova  </br>';
 //var_dump($hora_fim_da_prova);
+
 /**
- * Verifica��o de tempo da prova: se estourar o tempo salvar o resultado e
- * avisar o aluno com a possibilidade de dar a nota direto pro aluno se assim
- * estiver definido na administra��o
+ * Test time check: if the time burst saves the result and
+ * warns the student with the possibility of giving the grade direct to the student if so
+ * is defined in the administration
  */
 if ($tempo_restante['segundos'] < 0) {
     $resultado->setVar('terminou', 1);
@@ -192,36 +176,36 @@ if ($tempo_restante['segundos'] < 0) {
     redirect_header('index.php', 5, _MA_ASSESSMENT_ACABOU);
 }
 
-//busca titulo da prova
+//title search test
 $titulo_prova = $prova->getVar('titulo', 's');
 
 /**
- * buscando as perguntas da prova, depois separando
- * a nossa pergunta e enfim pegando o c�digo dela que vamos precisar
+ * searching the questions of the test, then separating
+ * our question and finally picking the code of it that we will need
  */
 $perguntas    = $questionFactory->getObjects($criteria_prova);
 $pergunta     = $perguntas[$start];
 $cod_pergunta = $pergunta->getVar('cod_pergunta');
 
 /**
- * buscando documentos a serem exibidos antes da pergunta
+ * looking for documents to be displayed before the question
  */
-$documentos =& $documentFactory->getDocumentosProvaPergunta($cod_prova, $cod_pergunta);
+$documentos = &$documentFactory->getDocumentosProvaPergunta($cod_prova, $cod_pergunta);
 
 /**
- * Cria��o de objetos de crit�rio para passar para as F�bricas
+ * Creating Criteria Objects to Move to Factories
  */
 $criteria_pergunta = new \Criteria('cod_pergunta', $cod_pergunta);
 
 /**
- * buscando as respostas a serem exibidas
+ * looking for the answers to be displayed
  */
 $respostas = $answerFactory->getObjects($criteria_pergunta);
 
 /**
- * buscar resposta anterior a esta pergunta caso
- * o aluno j� a tenha respondido e o n�mero de perguntas que
- * ele j� respondeu
+ * search for a previous answer to this question if
+ * the student has already answered it and the number of questions he
+ * has already answered
  */
 $cod_resposta_anterior = $resultado->getRespostaUsuario($cod_pergunta);
 $qtd_respostas         = $resultado->contarRespostas();
@@ -229,29 +213,28 @@ $qtd_respostas         = $resultado->contarRespostas();
 $cod_resultado = $resultado->getVar('cod_resultado');
 
 /**
- * Vamos buscar os codigos das perguntas respondidas e os codigos das perguntas
- * para passar como parametros para a barra de navega��o que marca as perguntas
- * que j� foram respondidas em vermelho.
+ * Let's get the codes of the questions answered and the codes of the questions
+ * to pass as parameters to the navigation bar that marks the questions that have already been answered in red.
  */
 $cod_perguntas_respondidas = $resultado->getCodPerguntasAsArray();
 $cod_perguntas             = $questionFactory->getCodObjects($criteria_prova);
 $navegacao                 = new Assessment\TestNavigator($qtd_perguntas, 1, $start, 'start', 'cod_prova=' . $cod_prova);
 $barra_navegacao           = $navegacao->renderImageNav($cod_perguntas, $cod_perguntas_respondidas, $helper->getConfig('qtdmenu'));
 
-//Montando o Formul�rio
+//Assembling the Form
 $formulario = $questionFactory->renderFormResponder('form_resposta.php', $pergunta, $respostas, $cod_resposta_anterior);
 $formulario->assign($xoopsTpl);
 
 //sanitizing
-//falta um if para n�o dar uma notice
+// missing an if not to give a notice
 foreach ($documentos as $doc) {
     //    $doc['documento'] = text_filter($doc['documento'],true);
     $doc['documento'] = $doc['documento'];
 }
-//nome do m�dulo
+//module name
 $nome_modulo = $xoopsModule->getVar('name');
 
-//Repassando as vari�veis para o template
+//Reviewing Variables for the Template
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name') . ' - ' . $titulo_prova);
 $xoopsTpl->assign('nome_modulo', $nome_modulo);
 $xoopsTpl->assign('documentos', $documentos);
@@ -275,5 +258,5 @@ $xoopsTpl->assign('lang_iconjaresp', _MA_ASSESSMENT_ICONJARESP);
 $xoopsTpl->assign('lang_iconnaoresp', _MA_ASSESSMENT_ICONNAORESP);
 $xoopsTpl->assign('tempo_restante', $tempo_restante);
 
-//Fecha a p�gina com seu rodap�. Inclus�o Obrigat�ria
-include dirname(dirname(__DIR__)) . '/footer.php';
+//Close the page with your footer. Inclusion Required
+require_once dirname(dirname(__DIR__)) . '/footer.php';

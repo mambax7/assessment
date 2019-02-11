@@ -1,29 +1,14 @@
 <?php
 // $Id: index.php,v 1.22 2007/03/24 17:50:52 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
 /**
  * index.php, Principal arquivo da administração
  *
@@ -36,6 +21,7 @@
  * @version 1.0
  * @package assessment
  */
+
 /**
  * Arquivo de cabeçalho da administração do Xoops
  */
@@ -45,7 +31,7 @@ use XoopsModules\Assessment;
 $currentFile = basename(__FILE__);
 
 require_once __DIR__ . '/admin_header.php';
-//include dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+//require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 
 /**
  * Função que desenha o cabeçalho da administração do Xoops
@@ -64,9 +50,9 @@ xoops_cp_header();
 //     echo _AM_ASSESSMENT_REQUERIMENTOS;
 //
 //} else {
-require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
-//   include_once(XOOPS_ROOT_PATH."/Frameworks/xoops_version.php");
-//   include_once(XOOPS_ROOT_PATH."/class/xoopseditor/xoops_version.php");
+//require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
+//   require(XOOPS_ROOT_PATH."/Frameworks/xoops_version.php");
+//   require(XOOPS_ROOT_PATH."/class/xoopseditor/xoops_version.php");
 //   if ((XOOPS_FRAMEWORKS_VERSION<floatval(1.10))||(XOOPS_FRAMEWORKS_XOOPSEDITOR_VERSION<floatval(1.10))) {
 //    echo _AM_ASSESSMENT_REQUERIMENTOS;
 //    } else {
@@ -74,7 +60,6 @@ require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 /**
  * Criação das Fábricas de objetos que vamos precisar
  */
-
 require_once dirname(dirname(dirname(__DIR__))) . '/class/pagenav.php';
 
 //$myts = \MyTextSanitizer::getInstance();
@@ -189,7 +174,7 @@ function verDetalhePergunta($cod_pergunta, $cod_resposta)
     /**
      * Criação da fábrica de provas
      */
-    $answerFactory = new Assessment\AnswerHandler($xoopsDB);
+    $answerFactory   = new Assessment\AnswerHandler($xoopsDB);
     $questionFactory = new Assessment\QuestionHandler($xoopsDB);
 
     /**
@@ -239,9 +224,9 @@ function editarResultado()
     /**
      * Criação das fábricas dos objetos que vamos precisar
      */
-    $resultFactory = new Assessment\ResultHandler($xoopsDB);
+    $resultFactory   = new Assessment\ResultHandler($xoopsDB);
     $examFactory     = new Assessment\ExamHandler($xoopsDB);
-    $questionFactory  = new Assessment\QuestionHandler($xoopsDB);
+    $questionFactory = new Assessment\QuestionHandler($xoopsDB);
 
     /**
      * Buscando na fábrica o resultado a ser editado
@@ -279,7 +264,7 @@ function listarResultados()
     /**
      * Declaração de variáveis globais
      */
-    global $xoopsDB, $xoopsUser, $start,  $pathIcon16;
+    global $xoopsDB, $xoopsUser, $start, $pathIcon16;
     /** @var Assessment\Helper $helper */
     $helper = Assessment\Helper::getInstance();
 
@@ -291,7 +276,7 @@ function listarResultados()
     /**
      * Criação das fábricas dos objetos que vamos precisar
      */
-    $examFactory     = new Assessment\ExamHandler($xoopsDB);
+    $examFactory   = new Assessment\ExamHandler($xoopsDB);
     $resultFactory = new Assessment\ResultHandler($xoopsDB);
 
     /**
@@ -300,7 +285,7 @@ function listarResultados()
      */
     $criteria_prova = new \Criteria('cod_prova', $cod_prova);
     $criteria_prova->setLimit($helper->getConfig('qtditens'));
-    if (isset($_GET['start'])) {
+    if (\Xmf\Request::hasVar('start', 'GET')) {
         $criteria_prova->setStart($_GET['start']);
     }
 
@@ -384,12 +369,12 @@ function listarResultados()
 
 function listarperguntas()
 {
-    global $xoopsDB, $startper,  $pathIcon16;
+    global $xoopsDB, $startper, $pathIcon16;
     /** @var Assessment\Helper $helper */
-    $helper = Assessment\Helper::getInstance();
+    $helper          = Assessment\Helper::getInstance();
     $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-    $cod_prova            = $_GET['cod_prova'];
-    $criteria             = new \Criteria('cod_prova', $cod_prova);
+    $cod_prova       = $_GET['cod_prova'];
+    $criteria        = new \Criteria('cod_prova', $cod_prova);
     $criteria->setSort('ordem');
     $criteria->setOrder('ASC');
     $criteria->setLimit($helper->getConfig('qtditens'));
@@ -428,9 +413,9 @@ function listarperguntas()
 function cadastrarpergunta()
 {
     global $xoopsDB;
-    $cod_prova         = $_GET['cod_prova'];
+    $cod_prova   = $_GET['cod_prova'];
     $examFactory = new Assessment\ExamHandler($xoopsDB);
-    $prova             = $examFactory->get($cod_prova);
+    $prova       = $examFactory->get($cod_prova);
 
     $questionFactory = new Assessment\QuestionHandler($xoopsDB);
     $questionFactory->renderFormCadastrar('cadastropergunta.php', $prova);
@@ -439,7 +424,7 @@ function cadastrarpergunta()
 function cadastrarprova()
 {
     global $xoopsDB;
-//    $examFactory = new Assessment\ExamHandler($xoopsDB);
+    //    $examFactory = new Assessment\ExamHandler($xoopsDB);
     $examFactory = Assessment\Helper::getInstance()->getHandler('Exam');
     $examFactory->renderFormCadastrar('cadastroprova.php');
 }
@@ -450,7 +435,7 @@ function editarprova()
     $cod_prova = $_GET['cod_prova'];
 
     $examFactory = new Assessment\ExamHandler($xoopsDB);
-    $prova             = $examFactory->get($cod_prova);
+    $prova       = $examFactory->get($cod_prova);
     $examFactory->renderFormEditar('editarprova.php', $prova);
 }
 
@@ -464,10 +449,10 @@ function editarpergunta()
     $criteria = new \Criteria('cod_pergunta', $cod_pergunta);
     $criteria->setSort('cod_resposta');
     $criteria->setOrder('ASC');
-    $answerFactory = new Assessment\AnswerHandler($xoopsDB);
-    $respostas            = $answerFactory->getObjects($criteria);
+    $answerFactory   = new Assessment\AnswerHandler($xoopsDB);
+    $respostas       = $answerFactory->getObjects($criteria);
     $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-    $pergunta             = $questionFactory->get($cod_pergunta);
+    $pergunta        = $questionFactory->get($cod_pergunta);
     $questionFactory->renderFormEditar('editarpergunta.php', $pergunta, $respostas);
 }
 
@@ -476,7 +461,7 @@ function listarDocumentos()
     /**
      * Listar variáveis globais
      */
-    global $xoopsDB, $start, $startdoc,  $pathIcon16;
+    global $xoopsDB, $start, $startdoc, $pathIcon16;
     /** @var Assessment\Helper $helper */
     $helper = Assessment\Helper::getInstance();
 
@@ -492,7 +477,7 @@ function listarDocumentos()
     $criteria->setLimit('');
     $criteria->setStart(0);
     $documentFactory = new Assessment\DocumentHandler($xoopsDB);
-    $total_items           = $documentFactory->getCount($criteria);
+    $total_items     = $documentFactory->getCount($criteria);
     if (0 == $total_items) {
         echo _AM_ASSESSMENT_SEMDOCUMENTO;
     } else {
@@ -564,7 +549,6 @@ function seloqualidade()
 }
 
 switch ($op) {
-
     case 'manter_documentos':
         //            loadModuleAdminMenu(3,"-> "._AM_ASSESSMENT_DOCUMENTO);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -573,7 +557,6 @@ switch ($op) {
         cadastrarDocumento();
         seloqualidade();
         break;
-
     case 'manter_provas':
         //            loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -590,7 +573,6 @@ switch ($op) {
         cadastrarprova();
         seloqualidade();
         break;
-
     case 'manter_resultados':
         //            loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_RESULTADO);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -598,7 +580,6 @@ switch ($op) {
         listarResultados();
         seloqualidade();
         break;
-
     case 'resultados_prova':
         //          loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_RESULTPROVA);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -606,7 +587,6 @@ switch ($op) {
         listarResultados();
         seloqualidade();
         break;
-
     case 'ver_detalhe_pergunta':
         //            loadModuleAdminMenu(2,_AM_ASSESSMENT_RESPALUNO);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -614,7 +594,6 @@ switch ($op) {
         verDetalhePergunta($_GET['cod_pergunta'], $_GET['cod_resposta']);
         seloqualidade();
         break;
-
     case 'editar_prova':
         //            loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA." - "._AM_ASSESSMENT_EDITAR);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -641,7 +620,6 @@ switch ($op) {
         echo '</td></tr></table>';
         seloqualidade();
         break;
-
     case 'editar_resultado':
         //            loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_PROVA." "._AM_ASSESSMENT_EDITAR);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -649,7 +627,6 @@ switch ($op) {
         editarResultado();
         seloqualidade();
         break;
-
     case 'editar_documento':
         //            loadModuleAdminMenu(3,"-> "._AM_ASSESSMENT_DOCUMENTO." "._AM_ASSESSMENT_EDITAR);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
@@ -657,14 +634,12 @@ switch ($op) {
         editarDocumento();
         seloqualidade();
         break;
-
     case 'editar_pergunta':
         $mainAdmin = \Xmf\Module\Admin::getInstance();
         echo $mainAdmin->displayNavigation('main.php');
         editarpergunta();
         seloqualidade();
         break;
-
     case 'default':
 
     default:

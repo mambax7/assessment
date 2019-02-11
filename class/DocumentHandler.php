@@ -1,29 +1,16 @@
-<?php namespace XoopsModules\Assessment;
+<?php
 
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+namespace XoopsModules\Assessment;
+
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
 // assessment_documentos.php,v 1
 //  ---------------------------------------------------------------- //
 //                                             //
@@ -32,20 +19,18 @@
 use Xmf\Request;
 use XoopsModules\Assessment;
 
-
-require_once XOOPS_ROOT_PATH . '/kernel/object.php';
-require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-require_once XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php';
-require_once XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.inc.php';
+//require_once XOOPS_ROOT_PATH . '/kernel/object.php';
+//require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+//require_once XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.php';
+//require_once XOOPS_ROOT_PATH . '/class/xoopseditor/xoopseditor.inc.php';
 //require_once XOOPS_ROOT_PATH."/class/xoopseditor/mastoppublish/formmpublishtextarea.php";
-require_once XOOPS_ROOT_PATH . '/class/xoopsform/formselecteditor.php';
-require_once XOOPS_ROOT_PATH . '/class/xoopsform/formeditor.php';
+//require_once XOOPS_ROOT_PATH . '/class/xoopsform/formselecteditor.php';
+//require_once XOOPS_ROOT_PATH . '/class/xoopsform/formeditor.php';
 //require_once XOOPS_ROOT_PATH."/Frameworks/art/functions.sanitizer.php";
 //require_once XOOPS_ROOT_PATH."/Frameworks/xoops22/class/xoopsform/xoopsformloader.php";
 
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
-
+///** @var Assessment\Helper $helper */
+//$helper = Assessment\Helper::getInstance();
 
 // -------------------------------------------------------------------------
 // ------------------Document user handler class -------------------
@@ -104,7 +89,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      * insert a new Assessment\Document in the database
      *
      * @param \XoopsObject $document reference to the {@link assessment_documentos} object
-     * @param  bool       $force                 flag to force the query execution despite security settings
+     * @param  bool        $force    flag to force the query execution despite security settings
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
@@ -127,10 +112,10 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         if ($document->isNew()) {
             // ajout/modification d'un Document
             $document = new Assessment\Document();
-            $format                = 'INSERT INTO `%s` (cod_documento, titulo, tipo, cod_prova, cods_perguntas, documento, uid_elaborador, fonte, html)';
-            $format                .= 'VALUES (%u, %s, %u, %u, %s, %s, %u, %s, %u)';
-            $sql                   = sprintf($format, $this->db->prefix('assessment_documentos'), $cod_documento, $this->db->quoteString($titulo), $tipo, $cod_prova, $this->db->quoteString($cods_perguntas), $this->db->quoteString($documento), $uid_elaborador, $this->db->quoteString($fonte), $html);
-            $force                 = true;
+            $format   = 'INSERT INTO `%s` (cod_documento, titulo, tipo, cod_prova, cods_perguntas, documento, uid_elaborador, fonte, html)';
+            $format   .= 'VALUES (%u, %s, %u, %u, %s, %s, %u, %s, %u)';
+            $sql      = sprintf($format, $this->db->prefix('assessment_documentos'), $cod_documento, $this->db->quoteString($titulo), $tipo, $cod_prova, $this->db->quoteString($cods_perguntas), $this->db->quoteString($documento), $uid_elaborador, $this->db->quoteString($fonte), $html);
+            $force    = true;
         } else {
             $format = 'UPDATE `%s` SET ';
             $format .= 'cod_documento=%u, titulo=%s, tipo=%u, cod_prova=%u, cods_perguntas=%s, documento=%s, uid_elaborador=%u, fonte=%s, html=%u';
@@ -157,7 +142,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      * delete a Document from the database
      *
      * @param \XoopsObject $document reference to the Document to delete
-     * @param bool        $force
+     * @param bool         $force
      *
      * @return bool FALSE if failed.
      */
@@ -182,19 +167,19 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_documentoss from the database
      *
-     * @param null|\CriteriaElement|\CriteriaCompo $criteria {@link \CriteriaElement} conditions to be met
-     * @param bool            $id_as_key use the UID as key for the array?
+     * @param null|\CriteriaElement|\CriteriaCompo $criteria  {@link \CriteriaElement} conditions to be met
+     * @param bool                                 $id_as_key use the UID as key for the array?
      *
-     * @param bool            $as_object
+     * @param bool                                 $as_object
      * @return array array of <a href='psi_element://$document'>$document</a> objects
-     *                                   objects
+     *                                                        objects
      */
     public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
     {
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->db->prefix('assessment_documentos');
-        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (null !== $criteria && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -210,9 +195,9 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
             $document = new Assessment\Document();
             $document->assignVars($myrow);
             if (!$id_as_key) {
-                $ret[] =& $document;
+                $ret[] = &$document;
             } else {
-                $ret[$myrow['cod_documento']] =& $document;
+                $ret[$myrow['cod_documento']] = &$document;
             }
             unset($document);
         }
@@ -229,18 +214,17 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      * objects
      * @internal param object $criteria <a href='psi_element://CriteriaElement'>CriteriaElement</a> conditions to be met conditions to be met conditions to be met conditions to be met
      * @internal param bool $id_as_key use the UID as key for the array?
-     *
      */
     public function getDocumentosProvaPergunta($cod_prova, $cod_pergunta)
     {
         $criteria         = new \Criteria('cod_prova', $cod_prova);
         $cod_documentos   = [];
         $documentos_prova = $this->getObjects($criteria);
-        $myts = \MyTextSanitizer::getInstance();
+        $myts             = \MyTextSanitizer::getInstance();
         $i                = 0;
         foreach ($documentos_prova as $documento_prova) {
             $cods_perguntas = explode(',', $documento_prova->getVar('cods_perguntas'));
-            if (in_array($cod_pergunta, $cods_perguntas)) {
+            if (in_array($cod_pergunta, $cods_perguntas, true)) {
                 $documentos[$i]['titulo'] = $documento_prova->getVar('titulo');
                 $documentos[$i]['fonte']  = $documento_prova->getVar('fonte');
                 /*if ($helper->getConfig('editorpadrao')=="dhtmlext"||$helper->getConfig('editorpadrao')=="textarea") {
@@ -270,7 +254,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     public function getCount(\CriteriaElement $criteria = null)
     {
         $sql = 'SELECT COUNT(*) FROM ' . $this->db->prefix('assessment_documentos');
-        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (null !== $criteria && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
@@ -287,14 +271,14 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      *
      * @param \CriteriaElement $criteria {@link \CriteriaElement}
      *
-     * @param bool            $force
-     * @param bool            $asObject
+     * @param bool             $force
+     * @param bool             $asObject
      * @return bool FALSE if deletion failed
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
         $sql = 'DELETE FROM ' . $this->db->prefix('assessment_documentos');
-        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (null !== $criteria && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
@@ -310,6 +294,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     * @param object $question {@link Question}
     * @return bool FALSE if deletion failed
     */
+
     /**
      * @param $action
      * @param $cod_prova
@@ -321,7 +306,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         global $xoopsDB, $xoopsUser;
 
         $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-        $criteria             = new \Criteria('cod_prova', $cod_prova);
+        $criteria        = new \Criteria('cod_prova', $cod_prova);
 
         $vetor_perguntas = $questionFactory->getObjects($criteria);
         $campo_perguntas = new \XoopsFormSelect(_AM_ASSESSMENT_PERGASSOC, 'campo_perguntas', null, 10, true);
@@ -337,7 +322,8 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
 
         $form->setExtra('enctype="multipart/form-data"');
 
-        $helper = Assessment\Helper::getInstance();
+        /** @var \XoopsModules\Assessment\Helper $helper */
+        $helper = \XoopsModules\Assessment\Helper::getInstance();
         $editor = $helper->getConfig('editorpadrao');
 
         // Add the editor selection box
@@ -391,7 +377,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         $vetor_perguntas_selecionadas = explode(',', $documento->getVar('cods_perguntas', 's'));
 
         $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-        $criteria             = new \Criteria('cod_prova', $cod_prova);
+        $criteria        = new \Criteria('cod_prova', $cod_prova);
 
         $vetor_perguntas = $questionFactory->getObjects($criteria);
         $campo_perguntas = new \XoopsFormSelect('Perguntas associadas', 'campo_perguntas', $vetor_perguntas_selecionadas, 10, true);
@@ -407,7 +393,8 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
         $campo_codprova     = new \XoopsFormHidden('campo_codprova', $cod_prova);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $helper = Assessment\Helper::getInstance();
+        /** @var \XoopsModules\Assessment\Helper $helper */
+        $helper = \XoopsModules\Assessment\Helper::getInstance();
         $editor = $helper->getConfig('editorpadrao');
 
         // Add the editor selection box
@@ -448,7 +435,6 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      * @param object $criteria {@link CriteriaElement} to match
      *
      * @param        $cod_prova
-     * @return void count of Questions
      */
     public function clonarDocumentos($criteria, $cod_prova)
     {

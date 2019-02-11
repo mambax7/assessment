@@ -1,33 +1,19 @@
 <?php
 // $Id: form_resposta.php,v 1.6 2007/03/24 14:41:41 marcellobrandao Exp $
-//  ------------------------------------------------------------------------ //
-//                XOOPS - PHP Content Management System                      //
-//                    Copyright (c) 2000 XOOPS.org                           //
-//                       <https://xoops.org>                             //
-//  ------------------------------------------------------------------------ //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  You may not change or alter any portion of this comment or credits       //
-//  of supporting developers from this source code or any supporting         //
-//  source code which is considered copyrighted (c) material of the          //
-//  original comment or credit authors.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-//  ------------------------------------------------------------------------ //
+/*
+ You may not change or alter any portion of this comment or credits
+ of supporting developers from this source code or any supporting source code
+ which is considered copyrighted (c) material of the original comment or credit authors.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 /**
- * form_resposta.php, Respons�vel pelo processamento da resposta do usu�rio
+ * form_resposta.php, Responsible for processing the user response
  *
- * Este arquivo processa a resposta do aluno ap�s alguns testes de seguran�a
+ * This file processes the student's response after some security tests
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
@@ -38,34 +24,33 @@ use Xmf\Request;
 use XoopsModules\Assessment;
 
 /**
- * Arquivos de cabe�alho do Xoops para carregar ...
- */
-include dirname(dirname(__DIR__)) . '/mainfile.php';
-include dirname(dirname(__DIR__)) . '/header.php';
-
-/**
- * Inclus�es das classes do m�dulo
+ * Xoops head files to load...
  */
 
+require __DIR__ . '/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
+
+
 /**
- * Passar as vari�veis enviadas por $_POST para vari�veis com o mesmo nome
- * As tr�s vari�veis vindas via POST s�o
+ * Pass the variables sent by $ _POST to variables with the same name
+ * The three variables coming via POST are
+ *
  * $cod_pergunta
  * $cod_resposta
  * $start
  */
 if (isset($_POST)) {
     foreach ($_POST as $k => $v) {
-        $$k = $v;
+        ${$k} = $v;
     }
 }
 /**
- * Buscar uid do aluno que est� fazendo a prova
+ * Find uid from the student taking the test
  */
 $uid = $xoopsUser->getVar('uid');
 
 /**
- * Se o aluno n�o escolheu nenhuma resposta faz ele voltar para a p�gina
+ * If the student did not choose any answer he returns to the page
  */
 if ('' == $cod_resposta) {
     redirect_header(Request::getString('HTTP_REFERER', '', 'SERVER'), 5, _MA_ASSESSMENT_RESPOSTAEMBRANCO);
@@ -79,14 +64,14 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 }
 
 /**
- * Cria��o das F�bricas de objetos que vamos precisar
+ * Creation of the factories of objects that we will need
  */
-$questionFactory  = new Assessment\QuestionHandler($xoopsDB);
-$answerFactory  = new Assessment\AnswerHandler($xoopsDB);
-$resultFactory = new Assessment\ResultHandler($xoopsDB);
+$questionFactory = new Assessment\QuestionHandler($xoopsDB);
+$answerFactory   = new Assessment\AnswerHandler($xoopsDB);
+$resultFactory   = new Assessment\ResultHandler($xoopsDB);
 
 /**
- * Cria��o de objetos de crit�rio para passar para as F�bricas
+ * Creating Criteria Objects to Move to Factories
  */
 $criteria_pergunta       = new \Criteria('cod_pergunta', $cod_pergunta);
 $criteria_certa          = new \Criteria('iscerta', 1);
@@ -94,20 +79,19 @@ $criteria_resposta_certa = new \CriteriaCompo($criteria_pergunta);
 $criteria_resposta_certa->add($criteria_certa);
 
 /**
- * Pegando qual seria a resposta certa e em seguida seu c�digo
+ * Taking what would be the right answer and then your code
  */
 $respostacerta      = $answerFactory->getObjects($criteria_resposta_certa);
 $cod_resposta_certa = $respostacerta[0]->getVar('cod_resposta');
 
 /**
- * Pegando qual seria a prova em seguida seu c�digo
+ * Picking up what would prove next your code
  */
 $pergunta  = $questionFactory->get($cod_pergunta);
 $cod_prova = $pergunta->getVar('cod_prova');
 
 /**
- * Criando mais um criterio para cod_prova, um criterio para uid_aluno e
- * um que tenha os dois
+ * Creating one more criterion for cod_prova, one criterion for uid_aluno and one that has both
  */
 $criteria_prova   = new \Criteria('cod_prova', $cod_prova);
 $criteria_usuario = new \Criteria('uid_aluno', $uid);
@@ -115,14 +99,14 @@ $criteria         = new \CriteriaCompo($criteria_prova);
 $criteria->add($criteria_usuario);
 
 /**
- * Determinando quantas perguntas tem a prova
+ * Determining how many questions the test has
  */
 $qtd_perguntas = $questionFactory->getCount($criteria_prova);
 
 /**
- * Colocando start para apontar para a pr�xima pergunta a menos que seja a
- * �ltima da prova nesse caso ir para a tela de resumo do fim da prova
- * Para o futuro:voltar para a primeira sem resposta
+ * Placing start to point to the next question unless it is the last
+ * of the test in this case go to the summary screen of the end of the test
+ * For the future: go back to the first one without an answer
  */
 if (($qtd_perguntas - 1) == $start) {
     $start = $start;
@@ -131,11 +115,11 @@ if (($qtd_perguntas - 1) == $start) {
 }
 
 /**
- * Agora vem a parte do cadastro da informa��o
+ * Now comes the part of the information register
  */
 /**
- * buscamos as respostas que ele j� deu e o c�digo da
- * resposta antiga dele para esta pergunta
+ * we look for the answers he has already given and the code of his
+ * ancient answer to this question
  */
 $resultados          = $resultFactory->getObjects($criteria);
 $resultado           = $resultados[0];
@@ -144,18 +128,16 @@ $respostaserradas    = $resultado->getRespostasErradasAsArray();
 $par_respostas       = $respostascertas + $respostaserradas;
 $cod_resposta_antiga = $par_respostas[$cod_pergunta];
 /**
- * Se a resposta que ele tinha dado antes n�o � a mesma que ele
- * est� dando agora
+ * If the answer he had given before is not the same as what he is giving now
  */
 if (!($cod_resposta == $cod_resposta_antiga)) {
     /**
-     * Tira a resposta antiga dele
+     * Take his old answer
      */
     unset($respostascertas[$cod_pergunta], $respostaserradas[$cod_pergunta]);
     /**
-     * Verifica se ele acertou ou errou e se ele acertou coloca ela
-     * no vetor de respostas certas, se ele errou coloca no de respostas
-     * erradas
+     * Check if he got it right or wrong and if he got it, put it
+     * in the right answer vector, if he missed, put it in the wrong answer
      */
     if ($cod_resposta_certa == $cod_resposta) {
         $respostascertas[$cod_pergunta] = $cod_resposta;
@@ -163,28 +145,26 @@ if (!($cod_resposta == $cod_resposta_antiga)) {
         $respostaserradas[$cod_pergunta] = $cod_resposta;
     }
     /**
-     * Redefine as vari�veis de repsosta no objeto resultado
+     * Redefine response variables in the result object
      */
     $resultado->setRespostasCertasAsArray($respostascertas);
     $resultado->setRespostasErradasAsArray($respostaserradas);
     /**
-     * Garante-se que ele est� marcado como um objeto que j� existia
-     * e manda persistir o objeto e dar uma mensagem de sucesso ao
-     * aluno
+     * It is guaranteed that it is marked as an object that already existed
+     * and has the object persist and give a message of success to the student
      */
     $resultado->unsetNew();
     $resultFactory->insert($resultado);
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=' . $start, 2, $message = _MA_ASSESSMENT_SUCESSO);
-/**
- * Se a resposta que ele tinha dado antes � a mesma que ele
- * est� dando agora avisa ele que ele j� tinha respondido assim
- * a esta pergunta
- */
+    /**
+     * If the answer he had given earlier is the same one he is giving now,
+     * he warns him that he has already answered this question
+     */
 } else {
     redirect_header('perguntas.php?cod_prova=' . $cod_prova . '&start=' . $start, 2, $message = _MA_ASSESSMENT_RESPOSTA_REPETIDA);
 }
 
 /**
- * Inclus�o de arquivo de fechamento da p�gina
+ * Including page closing file
  */
-include dirname(dirname(__DIR__)) . '/footer.php';
+require_once dirname(dirname(__DIR__)) . '/footer.php';

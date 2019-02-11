@@ -17,17 +17,18 @@
  * @author       XOOPS Development Team
  * @version      $Id $
  */
+require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+include dirname(__DIR__) . '/preloads/autoloader.php';
 
-use XoopsModules\Assessment;
+require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 
-require_once  dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsformloader.php';
+require_once dirname(__DIR__) . '/include/common.php';
 
-require_once  dirname(__DIR__) . '/include/common.php';
-
-$moduleDirName = basename(dirname(__DIR__));
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
-$utility = new Assessment\Utility();
+//$moduleDirName = basename(dirname(__DIR__));
+/** @var \XoopsModules\Assessment\Helper $helper */
+$helper  = \XoopsModules\Assessment\Helper::getInstance();
+$utility = new \XoopsModules\Assessment\Utility();
 
 /** @var Xmf\Module\Admin $adminObject */
 $adminObject = \Xmf\Module\Admin::getInstance();
@@ -36,5 +37,3 @@ $adminObject = \Xmf\Module\Admin::getInstance();
 $helper->loadLanguage('admin');
 $helper->loadLanguage('modinfo');
 $helper->loadLanguage('main');
-
-
