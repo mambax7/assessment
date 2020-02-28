@@ -38,7 +38,7 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
      */
     public function __construct(\XoopsDatabase $db = null, \XoopsModules\Assessment\Helper $helper = null)
     {
-        /** @var \XoopsModules\Assessment\Helper $this ->helper */
+        /** @var \XoopsModules\Assessment\Helper $this->helper */
         if (null === $helper) {
             $this->helper = \XoopsModules\Assessment\Helper::getInstance();
         } else {
