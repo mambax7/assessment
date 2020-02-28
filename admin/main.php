@@ -9,6 +9,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  * index.php, Principal arquivo da administração
  *
@@ -68,20 +69,20 @@ require_once dirname(dirname(dirname(__DIR__))) . '/class/pagenav.php';
  * Verificações de segurança e atribuição de variáveis recebidas por get
  */
 
-$op       = \Xmf\Request::getString('op', '', 'GET');
+$op = \Xmf\Request::getString('op', '', 'GET');
 
 //$start    = \Xmf\Request::getInt('start', 0, 'GET');
 //$startper = \Xmf\Request::getInt('startper', 0, 'GET');
 //$startdoc = \Xmf\Request::getInt('startdoc', 0, 'GET');
 
 $start = $startper = $startdoc = '';
-if ( \Xmf\Request::hasVar('start', 'GET')) {
+if (\Xmf\Request::hasVar('start', 'GET')) {
     $start = \Xmf\Request::getInt('start', '', 'GET');
 }
-if ( \Xmf\Request::hasVar('startper', 'GET')) {
+if (\Xmf\Request::hasVar('startper', 'GET')) {
     $startper = \Xmf\Request::getInt('startper', '', 'GET');
 }
-if ( \Xmf\Request::hasVar('startdoc', 'GET')) {
+if (\Xmf\Request::hasVar('startdoc', 'GET')) {
     $startdoc = \Xmf\Request::getInt('startdoc', '', 'GET');
 }
 
@@ -99,10 +100,9 @@ function listarprovas()
 {
     /**
      * Declaração de variáveis globais
-     */
-    global $xoopsDB, $start, $pathIcon16;
-    /** @var Assessment\Helper $helper */
-    $helper = Assessment\Helper::getInstance();
+     */ global $xoopsDB, $start, $pathIcon16;
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    $helper = \XoopsModules\Assessment\Helper::getInstance();
 
     /**
      * Criação da fábrica de provas
@@ -135,16 +135,16 @@ function listarprovas()
         /**
          * Loop nas provas montando as linhas das tabelas com os botões
          */
-        foreach ($vetor_provas as $prova) {
-            $x = '<tr><td>' . $prova->getVar('titulo', 's') . "</td><td width='50'>";
+        foreach ($vetor_provas as $exam) {
+            $x = '<tr><td>' . $exam->getVar('titulo', 's') . "</td><td width='50'>";
 
-            $x .= '<a href="main.php?op=editar_prova&amp;cod_prova=' . $prova->getVar('cod_prova', 's');
+            $x .= '<a href="main.php?op=edit_test&amp;cod_prova=' . $exam->getVar('cod_prova', 's');
             $x .= '"><img src="' . $pathIcon16 . '/edit.png" alt="' . _AM_ASSESSMENT_EDITARPROVAS . '" title="' . _AM_ASSESSMENT_EDITARPROVAS . '"></a><br></td>';
             $x .= '<td width="50"> <form action="clonar.php" method="post">
-            <input type="hidden" value="' . $prova->getVar('cod_prova', 's') . '" name="cod_prova" id="cod_prova">
+            <input type="hidden" value="' . $exam->getVar('cod_prova', 's') . '" name="cod_prova" id="cod_prova">
             <input type="image" src="' . $pathIcon16 . '/editcopy.png" alt="' . _AM_ASSESSMENT_CLONE . '" title="' . _AM_ASSESSMENT_CLONE . '">
             </form></td>';
-            $x .= '<td width="50"><a href="main.php?op=resultados_prova&amp;cod_prova=' . $prova->getVar('cod_prova', 's') . '"><img src="' . $pathIcon16 . '/view.png" alt="' . _AM_ASSESSMENT_VERRESULT . '" title="' . _AM_ASSESSMENT_VERRESULT . '"style="border-color:#E6E6E6"></a></td>';
+            $x .= '<td width="50"><a href="main.php?op=test_results&amp;cod_prova=' . $exam->getVar('cod_prova', 's') . '"><img src="' . $pathIcon16 . '/view.png" alt="' . _AM_ASSESSMENT_VERRESULT . '" title="' . _AM_ASSESSMENT_VERRESULT . '"style="border-color:#E6E6E6"></a></td>';
             $x .= '<td width="50"><form action="excluirprova.php" method="post">'
                   . $GLOBALS['xoopsSecurity']->getTokenHTML()
                   . '<input type="image" src="'
@@ -154,7 +154,7 @@ function listarprovas()
                   . '" title="'
                   . _AM_ASSESSMENT_EXCLUIRPROVAS
                   . '"><input type="hidden" value="'
-                  . $prova->getVar('cod_prova', 's')
+                  . $exam->getVar('cod_prova', 's')
                   . '" name="cod_prova" id="cod_prova"></form></td></tr>';
             echo $x;
         }
@@ -181,8 +181,7 @@ function verDetalhePergunta($cod_pergunta, $cod_resposta)
 {
     /**
      * Declaração de variáveis globais
-     */
-    global $xoopsDB, $xoopsUser;
+     */ global $xoopsDB, $xoopsUser;
 
     /**
      * Criação da fábrica de provas
@@ -226,8 +225,7 @@ function editarResultado()
 {
     /**
      * Declaração de variáveis globais
-     */
-    global $xoopsDB, $xoopsUser;
+     */ global $xoopsDB, $xoopsUser;
 
     /**
      * Buscando os dados passados via GET
@@ -251,21 +249,21 @@ function editarResultado()
     /**
      * Criação dos objetos critéria para repassar para a fábrica de provas
      */
-    $criteria_prova = new \Criteria('cod_prova', $cod_prova);
-    $criteria_aluno = new \Criteria('uid_aluno', $uid_aluno);
-    $criteria       = new \CriteriaCompo($criteria_prova);
-    $criteria->add($criteria_aluno);
+    $criteria_test    = new \Criteria('cod_prova', $cod_prova);
+    $criteria_student = new \Criteria('uid_aluno', $uid_aluno);
+    $criteria         = new \CriteriaCompo($criteria_test);
+    $criteria->add($criteria_student);
 
     /**
      * Buscando nas fábricas a prova a ser editada e a qtd de perguntas
      */
-    $prova = $examFactory->get($cod_prova);
-    $qtd   = $questionFactory->getCount($criteria_prova);
+    $exam = $examFactory->get($cod_prova);
+    $qtd  = $questionFactory->getCount($criteria_test);
 
     /**
      * Mandando a Fabrica gerar um formulário de edição
      */
-    $resultFactory->renderFormEditar($resultado, $prova, $qtd, 'editar_resultado.php');
+    $resultFactory->renderFormEditar($resultado, $exam, $qtd, 'editar_resultado.php');
 }
 
 /**
@@ -276,16 +274,15 @@ function listarResultados()
 {
     /**
      * Declaração de variáveis globais
-     */
-    global $xoopsDB, $xoopsUser, $start, $pathIcon16;
-    /** @var Assessment\Helper $helper */
-    $helper = Assessment\Helper::getInstance();
+     */ global $xoopsDB, $xoopsUser, $start, $pathIcon16;
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    $helper = \XoopsModules\Assessment\Helper::getInstance();
 
     /**
      * Buscando os dados passados via GET
      */
     $cod_prova = '';
-    if ( \Xmf\Request::hasVar('cod_prova', 'GET')) {
+    if (\Xmf\Request::hasVar('cod_prova', 'GET')) {
         $cod_prova = \Xmf\Request::getInt('cod_prova', '', 'GET');
     }
 
@@ -299,25 +296,25 @@ function listarResultados()
      * Criação dos objetos critéria para repassar para a fábrica de provas
      * Vamos limitar para começar do start e buscar 5 na prova de cod_prova
      */
-    $criteria_prova = new \Criteria('cod_prova', $cod_prova);
-    $criteria_prova->setLimit($helper->getConfig('qtditens'));
-    if ( \Xmf\Request::hasVar('start', 'GET')) {
-        $criteria_prova->setStart(\Xmf\Request::getInt('start', '', 'GET'));
+    $criteria_test = new \Criteria('cod_prova', $cod_prova);
+    $criteria_test->setLimit($helper->getConfig('qtditens'));
+    if (\Xmf\Request::hasVar('start', 'GET')) {
+        $criteria_test->setStart(\Xmf\Request::getInt('start', '', 'GET'));
     }
 
     /**
      * Buscando na fabrica os resultados (só os 5 que serão mostrados)
      */
-    $vetor_resultados = $resultFactory->getObjects($criteria_prova);
+    $vetor_resultados = $resultFactory->getObjects($criteria_test);
 
     /**
      * Mudança nos critérios para agora tirar o limiote de começo e de 5
      * assim podemos buscar a quantidade total de resultados para a prova
      * para poder passar para o a barra de navegação
      */
-    $criteria_prova->setLimit('');
-    $criteria_prova->setStart(0);
-    $total_items = $resultFactory->getCount($criteria_prova);
+    $criteria_test->setLimit('');
+    $criteria_test->setStart(0);
+    $total_items = $resultFactory->getCount($criteria_test);
 
     if (0 == $total_items) { // teste para ver se tem provas se não tiver faz
         echo _AM_ASSESSMENT_SEMRESULT;
@@ -344,8 +341,8 @@ function listarResultados()
         echo '</table>';
 
         $barra_navegacao = new \XoopsPageNav($total_items, $helper->getConfig('qtditens'), $start, 'start', 'op=' . \Xmf\Request::getString('op', '', 'GET'));
-        $prova           = $examFactory->getObjects($criteria_prova);
-        $titulo          = $prova[0]->getVar('titulo');
+        $exam            = $examFactory->getObjects($criteria_test);
+        $titulo          = $exam[0]->getVar('titulo');
         echo "<table class='outer' width='100%'><tr><th colspan='2'>" . _AM_ASSESSMENT_LISTARESULTADOS . '</th></tr>';
         foreach ($vetor_resultados as $resultado) {
             $uid             = $resultado->getVar('uid_aluno', 's');
@@ -367,7 +364,7 @@ function listarResultados()
                  . $data_fim
                  . '</strong><br>'
                  . _AM_ASSESSMENT_CODPROVA
-                 . '<a href="main.php?op=editar_prova&cod_prova='
+                 . '<a href="main.php?op=edit_test&cod_prova='
                  . $cod_prova_atual
                  . '">'
                  . $cod_prova_atual
@@ -386,13 +383,13 @@ function listarResultados()
 function listarperguntas()
 {
     global $xoopsDB, $startper, $pathIcon16;
-    /** @var Assessment\Helper $helper */
-    $helper          = Assessment\Helper::getInstance();
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    $helper          = \XoopsModules\Assessment\Helper::getInstance();
     $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-    if ( \Xmf\Request::hasVar('cod_prova', 'GET')) {
+    if (\Xmf\Request::hasVar('cod_prova', 'GET')) {
         $cod_prova = \Xmf\Request::getInt('cod_prova', null, 'GET');
     }
-    $criteria        = new \Criteria('cod_prova', $cod_prova);
+    $criteria = new \Criteria('cod_prova', $cod_prova);
     $criteria->setSort('ordem');
     $criteria->setOrder('ASC');
     $criteria->setLimit($helper->getConfig('qtditens'));
@@ -433,10 +430,10 @@ function cadastrarpergunta()
     global $xoopsDB;
     $cod_prova   = \Xmf\Request::getInt('cod_prova', null, 'GET');
     $examFactory = new Assessment\ExamHandler($xoopsDB);
-    $prova       = $examFactory->get($cod_prova);
+    $exam        = $examFactory->get($cod_prova);
 
     $questionFactory = new Assessment\QuestionHandler($xoopsDB);
-    $questionFactory->renderFormCadastrar('cadastropergunta.php', $prova);
+    $questionFactory->renderFormCadastrar('cadastropergunta.php', $exam);
 }
 
 function cadastrarprova()
@@ -444,7 +441,7 @@ function cadastrarprova()
     global $xoopsDB;
     //    $examFactory = new Assessment\ExamHandler($xoopsDB);
     /** @var \XoopsModules\Assessment\ExamHandler $examFactory */
-    $examFactory = Assessment\Helper::getInstance()->getHandler('Exam');
+    $examFactory = \XoopsModules\Assessment\Helper::getInstance()->getHandler('Exam');
     $examFactory->renderFormCadastrar('cadastroprova.php');
 }
 
@@ -452,11 +449,11 @@ function editarprova()
 {
     global $xoopsDB;
     $cod_prova0 = $_GET['cod_prova'];
-    $cod_prova = \Xmf\Request::getInt('cod_prova', null, 'GET');
+    $cod_prova  = \Xmf\Request::getInt('cod_prova', null, 'GET');
 
     $examFactory = new Assessment\ExamHandler($xoopsDB);
-    $prova       = $examFactory->get($cod_prova);
-    $examFactory->renderFormEditar('editarprova.php', $prova);
+    $exam        = $examFactory->get($cod_prova);
+    $examFactory->renderFormEditar('editarprova.php', $exam);
 }
 
 function editarpergunta()
@@ -476,20 +473,19 @@ function editarpergunta()
     $questionFactory->renderFormEditar('editarpergunta.php', $pergunta, $respostas);
 }
 
-function listarDocumentos()
+function listDocuments()
 {
     /**
      * Listar variáveis globais
-     */
-    global $xoopsDB, $start, $startdoc, $pathIcon16;
-    /** @var Assessment\Helper $helper */
-    $helper = Assessment\Helper::getInstance();
+     */ global $xoopsDB, $start, $startdoc, $pathIcon16;
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    $helper = \XoopsModules\Assessment\Helper::getInstance();
 
     /**
      * Buscando os dados passados via GET
      */
     $cod_prova = '';
-    if ( \Xmf\Request::hasVar('cod_prova', 'GET')) {
+    if (\Xmf\Request::hasVar('cod_prova', 'GET')) {
         $cod_prova = \Xmf\Request::getInt('cod_prova', '', 'GET');
     }
 
@@ -520,7 +516,7 @@ function listarDocumentos()
 
             $x .= '<a href="main.php?op=editar_documento&amp;cod_documento=' . $documento->getVar('cod_documento', 's');
             $x .= '"><img src="' . $pathIcon16 . '/edit.png" alt="' . _AM_ASSESSMENT_EDITARDOC . '" title="' . _AM_ASSESSMENT_EDITARDOC . '"></a><br></td>';
-            //$x.= '<td class="odd" width="50"><a href="main.php?op=resultados_prova&amp;cod_documento='.$documento->getVar("cod_documento", "s").'"><img src="../assets/images/detalhe.gif" alt="Ver Resultados" style="border-color:#E6E6E6"></a></td>';
+            //$x.= '<td class="odd" width="50"><a href="main.php?op=test_results&amp;cod_documento='.$documento->getVar("cod_documento", "s").'"><img src="../assets/images/detalhe.gif" alt="Ver Resultados" style="border-color:#E6E6E6"></a></td>';
             $x .= '<td class="odd" width="50"><form action="excluirdocumento.php" method="post">'
                   . $GLOBALS['xoopsSecurity']->getTokenHTML()
                   . '<input type="image" src="'
@@ -541,14 +537,13 @@ function listarDocumentos()
     }
 }
 
-function cadastrarDocumento()
+function registerDocument()
 {
     /**
      * Buscando os dados passados via GET
-     */
-    global $xoopsDB;
+     */ global $xoopsDB;
     $cod_prova = '';
-    if ( \Xmf\Request::hasVar('cod_prova', 'GET')) {
+    if (\Xmf\Request::hasVar('cod_prova', 'GET')) {
         $cod_prova = \Xmf\Request::getInt('cod_prova', 0, 'GET');
     }
 
@@ -575,58 +570,59 @@ function seloqualidade()
 }
 
 switch ($op) {
-    case 'manter_documentos':
+    case 'keep_documents':
         //            loadModuleAdminMenu(3,"-> "._AM_ASSESSMENT_DOCUMENTO);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
-        echo $mainAdmin->displayNavigation('main.php?op=manter_documentos');
-        listarDocumentos();
-        cadastrarDocumento();
+        echo $mainAdmin->displayNavigation('main.php?op=keep_documents');
+        listDocuments();
+        registerDocument();
         seloqualidade();
         break;
-    case 'manter_provas':
+    case 'keep_test':
         //            loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
-        echo $mainAdmin->displayNavigation('main.php?op=manter_provas');
+        echo $mainAdmin->displayNavigation('main.php?op=keep_test');
 
         //        $mainAdmin = \Xmf\Module\Admin::getInstance();
-        //        echo $mainAdmin->displayNavigation('main.php?op=manter_provas');
+        //        echo $mainAdmin->displayNavigation('main.php?op=keep_test');
         //        $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . " " . _AM_ASSESSMENT_PERGUNTA, '#cadastrar_pergunta', 'add');
         //        $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . " " . _AM_ASSESSMENT_DOCUMENTO, '#cadastrar_documento', 'add');
-        //    $mainAdmin->addItemButton(_MI_ASSESSMENT_ADMENU1, "{$currentFile}?op==manter_provas", 'list');
+        //    $mainAdmin->addItemButton(_MI_ASSESSMENT_ADMENU1, "{$currentFile}?op==keep_test", 'list');
         //        echo $mainAdmin->displayButton('left');
 
         listarprovas();
         cadastrarprova();
         seloqualidade();
+
         break;
-    case 'manter_resultados':
+    case 'keep_results':
         //            loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_RESULTADO);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
-        echo $mainAdmin->displayNavigation('main.php?op=manter_resultados');
+        echo $mainAdmin->displayNavigation('main.php?op=keep_results');
         listarResultados();
         seloqualidade();
         break;
-    case 'resultados_prova':
+    case 'test_results':
         //          loadModuleAdminMenu(2,"-> "._AM_ASSESSMENT_RESULTPROVA);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
-        echo $mainAdmin->displayNavigation('main.php?op=manter_prova');
+        echo $mainAdmin->displayNavigation('main.php?op=keep_test');
         listarResultados();
         seloqualidade();
         break;
-    case 'ver_detalhe_pergunta':
+    case 'see_detail_question':
         //            loadModuleAdminMenu(2,_AM_ASSESSMENT_RESPALUNO);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
-        echo $mainAdmin->displayNavigation('main.php?op=ver_detalhe_pergunta');
+        echo $mainAdmin->displayNavigation('main.php?op=see_detail_question');
         verDetalhePergunta(\Xmf\Request::getInt('cod_pergunta', null, 'GET'), \Xmf\Request::getInt('cod_resposta', null, 'GET'));
         seloqualidade();
         break;
-    case 'editar_prova':
+    case 'edit_test':
         //            loadModuleAdminMenu(1,"-> "._AM_ASSESSMENT_PROVA." - "._AM_ASSESSMENT_EDITAR);
         $mainAdmin = \Xmf\Module\Admin::getInstance();
-        echo $mainAdmin->displayNavigation('main.php?op=manter_provas');
+        echo $mainAdmin->displayNavigation('main.php?op=keep_test');
         $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PERGUNTA, '#cadastrar_pergunta', 'add');
         $mainAdmin->addItemButton(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_DOCUMENTO, '#cadastrar_documento', 'add');
-        $mainAdmin->addItemButton(_MI_ASSESSMENT_ADMENU1, "{$currentFile}?op==manter_provas", 'list');
+        $mainAdmin->addItemButton(_MI_ASSESSMENT_ADMENU1, "{$currentFile}?op==keep_test", 'list');
 
         echo $mainAdmin->displayButton('left');
 
@@ -636,13 +632,13 @@ switch ($op) {
         echo "<table class='outer' width='100%'><tr><td valign=top width='50%'>";
         listarperguntas();
         echo "</td><td valign=top width='50%'>";
-        listarDocumentos();
+        listDocuments();
         echo "</td></tr><tr><td colspan='2'>";
         echo '<br><br><a name="cadastrar_pergunta">';
         cadastrarpergunta();
         echo "</td></tr><tr><td colspan='2'>";
         echo '<br><br><a name="cadastrar_documento">';
-        cadastrarDocumento();
+        registerDocument();
         echo '</td></tr></table>';
         seloqualidade();
         break;

@@ -17,8 +17,7 @@ CREATE TABLE assessment_perguntas (
   AUTO_INCREMENT = 1;
 
 CREATE TABLE `assessment_provas` (
-  `cod_prova`        INT(11)      NOT NULL AUTO_INCREMENT
-  COMMENT 'Chave Primária',
+  `cod_prova`        INT(11)      NOT NULL AUTO_INCREMENT  COMMENT 'Primary Key',
   `data_criacao`     DATE         NOT NULL,
   `data_update`      DATE         NOT NULL,
   `titulo`           VARCHAR(255) NOT NULL,
@@ -99,18 +98,18 @@ INSERT INTO `assessment_perguntas` (`cod_pergunta`, `cod_prova`, `titulo`, `data
   (9, 1, 'What is the capital of USA?', '2007-03-15', '2007-03-15', '1'),
   (10, 1, 'What is the capital of Greece', '2007-03-15', '2007-03-15', '1');
 
--- Extraindo dados da tabela `assessment_provas`
+-- Extracting data from the `assessment_provas` table
 
 
 INSERT INTO `assessment_provas` (`cod_prova`, `data_criacao`, `data_update`, `titulo`, `descricao`, `instrucoes`, `tempo`, `acesso`, `uid_elaboradores`, `data_inicio`, `data_fim`)
 VALUES
-  (1, '2007-03-15', '2007-03-15', 'GEOGRAPHY TEST MARCH 2007', 'Geography test on the capitals of the countries in the world',
-      'This test consists of 10 questions, each will have 5 answers of which only one is correct. Pay attention to details and don\t rush. When done, wait for the results - they will be sent to you by email or they can be found here on the Assessment webpage.\r\n\r\n
+  (1, '2007-03-15', '2007-03-15', 'GEOGRAPHY TEST MARCH 2020', 'Geography test on the capitals of the countries in the world',
+      'This test consists of 10 questions, each will have 5 answers of which only one is correct. Pay attention to details and don\'t rush. When done, wait for the results - they will be sent to you by email or they can be found here on the Assessment webpage.\r\n\r\n
       You have 10 minutes to finish the test, after that time the program will finish your test.\r\n\r\n
       Good Luck',
-      '600', '1,2', '1', '1999-11-30 00:00:00', '2020-12-31 00:00:00');
+      '600', '1,2', '1', '2019-11-30 00:00:00', '2021-12-31 00:00:00');
 
--- Extraindo dados da tabela `assessment_respostas`
+-- Extracting data from the `assessment_responses` table
 
 
 INSERT INTO `assessment_respostas` (`cod_resposta`, `cod_pergunta`, `titulo`, `iscerta`, `data_criacao`, `data_update`, `uid_elaboradores`, `isativa`)

@@ -9,14 +9,18 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 //index.php
 
 //define("_AM_ASSESSMENT_CONGRATULATIONS", "Congratulations your test has been successfully saved");
 
 //excluirprova.php
-define('_AM_ASSESSMENT_CONFIRMAEXCLUSAOPROVAS', "Deleting this exam you will also be deleting:
+define(
+    '_AM_ASSESSMENT_CONFIRMAEXCLUSAOPROVAS',
+    "Deleting this exam you will also be deleting:
        :<br><br>Its questions<br>The answers of those questions<br>
-       The documents which show up before the questions<br>The results of the students who had already done the exam<br><br>Are you sure that's what you want to do?<br>");
+       The documents which show up before the questions<br>The results of the students who had already done the exam<br><br>Are you sure that's what you want to do?<br>"
+);
 
 define('_AM_ASSESSMENT_SIMCONFIRMAEXCLUSAOPROVAS', 'Ok I understood that I will delete more than a single exam and yes I AM SURE');
 define('_AM_ASSESSMENT_PERGUNTASAPAGADAS', 'question(s) deleted');
@@ -25,12 +29,15 @@ define('_AM_ASSESSMENT_RESULTAPAGADOS', 'result(s) deleted');
 define('_AM_ASSESSMENT_DOCUMENTOSPAGADOS', 'document(s) deleted');
 
 //index.php
-define('_AM_ASSESSMENT_REQUERIMENTOS', "You need to install these packages in order to make this module work properly:<br><br>
+define(
+    '_AM_ASSESSMENT_REQUERIMENTOS',
+    "You need to install these packages in order to make this module work properly:<br><br>
    <a href='http://dev.xoops.org/modules/xfmod/project/showfiles.php?group_id=1357'>
    Frameworks v 1.1 or newer</a><br>
    <br>
    <a href='http://dev.xoops.org/modules/xfmod/project/showfiles.php?group_id=1155'>
-   Xoops editor 1.10 or newer</a><br>");
+   Xoops editor 1.10 or newer</a><br>"
+);
 define('_AM_ASSESSMENT_SEMPROVAS', 'No exams have been submitted, yet');
 define('_AM_ASSESSMENT_EDITARPROVAS', 'Edit exams');
 define('_AM_ASSESSMENT_EXCLUIRPROVAS', 'Delete exams');
@@ -111,3 +118,18 @@ define('_AM_ASSESSMENT_ORDEM', 'Order');
 define('_AM_ASSESSMENT_CLONE', '[Clone] ');
 
 define('_AM_ASSESSMENT_DAYS_PER_MONTH', (((365 * 3) + 366) / 4) / 12);
+
+define('_AM_ASSESSMENT_UPGRADEFAILED0', "Update failed - couldn't rename field '%s'");
+define('_AM_ASSESSMENT_UPGRADEFAILED1', "Update failed - couldn't add new fields");
+define('_AM_ASSESSMENT_UPGRADEFAILED2', "Update failed - couldn't rename table '%s'");
+define('_AM_ASSESSMENT_ERROR_COLUMN', 'Could not create column in database : %s');
+define('_AM_ASSESSMENT_ERROR_BAD_XOOPS', 'This module requires XOOPS %s+ (%s installed)');
+define('_AM_ASSESSMENT_ERROR_BAD_PHP', 'This module requires PHP version %s+ (%s installed)');
+define('_AM_ASSESSMENT_ERROR_TAG_REMOVAL', 'Could not remove tags from Tag Module');
+
+define('_AM_ASSESSMENT_FOLDERS_DELETED_OK', 'Upload Folders have been deleted');
+
+// Error Msgs
+define('_AM_ASSESSMENT_ERROR_BAD_DEL_PATH', 'Could not delete %s directory');
+define('_AM_ASSESSMENT_ERROR_BAD_REMOVE', 'Could not delete %s');
+define('_AM_ASSESSMENT_ERROR_NO_PLUGIN', 'Could not load plugin');

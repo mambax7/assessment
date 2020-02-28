@@ -35,6 +35,6 @@ if ($answerFactory->deleteAll($criteria)) {
     $pergunta        = $questionFactory->get($cod_pergunta);
     $cod_prova       = $pergunta->getVar('cod_prova');
     if ($questionFactory->delete($pergunta)) {
-        redirect_header("main.php?op=editar_prova&amp;cod_prova=$cod_prova", 2, _AM_ASSESSMENT_SUCESSO);
+        redirect_header("main.php?op=edit_test&amp;cod_prova=$cod_prova", 2, _AM_ASSESSMENT_SUCESSO);
     }
 }

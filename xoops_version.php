@@ -11,19 +11,24 @@
 
 /**
  * @copyright    XOOPS Project (https://xoops.org)
- * @license      GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license      GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @package
  * @since
  * @author       XOOPS Development Team
  * @version      $Id $
  */
-defined('XOOPS_ROOT_PATH') || die('Restricted access');
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 require_once __DIR__ . '/preloads/autoloader.php';
 
-$modversion['version']       = 1.11;
-$modversion['module_status'] = 'Beta 2';
-$modversion['release_date']  = '2019/02/10';
+$moduleDirName      = basename(__DIR__);
+$moduleDirNameUpper = mb_strtoupper($moduleDirName);
+
+xoops_loadLanguage('common', $moduleDirName);
+
+$modversion['version']       = 2.01;
+$modversion['module_status'] = 'Alpha 1';
+$modversion['release_date']  = '2020/02/25';
 $modversion['name']          = _MI_ASSESSMENT_NAME;
 $modversion['description']   = _MI_ASSESSMENT_DESC;
 $modversion['credits']       = 'Equipe Simcity Brasil';
@@ -32,28 +37,39 @@ $modversion['help']          = 'page=help';
 $modversion['license']       = 'GNU GPL 2.0 or later';
 $modversion['license_url']   = 'www.gnu.org/licenses/gpl-2.0.html';
 $modversion['official']      = 0;
-$modversion['image']         = 'assets/images/logo_module.png';
-$modversion['dirname']       = basename(__DIR__);
-
-$modversion['dirmoduleadmin'] = 'Frameworks/moduleclasses';
-$modversion['icons16']        = 'Frameworks/moduleclasses/icons/16';
-$modversion['icons32']        = 'Frameworks/moduleclasses/icons/32';
+$modversion['image']         = 'assets/images/logoModule.png';
+$modversion['dirname']       = $moduleDirName;
+$modversion['modicons16']    = 'assets/images/icons/16';
+$modversion['modicons32']    = 'assets/images/icons/32';
 //about
 $modversion['module_website_url']  = 'www.xoops.org';
 $modversion['module_website_name'] = 'XOOPS';
-$modversion['min_php']             = '5.5';
-$modversion['min_xoops']           = '2.5.9';
+$modversion['min_php']             = '5.6';
+$modversion['min_xoops']           = '2.5.10';
 $modversion['min_admin']           = '1.2';
-$modversion['min_db']              = [
-    'mysql'  => '5.0.7',
-    'mysqli' => '5.0.7',
-];
+$modversion['min_db']              = ['mysql' => '5.5'];
 
 $modversion['hasMain']     = 1;
 $modversion['hasAdmin']    = 1;
 $modversion['system_menu'] = 1;
 $modversion['adminindex']  = 'admin/index.php';
 $modversion['adminmenu']   = 'admin/menu.php';
+
+$modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
+$modversion['tables'][0]        = 'assessment_perguntas';
+$modversion['tables'][1]        = 'assessment_respostas';
+$modversion['tables'][2]        = 'assessment_provas';
+$modversion['tables'][3]        = 'assessment_resultados';
+$modversion['tables'][4]        = 'assessment_documentos';
+
+// ------------------- Help files ------------------- //
+$modversion['helpsection'] = [
+    ['name' => _MI_ASSESSMENT_OVERVIEW, 'link' => 'page=help'],
+    ['name' => _MI_ASSESSMENT_TUTORIAL, 'link' => 'page=tutorial'],
+    ['name' => _MI_ASSESSMENT_DISCLAIMER, 'link' => 'page=disclaimer'],
+    ['name' => _MI_ASSESSMENT_LICENSE, 'link' => 'page=license'],
+    ['name' => _MI_ASSESSMENT_SUPPORT, 'link' => 'page=support'],
+];
 
 $modversion['config'][] = [
     'name'        => 'qtdmenu',
@@ -67,6 +83,7 @@ $modversion['config'][] = [
 
 xoops_load('xoopseditorhandler');
 $editorHandler = XoopsEditorHandler::getInstance();
+$editorList    = array_flip($editorHandler->getList());
 
 $modversion['config'][] = [
     'name'        => 'editorpadrao',
@@ -75,11 +92,12 @@ $modversion['config'][] = [
     'formtype'    => 'select',
     'valuetype'   => 'text',
     'default'     => 'dhtmlext',
-    'options'     => array_flip($editorHandler->getList()),
+    'options'     => $editorList,
 ];
 
 //'options'     => array('dhtmlext' => 'Extended DHTML Form', 'textarea' => 'Plain Text', 'FCKeditor' => 'FCKeditor', 'tinymce' => 'tinymce', 'koivi' => 'koivi', 'mastoppublish'=>'mastoppublish'),
 //'options'     => array('Extended DHTML Form' => 'dhtmlext', 'Plain Text' => 'textarea', 'FCKeditor' => 'FCKeditor', 'tinymce' => 'tinymce', 'koivi' => 'koivi','mastoppublish'=>'mastoppublish'),
+
 $modversion['config'][] = [
     'name'        => 'notadireta',
     'title'       => '_MI_ASSESSMENT_CONFIG3_TITLE',
@@ -97,26 +115,39 @@ $modversion['config'][] = [
     'options'     => ['5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50],
 ];
 
+//$modversion['config'][] = [
+//'name' =>  'qtdindex',
+//'title' =>  '_MI_ASSESSMENT_CONFIG5_TITLE',
+//'description' =>  '_MI_ASSESSMENT_CONFIG5_DESC',
+//'formtype' =>  'select',
+//'valuetype' =>  'int',
+//'default' =>  5,
+//'options'     => ['5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50],
+//];
+
 /*
- $modversion['config'][] = [
-'name' =>  'qtdindex',
-'title' =>  '_MI_ASSESSMENT_CONFIG5_TITLE',
-'description' =>  '_MI_ASSESSMENT_CONFIG5_DESC',
-'formtype' =>  'select',
-'valuetype' =>  'int',
-'default' =>  5,
-'options'     => array('5' => 5, '10' => 10, '15' => 15, '20' => 20, '30' => 30, '50' => 50),
+ * Make Sample button visible?
+ */
+$modversion['config'][] = [
+    'name'        => 'displaySampleButton',
+    'title'       => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON',
+    'description' => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
 ];
 
-                                                                                                                  */
-
-$modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
-
-$modversion['tables'][0] = 'assessment_perguntas';
-$modversion['tables'][1] = 'assessment_respostas';
-$modversion['tables'][2] = 'assessment_provas';
-$modversion['tables'][3] = 'assessment_resultados';
-$modversion['tables'][4] = 'assessment_documentos';
+/*
+ * Show Developer Tools?
+ */
+$modversion['config'][] = [
+    'name'        => 'displayDeveloperTools',
+    'title'       => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS',
+    'description' => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 0,
+];
 
 $modversion['templates'][1]['file']        = 'assessment_index.tpl';
 $modversion['templates'][1]['description'] = _MI_ASSESSMENT_TPL1_TITLE;

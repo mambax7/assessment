@@ -79,7 +79,7 @@ class Result extends \XoopsObject
         $respostas     = explode(',', $this->getVar('resp_certas'));
         $par_respostas = [];
         foreach ($respostas as $resposta) {
-            $x                    = explode('-', $resposta);
+            $x = explode('-', $resposta);
             if (isset($x[1])) {
                 $par_respostas[$x[0]] = $x[1];
             }

@@ -14,6 +14,7 @@ namespace XoopsModules\Assessment;
  WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
+
 /**
  * Module:  xSitemap
  *
@@ -25,16 +26,15 @@ namespace XoopsModules\Assessment;
  * @since        File available since version 1.54
  */
 
+use XoopsModules\Assessment;
+use XoopsModules\Assessment\Common;
+
+//use XoopsModules\Assessment\Constants;
+
 /**
  * Class Utility
  */
-class Utility
+class Utility extends Common\SysUtility
 {
-    use Common\VersionChecks; //checkVerXoops, checkVerPhp Traits
-
-    use Common\ServerStats; // getServerStats Trait
-
-    use Common\FilesManagement; // Files Management Trait
-
     //--------------- Custom module methods -----------------------------
 }

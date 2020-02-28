@@ -11,7 +11,7 @@
 
 /**
  * @copyright    XOOPS Project https://xoops.org/
- * @license      GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license      GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @package
  * @since
  * @author       XOOPS Development Team
@@ -38,16 +38,16 @@ function tableExists($tablename)
 
 /**
  * Prepares system prior to attempting to install module
- * @param XoopsModule $module {@link XoopsModule}
+ * @param \XoopsModule $module {@link XoopsModule}
  *
  * @return bool true if ready to install, false if not
  */
 function xoops_module_pre_update_assessment(\XoopsModule $module)
 {
     $moduleDirName = basename(dirname(__DIR__));
-    /** @var Assessment\Helper $helper */
-    /** @var Assessment\Utility $utility */
-    $helper  = Assessment\Helper::getInstance();
+    /** @var \XoopsModules\Assessment\Helper $helper */
+    /** @var \XoopsModules\Assessment\Utility $utility */
+    $helper  = \XoopsModules\Assessment\Helper::getInstance();
     $utility = new Assessment\Utility();
 
     $xoopsSuccess = $utility::checkVerXoops($module);
@@ -58,8 +58,8 @@ function xoops_module_pre_update_assessment(\XoopsModule $module)
 
 /**
  * Performs tasks required during update of the module
- * @param XoopsModule $module {@link XoopsModule}
- * @param null        $previousVersion
+ * @param \XoopsModule $module {@link XoopsModule}
+ * @param null         $previousVersion
  *
  * @return bool true if update successful, false if not
  */
@@ -68,10 +68,9 @@ function xoops_module_update_assessment(\XoopsModule $module, $previousVersion =
     $moduleDirName      = basename(dirname(__DIR__));
     $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
-    /** @var Assessment\Helper $helper */
-    /** @var Assessment\Utility $utility */
+    /** @var \XoopsModules\Assessment\Helper $helper */ /** @var Assessment\Utility $utility */
     /** @var Assessment\Common\Configurator $configurator */
-    $helper       = Assessment\Helper::getInstance();
+    $helper       = \XoopsModules\Assessment\Helper::getInstance();
     $utility      = new Assessment\Utility();
     $configurator = new Assessment\Common\Configurator();
 

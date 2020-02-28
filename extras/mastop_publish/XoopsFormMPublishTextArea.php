@@ -150,8 +150,8 @@ class XoopsFormMPublishTextArea extends \XoopsFormElement
     {
         global $xoopsUser, $xoopsConfig;
 
-        /** @var Assessment\Helper $helper */
-        $helper = Assessment\Helper::getInstance();
+        /** @var \XoopsModules\Assessment\Helper $helper */
+        $helper = \XoopsModules\Assessment\Helper::getInstance();
         $helper->loadLanguage('admin');
         $helper->loadLanguage('modinfo');
 
@@ -659,34 +659,19 @@ tinyMCE.init({
             if (empty($smileys)) {
                 if (false !== ($result = $this->db->query('SELECT * FROM ' . $this->db->prefix('smiles') . ' WHERE display=1'))) {
                     while (false !== ($smiles = $this->db->fetchArray($result))) {
-                        $ret .= "<img onclick=\"tinyMCE.execCommand('mceInsertContent',false,'<img src=\'"
-                                . XOOPS_UPLOAD_URL
-                                . '/'
-                                . htmlspecialchars($smiles['smile_url'], ENT_QUOTES)
-                                . '\');" onmouseover=\'style.cursor="hand"\' src=\''
-                                . XOOPS_UPLOAD_URL
-                                . '/'
-                                . htmlspecialchars($smiles['smile_url'], ENT_QUOTES)
-                                . '\' alt=\''
-                                . $smiles['emotion']
-                                . '\'>';
+                        $ret .= "<img onclick=\"tinyMCE.execCommand('mceInsertContent',false,'<img src=\'" . XOOPS_UPLOAD_URL . '/' . htmlspecialchars($smiles['smile_url'], ENT_QUOTES) . '\');" onmouseover=\'style.cursor="hand"\' src=\'' . XOOPS_UPLOAD_URL . '/' . htmlspecialchars(
+                                $smiles['smile_url'],
+                                ENT_QUOTES
+                            ) . '\' alt=\'' . $smiles['emotion'] . '\'>';
                     }
                 }
             } else {
                 $count = count($smiles);
                 for ($i = 0; $i < $count; ++$i) {
                     if (1 == $smiles[$i]['display']) {
-                        $ret .= "<img onclick=\"tinyMCE.execCommand('mceInsertContent',false,'<img src=\'"
-                                . XOOPS_UPLOAD_URL
-                                . '/'
-                                . htmlspecialchars($smiles[$i]['smile_url'], ENT_QUOTES)
-                                . '\');" onmouseover=\'style.cursor="hand"\' src=\''
-                                . XOOPS_UPLOAD_URL
-                                . '/'
-                                . $myts->oopsHtmlSpecialChars($smiles[$i]['smile_url'])
-                                . '\' border=\'0\' alt=\''
-                                . $smiles[$i]['emotion']
-                                . '\'>';
+                        $ret .= "<img onclick=\"tinyMCE.execCommand('mceInsertContent',false,'<img src=\'" . XOOPS_UPLOAD_URL . '/' . htmlspecialchars($smiles[$i]['smile_url'], ENT_QUOTES) . '\');" onmouseover=\'style.cursor="hand"\' src=\'' . XOOPS_UPLOAD_URL . '/' . $myts->oopsHtmlSpecialChars(
+                                $smiles[$i]['smile_url']
+                            ) . '\' border=\'0\' alt=\'' . $smiles[$i]['emotion'] . '\'>';
                     }
                 }
             }

@@ -25,12 +25,11 @@ use XoopsModules\Assessment;
 
 $GLOBALS['xoopsOption']['template_main'] = 'assessment_index.tpl';
 require __DIR__ . '/header.php';
-require XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH . '/header.php';
 
 $moduleDirName = basename(__DIR__);
 /** @var \XoopsModules\Assessment\Helper $helper */
 $helper = \XoopsModules\Assessment\Helper::getInstance();
-
 
 /**
  * Creation of the factories of objects that we will need
@@ -44,7 +43,7 @@ $resultFactory   = new Assessment\ResultHandler($xoopsDB);
  */
 
 $start = \Xmf\Request::getInt('start', 0, 'GET');
-
+$x     = [];
 //$criteria = new \Criteria ('cod_prova');
 //$criteria->setLimit(10);
 //$criteria->setStart($start);
@@ -56,25 +55,25 @@ $qtd_provas   = count($vetor_provas);
 if (is_object($GLOBALS['xoopsUser'])) {
     $uid = $GLOBALS['xoopsUser']->getVar('uid');
 
-    $criteria_aluno   = new \Criteria('uid_aluno', $uid);
-    $vetor_resultados = $resultFactory->getObjects($criteria_aluno);
+    $criteria_student = new \Criteria('uid_aluno', $uid);
+    $vetor_resultados = $resultFactory->getObjects($criteria_student);
     $vetor_perguntas  = $questionFactory->getObjects();
     //echo "<pre>";
     //print_r($vetor_resultados);
     $grupos = $GLOBALS['xoopsUser']->getGroups();
     /**
-     * loop pass proof by test
+     * loop pass test by test
      */
-    $x = [];
+    //    $x = [];
     $i = 0;
 
-    /** @var \XoopsModules\Assessment\Exam $prova */
-    foreach ($vetor_provas as $prova) {
-        $cod_prova = $prova->getVar('cod_prova');
+    /** @var \XoopsModules\Assessment\Exam $exam */
+    foreach ($vetor_provas as $exam) {
+        $cod_prova = $exam->getVar('cod_prova');
 
-        if ($prova->isAutorizado2($grupos)) {
-            $fim          = $prova->getVar('data_fim', 'n');
-            $tempo        = $prova->getVar('tempo', 'n');
+        if ($exam->isAutorizado2($grupos)) {
+            $fim          = $exam->getVar('data_fim', 'n');
+            $tempo        = $exam->getVar('tempo', 'n');
             $fimmaistempo = $examFactory->dataMysql2dataUnix($fim) + $tempo;
 
             if ($fimmaistempo < time()) {
@@ -107,10 +106,10 @@ if (is_object($GLOBALS['xoopsUser'])) {
                     $x[$i]['nivel']      = $resultado->getVar('nivel');
                 }
             }
-            $x[$i]['cod_prova'] = $prova->getVar('cod_prova', 's');
-            $x[$i]['tit_prova'] = $prova->getVar('titulo', 's');
-            $x[$i]['inicio']    = $prova->getVar('data_inicio', 's');
-            $x[$i]['fim']       = $prova->getVar('data_fim', 's');
+            $x[$i]['cod_prova'] = $exam->getVar('cod_prova', 's');
+            $x[$i]['tit_prova'] = $exam->getVar('titulo', 's');
+            $x[$i]['inicio']    = $exam->getVar('data_inicio', 's');
+            $x[$i]['fim']       = $exam->getVar('data_fim', 's');
 
             $vetor_perguntas_por_prova = [];
             foreach ($vetor_perguntas as $pergunta) {

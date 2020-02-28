@@ -1,0 +1,176 @@
+assessment_perguntas:
+    options: 'ENGINE=MyISAM DEFAULT CHARSET=utf8'
+    columns:
+        -
+            name: cod_pergunta
+            attributes: ' int(11)  NOT NULL auto_increment'
+        -
+            name: cod_prova
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: titulo
+            attributes: ' varchar(255)  NOT NULL '
+        -
+            name: data_criacao
+            attributes: ' date  NOT NULL '
+        -
+            name: data_update
+            attributes: ' date  NOT NULL '
+        -
+            name: uid_elaborador
+            attributes: ' varchar(50)  NOT NULL '
+        -
+            name: ordem
+            attributes: ' int(11)  NOT NULL  DEFAULT ''0'' '
+    keys:
+        PRIMARY:
+            columns: cod_pergunta
+            unique: true
+assessment_respostas:
+    options: 'ENGINE=MyISAM DEFAULT CHARSET=utf8'
+    columns:
+        -
+            name: cod_resposta
+            attributes: ' int(11)  NOT NULL auto_increment'
+        -
+            name: cod_pergunta
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: titulo
+            attributes: ' varchar(255)  NOT NULL '
+        -
+            name: iscerta
+            attributes: ' smallint(1)  NOT NULL '
+        -
+            name: data_criacao
+            attributes: ' date  NOT NULL '
+        -
+            name: data_update
+            attributes: ' date  NOT NULL '
+        -
+            name: uid_elaboradores
+            attributes: ' varchar(50)  NOT NULL '
+        -
+            name: isativa
+            attributes: ' tinyint(1)  NOT NULL '
+    keys:
+        PRIMARY:
+            columns: cod_resposta
+            unique: true
+assessment_provas:
+    options: 'ENGINE=MyISAM DEFAULT CHARSET=utf8'
+    columns:
+        -
+            name: cod_prova
+            attributes: ' int(11)  NOT NULL auto_increment'
+        -
+            name: data_criacao
+            attributes: ' date  NOT NULL '
+        -
+            name: data_update
+            attributes: ' date  NOT NULL '
+        -
+            name: titulo
+            attributes: ' varchar(255)  NOT NULL '
+        -
+            name: descricao
+            attributes: ' text  NOT NULL '
+        -
+            name: instrucoes
+            attributes: ' text  NOT NULL '
+        -
+            name: tempo
+            attributes: ' varchar(10)  NOT NULL '
+        -
+            name: acesso
+            attributes: ' varchar(250)  NOT NULL '
+        -
+            name: uid_elaboradores
+            attributes: ' varchar(50)  NOT NULL '
+        -
+            name: data_inicio
+            attributes: ' datetime  NOT NULL '
+        -
+            name: data_fim
+            attributes: ' datetime  NOT NULL '
+    keys:
+        PRIMARY:
+            columns: cod_prova
+            unique: true
+assessment_resultados:
+    options: 'ENGINE=MyISAM DEFAULT CHARSET=utf8'
+    columns:
+        -
+            name: cod_resultado
+            attributes: ' int(11)  NOT NULL auto_increment'
+        -
+            name: cod_prova
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: uid_aluno
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: data_inicio
+            attributes: ' datetime  NOT NULL '
+        -
+            name: data_fim
+            attributes: ' datetime  NOT NULL '
+        -
+            name: resp_certas
+            attributes: ' text  NOT NULL '
+        -
+            name: resp_erradas
+            attributes: ' text  NOT NULL '
+        -
+            name: nota_final
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: nivel
+            attributes: ' varchar(50)  NOT NULL '
+        -
+            name: obs
+            attributes: ' text  NOT NULL '
+        -
+            name: terminou
+            attributes: ' int(1)  NOT NULL '
+        -
+            name: fechada
+            attributes: ' int(1)  NOT NULL '
+    keys:
+        PRIMARY:
+            columns: cod_resultado
+            unique: true
+assessment_documentos:
+    options: 'ENGINE=MyISAM DEFAULT CHARSET=utf8'
+    columns:
+        -
+            name: cod_documento
+            attributes: ' int(11)  NOT NULL auto_increment'
+        -
+            name: titulo
+            attributes: ' varchar(255)  NOT NULL '
+        -
+            name: tipo
+            attributes: ' tinyint(4)  NOT NULL '
+        -
+            name: cod_prova
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: cods_perguntas
+            attributes: ' text  NOT NULL '
+        -
+            name: documento
+            attributes: ' text  NOT NULL '
+        -
+            name: uid_elaborador
+            attributes: ' int(11)  NOT NULL '
+        -
+            name: fonte
+            attributes: ' varchar(255)  NOT NULL '
+        -
+            name: html
+            attributes: ' int(11)  NOT NULL '
+    keys:
+        PRIMARY:
+            columns: cod_documento
+            unique: true

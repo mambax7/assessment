@@ -9,31 +9,41 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 //index.php
 define('_AM_ASSESSMENT_CONGRATULATIONS', 'Parab�ns a prova foi salva com sucesso!');
 
 //excluirprova.php
-define('_AM_ASSESSMENT_CONFIRMAEXCLUSAOPROVAS', 'Ao excluir esta prova voc� tamb�m estar�
+define(
+    '_AM_ASSESSMENT_CONFIRMAEXCLUSAOPROVAS',
+    'Ao excluir esta prova voc� tamb�m estar�
        excluindo:<br><br>Suas Perguntas<br>As Respostas das perguntas<br>
        Os documentos que aparecem antes das perguntas<br>Os resultados dos
        alunos que j� fizeram a prova<br><br>Voc� tem certeza que � isto que
-       voc� quer fazer?<br>');
+       voc� quer fazer?<br>'
+);
 
-define('_AM_ASSESSMENT_SIMCONFIRMAEXCLUSAOPROVAS', 'Sim entendi que vou excluir mais do que
-       somente a prova e concordo');
+define(
+    '_AM_ASSESSMENT_SIMCONFIRMAEXCLUSAOPROVAS',
+    'Sim entendi que vou excluir mais do que
+       somente a prova e concordo'
+);
 define('_AM_ASSESSMENT_PERGUNTASAPAGADAS', 'pergunta(s) apagadas');
 define('_AM_ASSESSMENT_RESPDAPERG', 'Respostas da pergunta %s apagada');
 define('_AM_ASSESSMENT_RESULTAPAGADOS', 'resultado(s) apagados');
 define('_AM_ASSESSMENT_DOCUMENTOSPAGADOS', 'documento(s) apagados');
 
 //index.php
-define('_AM_ASSESSMENT_REQUERIMENTOS', "Para o correto funcionamento deste m�dulo �
+define(
+    '_AM_ASSESSMENT_REQUERIMENTOS',
+    "Para o correto funcionamento deste m�dulo �
                             necess�ria a instala��o dos pacotes:<br><br>
    <a href='http://dev.xoops.org/modules/xfmod/project/showfiles.php?group_id=1357'>
    Frameworks do phppp de janeiro 1.10 ou superior</a><br>
    <br>
    <a href='http://dev.xoops.org/modules/xfmod/project/showfiles.php?group_id=1155'>
-   Xoops editor 1.10 ou superior   </a><br>");
+   Xoops editor 1.10 ou superior   </a><br>"
+);
 define('_AM_ASSESSMENT_SEMPROVAS', 'Nenhuma prova cadastrada ainda');
 define('_AM_ASSESSMENT_EDITARPROVAS', 'Editar provas');
 define('_AM_ASSESSMENT_EXCLUIRPROVAS', 'Excluir provas');

@@ -11,9 +11,9 @@
 */
 
 /**
- * prepergunta.php, Responsible for processing the proof opening
+ * prepergunta.php, Responsible for processing the test opening
  *
- * This file processes the opening of the proof creating a result for the student
+ * This file processes the opening of the test creating a result for the student
  * for the first time. This result will be updated during the user's responses and in the administration when the student is receiving his grade
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
@@ -47,14 +47,14 @@ $resultFactory = new Assessment\ResultHandler($xoopsDB);
 /**
  * Creation of the criteria for the factory to produce the objects
  */
-$criteria_prova = new \Criteria('cod_prova', $cod_prova);
-$criteria_aluno = new \Criteria('uid_aluno', $uid);
-$criteria       = new \CriteriaCompo($criteria_prova);
-$criteria->add($criteria_aluno);
+$criteria_test    = new \Criteria('cod_prova', $cod_prova);
+$criteria_student = new \Criteria('uid_aluno', $uid);
+$criteria         = new \CriteriaCompo($criteria_test);
+$criteria->add($criteria_student);
 
 /**
  * Checks whether the result has already been created before and if
- * creates the result, if it informs that the proof is in progress j
+ * creates the result, if it informs that the test is in progress j
  */
 if ($resultFactory->getCount($criteria) < 1) {
     $resultado = $resultFactory->create();

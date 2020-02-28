@@ -27,6 +27,28 @@ use XoopsModules\Assessment;
 class AnswerHandler extends \XoopsPersistableObjectHandler
 {
     /**
+     * @var Helper
+     */
+    public $helper;
+    public $userIsAdmin;
+
+    /**
+     * @param \XoopsDatabase                       $db
+     * @param null|\XoopsModules\Assessment\Helper $helper
+     */
+    public function __construct(\XoopsDatabase $db = null, \XoopsModules\Assessment\Helper $helper = null)
+    {
+        /** @var \XoopsModules\Assessment\Helper $this ->helper */
+        if (null === $helper) {
+            $this->helper = \XoopsModules\Assessment\Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
+        $userIsAdmin = $this->helper->isUserAdmin();
+        parent::__construct($db, 'assessment_respostas', Answer::class, 'cod_resposta', 'cod_resposta');
+    }
+
+    /**
      * create a new Assessment\Answer
      *
      * @param bool $isNew flag the new objects as "new"?
@@ -50,8 +72,8 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve a assessment_respostas
      *
-     * @param  mixed $id     ID
-     * @param  array $fields fields to fetch
+     * @param mixed $id     ID
+     * @param array $fields fields to fetch
      * @return bool|\XoopsModules\Assessment\Answer <a href='psi_element://XoopsObject'>XoopsObject</a>
      */
     public function get($id = null, $fields = null)
@@ -214,7 +236,6 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
         return $count;
     }
 
-
     /**
      * @param array  $criteria
      * @param bool   $asobject
@@ -260,8 +281,8 @@ class AnswerHandler extends \XoopsPersistableObjectHandler
      *
      * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
-     * @param bool             $force
-     * @param bool             $asObject
+     * @param bool                       $force
+     * @param bool                       $asObject
      * @return bool FALSE if deletion failed
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)

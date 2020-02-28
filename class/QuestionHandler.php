@@ -31,6 +31,28 @@ use XoopsModules\Assessment;
 class QuestionHandler extends \XoopsPersistableObjectHandler
 {
     /**
+     * @var Helper
+     */
+    public $helper;
+    public $userIsAdmin;
+
+    /**
+     * @param \XoopsDatabase                       $db
+     * @param null|\XoopsModules\Assessment\Helper $helper
+     */
+    public function __construct(\XoopsDatabase $db = null, \XoopsModules\Assessment\Helper $helper = null)
+    {
+        /** @var \XoopsModules\Assessment\Helper $this ->helper */
+        if (null === $helper) {
+            $this->helper = \XoopsModules\Assessment\Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
+        $userIsAdmin = $this->helper->isUserAdmin();
+        parent::__construct($db, 'assessment_perguntas', Question::class, 'cod_pergunta', 'cod_pergunta');
+    }
+
+    /**
      * create a new Assessment\Question
      *
      * @param bool $isNew flag the new objects as "new"?
@@ -54,8 +76,8 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve a assessment_perguntas
      *
-     * @param  mixed $id     ID
-     * @param  array $fields fields to fetch
+     * @param mixed $id     ID
+     * @param array $fields fields to fetch
      * @return bool|\XoopsModules\Assessment\Question <a href='psi_element://XoopsObject'>XoopsObject</a>
      */
     public function get($id = null, $fields = null)
@@ -158,10 +180,10 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve assessment_perguntas from the database
      *
-     * @param \CriteriaElement|\Criteria $criteria  {@link \CriteriaElement} conditions to be met
-     * @param bool                                 $id_as_key use the UID as key for the array?
+     * @param \CriteriaElement|\Criteria $criteria            {@link \CriteriaElement} conditions to be met
+     * @param bool                       $id_as_key           use the UID as key for the array?
      *
-     * @param bool                                 $as_object
+     * @param bool                       $as_object
      * @return array array of <a href='psi_element://Question'>Question</a> objects
      *                                                        objects
      */
@@ -200,7 +222,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
      * retrieve Question from the database
      *
      * @param \Criteria $criteria  {@link \Criteria} conditions to be met
-     * @param bool   $id_as_key use the UID as key for the array?
+     * @param bool      $id_as_key use the UID as key for the array?
      *
      * @return array array of {@link Question} objects
      */
@@ -209,7 +231,7 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT cod_pergunta FROM ' . $this->db->prefix('assessment_perguntas');
-        if ($criteria instanceof \Criteria) {
+        if ($criteria !== null) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -246,7 +268,6 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
 
         return $count;
     }
-
 
     /**
      * @param array  $criteria
@@ -293,8 +314,8 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
      *
      * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
-     * @param bool             $force
-     * @param bool             $asObject
+     * @param bool                       $force
+     * @param bool                       $asObject
      * @return bool FALSE if deletion failed
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
@@ -313,18 +334,18 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     /**
      * create form of insertion and question edit
      *
-     * @param string $action caminho para arquivo que ...
-     * @param null   $prova
+     * @param string               $action caminho para arquivo que ...
+     * @param Assessment\Exam|null $exam
      * @return bool FALSE if failed
      * @internal param object $assessment_prova <a href='psi_element://assessment_pprova'>assessment_pprova</a>
      */
-    public function renderFormCadastrar($action, $prova = null)
+    public function renderFormCadastrar($action, $exam = null)
     {
         $form              = new \XoopsThemeForm(_AM_ASSESSMENT_CADASTRAR . ' ' . _AM_ASSESSMENT_PERGUNTA, 'form_pergunta', $action, 'post', true);
         $campo_titulo      = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', '', 2, 50);
         $campo_ordem       = new \XoopsFormText(_AM_ASSESSMENT_ORDEM, 'campo_ordem', 3, 3, '0');
-        $cod_prova         = $prova->getVar('cod_prova');
-        $titulo_prova      = $prova->getVar('titulo');
+        $cod_prova         = $exam->getVar('cod_prova');
+        $titulo_prova      = $exam->getVar('titulo');
         $campo_prova_label = new \XoopsFormLabel(_AM_ASSESSMENT_PROVA, $titulo_prova);
         $campo_prova_valor = new \XoopsFormHidden('campo_cod_prova', $cod_prova);
         $campo_resposta1   = new \XoopsFormTextArea(_AM_ASSESSMENT_RESPOSTA . ' 1 <br>(' . _AM_ASSESSMENT_RESPCERTAS . ')', 'campo_resposta1', '', 2, 50);
@@ -460,11 +481,11 @@ class QuestionHandler extends \XoopsPersistableObjectHandler
     }
 
     /**
-     * Copy the questions and save them! Clone proof
+     * Copy the questions and save them! Clone test
      *
      * @param \Criteria $criteria {@link \Criteria} to match
      *
-     * @param        $cod_prova
+     * @param           $cod_prova
      */
     public function clonarPerguntas(\Criteria $criteria, $cod_prova)
     {

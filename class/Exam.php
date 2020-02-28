@@ -70,11 +70,11 @@ class Exam extends \XoopsObject
     }
 
     /**
-     * Verifica se aluno pode acessar esta prova
+     * Checks whether a student can access this exam
      *
      * @param \XoopsUser $aluno
      *
-     * @return bool true se autorizado e false se n�o autorizado
+     * @return bool true if authorized and false if not authorized
      */
     public function isAutorizado($aluno = null)
     {
@@ -91,9 +91,9 @@ class Exam extends \XoopsObject
             return false;
         }
 
-        $inicio      = $this->getVar('data_inicio', 'n');
+        $start       = $this->getVar('data_inicio', 'n');
         $examFactory = new Assessment\ExamHandler($xoopsDB);
-        if ($examFactory->dataMysql2dataUnix($inicio) > time()) {
+        if ($examFactory->dataMysql2dataUnix($start) > time()) {
             return false;
         }
 
@@ -105,7 +105,7 @@ class Exam extends \XoopsObject
      *
      * @param mixed $grupos
      *
-     * @return bool true se autorizado e false se n�o autorizado
+     * @return bool true if authorized and false if not authorized
      */
     public function isAutorizado2($grupos)
     {
@@ -118,9 +118,9 @@ class Exam extends \XoopsObject
             return false;
         }
 
-        $inicio      = $this->getVar('data_inicio', 'n');
+        $start       = $this->getVar('data_inicio', 'n');
         $examFactory = new Assessment\ExamHandler($xoopsDB);
-        if ($examFactory->dataMysql2dataUnix($inicio) > time()) {
+        if ($examFactory->dataMysql2dataUnix($start) > time()) {
             return false;
         }
 

@@ -9,6 +9,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 //fecharprova.php
 define('_AM_ASSESSMENT_CONGRATULATIONS', 'Parab�ns a prova foi salva com sucesso!');
 

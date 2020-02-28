@@ -10,7 +10,7 @@
 </div>
 <div id="instrucoes">
     <fieldset id="instrucoes">
-        <legend><{$lang_instrucoes}></legend>
+        <legend><{$lang_instructions}></legend>
 
         <p><{$instrucoes}>
 

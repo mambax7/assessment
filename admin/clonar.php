@@ -11,12 +11,11 @@
 */
 
 /**
- * index.php, Principal arquivo da administra��o
+ * index.php, Main administration file
  *
- * Este arquivo foi implementado da seguinte forma
- * Primeiro voc� tem v�rias fun��es
- * Depois voc� tem um case que vai chamar algumas destas fun��es de acordo com
- * o paramentro $op
+ * This file was implemented as follows
+ * First you have several functions
+ * Then you have a case that will call some of these functions according to the parameter $op
  *
  * @author  Marcello Brandao <marcello.brandao@gmail.com>
  * @version 1.0
@@ -26,23 +25,23 @@
 use XoopsModules\Assessment;
 
 /**
- * Arquivo de cabe�alho da administra��o do Xoops
+ * Xoops admin header file
  */
 require_once __DIR__ . '/admin_header.php';
 //require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 
 /**
- * Fun��o que desenha o cabe�alho da administra��o do Xoops
+ * Function that draws the header of the Xoops administration
  */
 //xoops_cp_header();
 
 /**
- * Fun��o que permite clonar uma prova copiando os seus dados suas perguntas e as respostas destas
+ * Function that allows you to clone a test by copying your data, your questions and their answers
  * perguntas
  */
 $cod_prova = \Xmf\Request::getInt('cod_prova', '', 'POST');
 /**
- * Cria��o das f�bricas dos objetos que vamos precisar
+ * Creating the factories of the objects we will need
  */
 $examFactory     = new Assessment\ExamHandler($xoopsDB);
 $questionFactory = new Assessment\QuestionHandler($xoopsDB);
@@ -51,8 +50,8 @@ $examFactory->clonarProva($cod_prova);
 $cod_prova_clone = $xoopsDB->getInsertId();
 $criteria        = new \Criteria('cod_prova', $cod_prova);
 $questionFactory->clonarPerguntas($criteria, $cod_prova_clone);
-$documentFactory->clonarDocumentos($criteria, $cod_prova_clone);
+$documentFactory->cloneDocuments($criteria, $cod_prova_clone);
 
-redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova_clone, 2, _AM_ASSESSMENT_SUCESSO);
+redirect_header('main.php?op=edit_test&cod_prova=' . $cod_prova_clone, 2, _AM_ASSESSMENT_SUCESSO);
 //fechamento das tags de if l� de cim�o verifica��o se os arquivos do phppp existem
 //xoops_cp_footer();

@@ -5,7 +5,7 @@
 
     <p><img align="absmiddle" src="assets/images/text-editor.gif" alt="Checklist" title="checklist"> <{$lang_andamento}> <img align="absmiddle"
                                                                                                                        src="assets/images/relogio.gif"
-                                                                                                                       alt="rel�gio" title="tempo">
+                                                                                                                       alt="relogio" title="tempo">
         <{$lang_temporestante}></p>
 </div>
 <{if isset($documentos)}>

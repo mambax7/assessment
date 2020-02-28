@@ -15,7 +15,7 @@ $sql = 'SELECT teste_id,teste_nome FROM ' . $xoopsDB->prefix('meumodulo_tabela1'
 $rs  = $xoopsDB->query($sql);
 
 $i = 1;
-while (false !== (list($id, $nome) = $xoopsDB->fetchRow($rs))) {
+while (list($id, $nome) = $xoopsDB->fetchRow($rs)) {
     $vetorresultados[$i]['id']   = $id;
     $vetorresultados[$i]['nome'] = $nome;
     ++$i;

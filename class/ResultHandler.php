@@ -27,6 +27,28 @@ use XoopsModules\Assessment;
 class ResultHandler extends \XoopsPersistableObjectHandler
 {
     /**
+     * @var Helper
+     */
+    public $helper;
+    public $userIsAdmin;
+
+    /**
+     * @param \XoopsDatabase                       $db
+     * @param null|\XoopsModules\Assessment\Helper $helper
+     */
+    public function __construct(\XoopsDatabase $db = null, \XoopsModules\Assessment\Helper $helper = null)
+    {
+        /** @var \XoopsModules\Assessment\Helper $this ->helper */
+        if (null === $helper) {
+            $this->helper = \XoopsModules\Assessment\Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
+        $userIsAdmin = $this->helper->isUserAdmin();
+        parent::__construct($db, 'assessment_resultados', Result::class, 'cod_resultado', 'cod_resultado');
+    }
+
+    /**
      * create a new Assessment\Result
      *
      * @param bool $isNew flag the new objects as "new"?
@@ -48,8 +70,8 @@ class ResultHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve a Result
      *
-     * @param  mixed $id     ID
-     * @param  array $fields fields to fetch
+     * @param mixed $id     ID
+     * @param array $fields fields to fetch
      * @return bool|\XoopsObject {@link \XoopsObject}
      */
     public function get($id = null, $fields = null)
@@ -99,15 +121,44 @@ class ResultHandler extends \XoopsPersistableObjectHandler
             $resultObj = new Assessment\Result();
             $format    = 'INSERT INTO `%s` (cod_resultado, cod_prova, uid_aluno, data_inicio, data_fim, resp_certas, resp_erradas, nota_final, nivel, obs, terminou, fechada )';
             $format    .= 'VALUES (%u, %u, %u, %s, %s, %s, %s, %u, %s, %s, %u, %u)';
-            $sql       = sprintf($format, $this->db->prefix('assessment_resultados'), $cod_resultado, $cod_prova, $uid_aluno, $now, $now, $this->db->quoteString($resp_certas), $this->db->quoteString($resp_erradas), $nota_final, $this->db->quoteString($nivel), $this->db->quoteString($obs), $terminou,
-                                 $fechada);
+            $sql       = sprintf(
+                $format,
+                $this->db->prefix('assessment_resultados'),
+                $cod_resultado,
+                $cod_prova,
+                $uid_aluno,
+                $now,
+                $now,
+                $this->db->quoteString($resp_certas),
+                $this->db->quoteString($resp_erradas),
+                $nota_final,
+                $this->db->quoteString($nivel),
+                $this->db->quoteString($obs),
+                $terminou,
+                $fechada
+            );
             $force     = true;
         } else {
             $format = 'UPDATE `%s` SET ';
             $format .= 'cod_resultado=%u, cod_prova=%u, uid_aluno=%u, data_inicio=%s, data_fim=%s, resp_certas=%s, resp_erradas=%s, nota_final=%u, nivel=%s, obs=%s, terminou=%u,  fechada=%u';
             $format .= ' WHERE cod_resultado = %u';
-            $sql    = sprintf($format, $this->db->prefix('assessment_resultados'), $cod_resultado, $cod_prova, $uid_aluno, $this->db->quoteString($data_inicio), $now, $this->db->quoteString($resp_certas), $this->db->quoteString($resp_erradas), $nota_final, $this->db->quoteString($nivel),
-                              $this->db->quoteString($obs), $terminou, $fechada, $cod_resultado);
+            $sql    = sprintf(
+                $format,
+                $this->db->prefix('assessment_resultados'),
+                $cod_resultado,
+                $cod_prova,
+                $uid_aluno,
+                $this->db->quoteString($data_inicio),
+                $now,
+                $this->db->quoteString($resp_certas),
+                $this->db->quoteString($resp_erradas),
+                $nota_final,
+                $this->db->quoteString($nivel),
+                $this->db->quoteString($obs),
+                $terminou,
+                $fechada,
+                $cod_resultado
+            );
         }
         if (false !== $force) {
             $result = $this->db->queryF($sql);
@@ -155,11 +206,11 @@ class ResultHandler extends \XoopsPersistableObjectHandler
      * retrieve assessment_resultadoss from the database
      *
      * @param \CriteriaElement|\Criteria $criteria  {@link \CriteriaElement} conditions to be met
-     * @param bool             $id_as_key use the UID as key for the array?
+     * @param bool                       $id_as_key use the UID as key for the array?
      *
-     * @param bool             $as_object
+     * @param bool                       $as_object
      * @return array array of <a href='psi_element://$result'>$result</a> objects
-     *                                    objects
+     *                                              objects
      */
     public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true)
     {
@@ -214,7 +265,6 @@ class ResultHandler extends \XoopsPersistableObjectHandler
         return $count;
     }
 
-
     /**
      * @param array  $criteria
      * @param bool   $asobject
@@ -260,8 +310,8 @@ class ResultHandler extends \XoopsPersistableObjectHandler
      *
      * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
-     * @param bool             $force
-     * @param bool             $asObject
+     * @param bool                       $force
+     * @param bool                       $asObject
      * @return bool FALSE if deletion failed
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
@@ -285,20 +335,20 @@ class ResultHandler extends \XoopsPersistableObjectHandler
 */
 
     /**
-     * @param $resultado
-     * @param $prova
-     * @param $qtd_perguntas
-     * @param $action
+     * @param                 $resultado
+     * @param Assessment\Exam $exam
+     * @param                 $qtd_perguntas
+     * @param                 $action
      *
      * @return bool
      */
-    public function renderFormEditar($resultado, $prova, $qtd_perguntas, $action)
+    public function renderFormEditar($resultado, $exam, $qtd_perguntas, $action)
     {
-        $cod_prova  = $prova->getVar('cod_prova');
-        $titulo     = $prova->getVar('titulo');
-        $descricao  = $prova->getVar('descricao');
-        $instrucoes = $prova->getVar('instrucoes');
-        $tempo      = $prova->getVar('tempo');
+        $cod_prova  = $exam->getVar('cod_prova');
+        $titulo     = $exam->getVar('titulo');
+        $descricao  = $exam->getVar('descricao');
+        $instrucoes = $exam->getVar('instrucoes');
+        $tempo      = $exam->getVar('tempo');
 
         $cod_resultado = $resultado->getVar('cod_resultado');
         $data_inicio   = $resultado->getVar('data_inicio');
@@ -316,14 +366,14 @@ class ResultHandler extends \XoopsPersistableObjectHandler
 
         foreach ($vetor_resp_certas as $resp) {
             $detalhe_resp_certa = explode('-', $resp);
-            $texto_resp_certas  .= '<a href=main.php?op=ver_detalhe_pergunta&cod_pergunta=' . $detalhe_resp_certa[0] . '&cod_resposta=' . (isset($detalhe_resp_certa[1]) ? $detalhe_resp_certa[1]:'') . '>' . $detalhe_resp_certa[0] . ' </a> ';
+            $texto_resp_certas  .= '<a href=main.php?op=see_detail_question&cod_pergunta=' . $detalhe_resp_certa[0] . '&cod_resposta=' . (isset($detalhe_resp_certa[1]) ? $detalhe_resp_certa[1] : '') . '>' . $detalhe_resp_certa[0] . ' </a> ';
         }
         $texto_resp_erradas = _AM_ASSESSMENT_PERGDETALHES . ' <br>';
         $vetor_resp_erradas = explode(',', $resp_erradas);
 
         foreach ($vetor_resp_erradas as $resp2) {
             $detalhe_resp_errada = explode('-', $resp2);
-            $texto_resp_erradas  .= '<a href=main.php?op=ver_detalhe_pergunta&cod_pergunta=' . $detalhe_resp_errada[0] . '&cod_resposta=' . (isset($detalhe_resp_errada[1])?$detalhe_resp_errada[1]:'') . '>' . $detalhe_resp_errada[0] . ' </a> ';
+            $texto_resp_erradas  .= '<a href=main.php?op=see_detail_question&cod_pergunta=' . $detalhe_resp_errada[0] . '&cod_resposta=' . (isset($detalhe_resp_errada[1]) ? $detalhe_resp_errada[1] : '') . '>' . $detalhe_resp_errada[0] . ' </a> ';
         }
 
         if ('' == $vetor_resp_certas[0]) {
@@ -338,26 +388,10 @@ class ResultHandler extends \XoopsPersistableObjectHandler
         $form                    = new \XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_RESULTADO, 'form_resultado', $action, 'post', true);
         $campo_resp_certas       = new \XoopsFormLabel(_AM_ASSESSMENT_RESPCERTAS, $texto_resp_certas);
         $campo_resp_erradas      = new \XoopsFormLabel(_AM_ASSESSMENT_RESPERR, $texto_resp_erradas);
-        $campo_sugest_nota_final = new \XoopsFormLabel(_AM_ASSESSMENT_SUGESTNOTA, $nota_sugest
-                                                                                  . '/100 ('
-                                                                                  . _AM_ASSESSMENT_ACERTOU
-                                                                                  . ' '
-                                                                                  . $qtd_acertos
-                                                                                  . ' '
-                                                                                  . _AM_ASSESSMENT_ERROU
-                                                                                  . ' '
-                                                                                  . $qtd_erros
-                                                                                  . ' '
-                                                                                  . _AM_ASSESSMENT_SEMREPONDER
-                                                                                  . ' '
-                                                                                  . $qtd_branco
-                                                                                  . ' '
-                                                                                  . _AM_ASSESSMENT_DEUMTOTALDE
-                                                                                  . ' '
-                                                                                  . $qtd_perguntas
-                                                                                  . ' '
-                                                                                  . _AM_ASSESSMENT_PERGUNTAS
-                                                                                  . ' )');
+        $campo_sugest_nota_final = new \XoopsFormLabel(
+            _AM_ASSESSMENT_SUGESTNOTA,
+            $nota_sugest . '/100 (' . _AM_ASSESSMENT_ACERTOU . ' ' . $qtd_acertos . ' ' . _AM_ASSESSMENT_ERROU . ' ' . $qtd_erros . ' ' . _AM_ASSESSMENT_SEMREPONDER . ' ' . $qtd_branco . ' ' . _AM_ASSESSMENT_DEUMTOTALDE . ' ' . $qtd_perguntas . ' ' . _AM_ASSESSMENT_PERGUNTAS . ' )'
+        );
         $campo_nota_final        = new \XoopsFormText(_AM_ASSESSMENT_NOTAFINAL, 'campo_nota_final', 6, 10, $nota_final);
         $campo_nivel             = new \XoopsFormText(_AM_ASSESSMENT_NIVEL, 'campo_nivel', 10, 20, $nivel);
         $campo_observacoes       = new \XoopsFormTextArea(_AM_ASSESSMENT_OBS, 'campo_observacoes', $observacoes, 2, 50);
@@ -396,7 +430,7 @@ class ResultHandler extends \XoopsPersistableObjectHandler
             return 0;
         }
 
-        while (false !== (list($max, $min, $media) = $this->db->fetchRow($result))) {
+        while (list($max, $min, $media) = $this->db->fetchRow($result)) {
             $ret['max']   = $max;
             $ret['min']   = $min;
             $ret['media'] = $media;

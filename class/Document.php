@@ -28,7 +28,6 @@ use XoopsModules\Assessment;
 //require_once XOOPS_ROOT_PATH."/Frameworks/art/functions.sanitizer.php";
 //require_once XOOPS_ROOT_PATH."/Frameworks/xoops22/class/xoopsform/xoopsformloader.php";
 
-
 /**
  * Document class.
  * $this class is responsible for providing data access mechanisms to the data source

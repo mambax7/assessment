@@ -17,8 +17,8 @@ require_once __DIR__ . '/admin_header.php';
 //require_once XOOPS_ROOT_PATH . '/Frameworks/art/functions.admin.php';
 global $xoopsModuleConfig;
 
-/** @var Assessment\Helper $helper */
-$helper = Assessment\Helper::getInstance();
+/** @var \XoopsModules\Assessment\Helper $helper */
+$helper = \XoopsModules\Assessment\Helper::getInstance();
 
 /**
  * Security check validating TOKEN
@@ -53,5 +53,5 @@ $documento->setVar('fonte', $fonte);
 $documento->setVar('uid_elaborador', $uid_elaborador);
 $documento->setVar('html', $html);
 if ($documentFactory->insert($documento)) {
-    redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
+    redirect_header('main.php?op=edit_test&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
 }

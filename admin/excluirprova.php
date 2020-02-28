@@ -138,7 +138,7 @@ if (1 == $segunda_vez) {
     $hiddens = ['cod_prova' => $cod_prova, 'segunda_vez' => 1];
 
     /**
-     * Function that confirms if the teacher really wants to exclude the proof
+     * Function that confirms if the teacher really wants to exclude the test
      */
     xoops_confirm($hiddens, '', _AM_ASSESSMENT_CONFIRMAEXCLUSAOPROVAS, _AM_ASSESSMENT_SIMCONFIRMAEXCLUSAOPROVAS);
     /**

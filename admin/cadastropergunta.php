@@ -65,4 +65,4 @@ if ($questionFactory->insert($pergunta)) {
     }
 }
 
-redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
+redirect_header('main.php?op=edit_test&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);

@@ -11,20 +11,27 @@
 
 /**
  * @copyright    XOOPS Project (https://xoops.org)
- * @license      GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license      GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @package
  * @since
  * @author       XOOPS Development Team
  * @version      $Id $
  */
 
-//require_once  dirname(__DIR__) . '/include/common.php';
+include dirname(__DIR__) . '/preloads/autoloader.php';
+
+$moduleDirName      = basename(dirname(__DIR__));
+$moduleDirNameUpper = mb_strtoupper($moduleDirName);
+
 /** @var \XoopsModules\Assessment\Helper $helper */
 $helper = \XoopsModules\Assessment\Helper::getInstance();
+$helper->loadLanguage('common');
+$helper->loadLanguage('feedback');
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
 if (is_object($helper->getModule())) {
-    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+    //    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+    $pathModIcon32 = $helper->url($helper->getModule()->getInfo('modicons32'));
 }
 
 $adminmenu[] = [
@@ -35,21 +42,29 @@ $adminmenu[] = [
 
 $adminmenu[] = [
     'title' => _MI_ASSESSMENT_ADMENU1,
-    'link'  => 'admin/main.php?op=manter_provas',
+    'link'  => 'admin/main.php?op=keep_test',
     'icon'  => $pathIcon32 . '/manage.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_ASSESSMENT_ADMENU2,
-    'link'  => 'admin/main.php?op=manter_resultados',
+    'link'  => 'admin/main.php?op=keep_results',
     'icon'  => $pathIcon32 . '/button_ok.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_ASSESSMENT_ADMENU3,
-    'link'  => 'admin/main.php?op=manter_documentos',
+    'link'  => 'admin/main.php?op=keep_documents',
     'icon'  => $pathIcon32 . '/content.png',
 ];
+
+if ($helper->getConfig('displayDeveloperTools')) {
+    $adminmenu[] = [
+        'title' => constant('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_MIGRATE'),
+        'link'  => 'admin/migrate.php',
+        'icon'  => $pathIcon32 . '/database_go.png',
+    ];
+}
 
 $adminmenu[] = [
     'title' => _MI_ASSESSMENT_ABOUT,

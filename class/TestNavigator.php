@@ -55,7 +55,7 @@ class TestNavigator extends \XoopsPageNav
             while ($counter <= $total_pages) {
                 $cod_pergunta_atual = $cod_perguntas[$counter - 1];
 
-                if (in_array($cod_pergunta_atual, $cod_perguntas_respondidas, true)) {
+                if (in_array($cod_pergunta_atual, $cod_perguntas_respondidas)) {
                     $ret .= '<td  valign="center" style="height=20px; text-align:center; background:url(assets/images/feita.jpg); background-repeat:no-repeat;background-position:center;">
                     <a rel="sad" href="' . $this->url . (($counter - 1) * $this->perpage) . $this->extra . '">' . $counter . '</a></td>';
                 } else {

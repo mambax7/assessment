@@ -49,19 +49,19 @@ if ($data_hora_inicio_UNIX > $data_hora_fim_UNIX) {
                     }*/
 $uid_elaborador = $xoopsUser->getVar('uid');
 
-$prova = $examFactory->create(false);
-$prova->load($cod_prova);
-$prova->setVar('descricao', $descricao);
-$prova->setVar('instrucoes', $instrucoes);
-$prova->setVar('titulo', $titulo);
-$prova->setVar('tempo', $tempo);
-$prova->setVar('acesso', implode(',', $acesso));
-$prova->setVar('uid_elaboradores', $uid_elaborador);
-$prova->setVar('data_inicio', date('Y-m-d H:i:s', strtotime($data_hora_inicio_MYSQL)));
-$prova->setVar('data_fim', date('Y-m-d H:i:s', strtotime($data_hora_fim_MYSQL)));
-//$prova->unsetNew();
+$exam = $examFactory->create(false);
+$exam->load($cod_prova);
+$exam->setVar('descricao', $descricao);
+$exam->setVar('instrucoes', $instrucoes);
+$exam->setVar('titulo', $titulo);
+$exam->setVar('tempo', $tempo);
+$exam->setVar('acesso', implode(',', $acesso));
+$exam->setVar('uid_elaboradores', $uid_elaborador);
+$exam->setVar('data_inicio', date('Y-m-d H:i:s', strtotime($data_hora_inicio_MYSQL)));
+$exam->setVar('data_fim', date('Y-m-d H:i:s', strtotime($data_hora_fim_MYSQL)));
+//$exam->unsetNew();
 
-//$prova->setVar("data_update",$agora);
-if ($examFactory->insert($prova)) {
-    redirect_header('main.php?op=editar_prova&amp;cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
+//$exam->setVar("data_update",$agora);
+if ($examFactory->insert($exam)) {
+    redirect_header('main.php?op=edit_test&amp;cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
 }

@@ -12,16 +12,17 @@
 
 /**
  * @copyright    XOOPS Project https://xoops.org/
- * @license      GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
+ * @license      GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @package
  * @since
- * @author     XOOPS Development Team
+ * @author       XOOPS Development Team
  */
 
 use XoopsModules\Assessment;
 
-require  dirname(dirname(__DIR__)) . '/mainfile.php';
-//require XOOPS_ROOT_PATH . '/header.php';
+require dirname(dirname(__DIR__)) . '/mainfile.php';
+//include dirname(dirname(__DIR__)) . '/header.php';
+require XOOPS_ROOT_PATH . '/header.php';
 
 $moduleDirName = basename(__DIR__);
 
@@ -29,7 +30,7 @@ $moduleDirName = basename(__DIR__);
 $helper = \XoopsModules\Assessment\Helper::getInstance();
 
 $modulePath = XOOPS_ROOT_PATH . '/modules/' . $moduleDirName;
-require __DIR__ . '/include/config.php';
+//require __DIR__ . '/config/config.php';
 
 $myts = \MyTextSanitizer::getInstance();
 

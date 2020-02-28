@@ -28,6 +28,28 @@ use XoopsModules\Assessment;
 class ExamHandler extends \XoopsPersistableObjectHandler
 {
     /**
+     * @var Helper
+     */
+    public $helper;
+    public $userIsAdmin;
+
+    /**
+     * @param \XoopsDatabase                       $db
+     * @param null|\XoopsModules\Assessment\Helper $helper
+     */
+    public function __construct(\XoopsDatabase $db = null, \XoopsModules\Assessment\Helper $helper = null)
+    {
+        /** @var \XoopsModules\Assessment\Helper $this ->helper */
+        if (null === $helper) {
+            $this->helper = \XoopsModules\Assessment\Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
+        $userIsAdmin = $this->helper->isUserAdmin();
+        parent::__construct($db, 'assessment_provas', Exam::class, 'cod_prova', 'cod_prova');
+    }
+
+    /**
      * create a new Assessment\Exam
      *
      * @param bool $isNew flag the new objects as "new"?
@@ -51,8 +73,8 @@ class ExamHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve a Test
      *
-     * @param  mixed $id     ID
-     * @param  array $fields fields to fetch
+     * @param mixed $id     ID
+     * @param array $fields fields to fetch
      * @return bool|\XoopsObject {@link \XoopsObject}
      */
     public function get($id = null, $fields = null)
@@ -101,15 +123,42 @@ class ExamHandler extends \XoopsPersistableObjectHandler
             $test   = new Assessment\Exam();
             $format = 'INSERT INTO `%s` (cod_prova, data_criacao, data_update, titulo, descricao, instrucoes, acesso, tempo, uid_elaboradores, data_inicio, data_fim)';
             $format .= 'VALUES (%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)';
-            $sql    = sprintf($format, $this->db->prefix('assessment_provas'), $cod_prova, $this->db->quoteString($data_criacao), $this->db->quoteString($data_update), $this->db->quoteString($titulo), $this->db->quoteString($descricao), $this->db->quoteString($instrucoes),
-                              $this->db->quoteString($acesso), $this->db->quoteString($tempo), $this->db->quoteString($uid_elaboradores), $this->db->quoteString($data_inicio), $this->db->quoteString($data_fim));
+            $sql    = sprintf(
+                $format,
+                $this->db->prefix('assessment_provas'),
+                $cod_prova,
+                $this->db->quoteString($data_criacao),
+                $this->db->quoteString($data_update),
+                $this->db->quoteString($titulo),
+                $this->db->quoteString($descricao),
+                $this->db->quoteString($instrucoes),
+                $this->db->quoteString($acesso),
+                $this->db->quoteString($tempo),
+                $this->db->quoteString($uid_elaboradores),
+                $this->db->quoteString($data_inicio),
+                $this->db->quoteString($data_fim)
+            );
             $force  = true;
         } else {
             $format = 'UPDATE `%s` SET ';
             $format .= 'cod_prova=%u, data_criacao=%s, data_update=%s, titulo=%s, descricao=%s, instrucoes=%s, acesso=%s, tempo=%s, uid_elaboradores=%s, data_inicio=%s, data_fim=%s';
             $format .= ' WHERE cod_prova = %u';
-            $sql    = sprintf($format, $this->db->prefix('assessment_provas'), $cod_prova, $this->db->quoteString($data_criacao), $this->db->quoteString($data_update), $this->db->quoteString($titulo), $this->db->quoteString($descricao), $this->db->quoteString($instrucoes),
-                              $this->db->quoteString($acesso), $this->db->quoteString($tempo), $this->db->quoteString($uid_elaboradores), $this->db->quoteString($data_inicio), $this->db->quoteString($data_fim), $cod_prova);
+            $sql    = sprintf(
+                $format,
+                $this->db->prefix('assessment_provas'),
+                $cod_prova,
+                $this->db->quoteString($data_criacao),
+                $this->db->quoteString($data_update),
+                $this->db->quoteString($titulo),
+                $this->db->quoteString($descricao),
+                $this->db->quoteString($instrucoes),
+                $this->db->quoteString($acesso),
+                $this->db->quoteString($tempo),
+                $this->db->quoteString($uid_elaboradores),
+                $this->db->quoteString($data_inicio),
+                $this->db->quoteString($data_fim),
+                $cod_prova
+            );
         }
         if ($force) {
             $result = $this->db->queryF($sql);
@@ -158,12 +207,12 @@ class ExamHandler extends \XoopsPersistableObjectHandler
      */
     public function clonarProva($cod_prova)
     {
-        $prova = $this->get($cod_prova);
+        $exam = $this->get($cod_prova);
 
-        $prova->setVar('titulo', _AM_ASSESSMENT_CLONE . $prova->getVar('titulo'));
-        $prova->setVar('cod_prova', 0);
-        $prova->setNew();
-        $this->insert($prova);
+        $exam->setVar('titulo', _AM_ASSESSMENT_CLONE . $exam->getVar('titulo'));
+        $exam->setVar('cod_prova', 0);
+        $exam->setNew();
+        $this->insert($exam);
     }
 
     /**
@@ -229,7 +278,6 @@ class ExamHandler extends \XoopsPersistableObjectHandler
         return $count;
     }
 
-
     /**
      * @param array  $criteria
      * @param bool   $asobject
@@ -269,7 +317,6 @@ class ExamHandler extends \XoopsPersistableObjectHandler
 
         return $ret;
     }
-
 
     /**
      * delete Tests matching a set of conditions
@@ -326,22 +373,22 @@ class ExamHandler extends \XoopsPersistableObjectHandler
     }
 
     /**
-     * cria form de inser��o e edi��o de pergunta
+     * creates insertion form and editing question
      *
-     * @param string $action caminho para arquivo que ...
-     * @param        $prova
+     * @param string          $action caminho para arquivo que ...
+     * @param Assessment\Exam $exam
      * @return bool FALSE if deletion failed
      */
-    public function renderFormEditar($action, $prova)
+    public function renderFormEditar($action, $exam)
     {
-        $cod_prova  = $prova->getVar('cod_prova');
-        $titulo     = $prova->getVar('titulo');
-        $descricao  = $prova->getVar('descricao');
-        $instrucoes = $prova->getVar('instrucoes');
-        $acessos    = explode(',', $prova->getVar('acesso'));
-        $tempo      = $prova->getVar('tempo');
-        $inicio     = $this->dataMysql2dataUnix($prova->getVar('data_inicio'));
-        $fim        = $this->dataMysql2dataUnix($prova->getVar('data_fim'));
+        $cod_prova  = $exam->getVar('cod_prova');
+        $titulo     = $exam->getVar('titulo');
+        $descricao  = $exam->getVar('descricao');
+        $instrucoes = $exam->getVar('instrucoes');
+        $acessos    = explode(',', $exam->getVar('acesso'));
+        $tempo      = $exam->getVar('tempo');
+        $start      = $this->dataMysql2dataUnix($exam->getVar('data_inicio'));
+        $fim        = $this->dataMysql2dataUnix($exam->getVar('data_fim'));
 
         $form              = new \XoopsThemeForm(_AM_ASSESSMENT_EDITAR . ' ' . _AM_ASSESSMENT_PROVA, 'form_prova', $action, 'post', true);
         $campo_titulo      = new \XoopsFormTextArea(_AM_ASSESSMENT_TITULO, 'campo_titulo', $titulo, 2, 50);
@@ -350,7 +397,7 @@ class ExamHandler extends \XoopsPersistableObjectHandler
         $campo_tempo       = new \XoopsFormText(_AM_ASSESSMENT_TEMPO, 'campo_tempo', 10, 20, $tempo);
         $campo_acesso      = new \XoopsFormSelectGroup(_AM_ASSESSMENT_GRUPOSACESSO, 'campo_grupo', false, $acessos, 4, true);
         $campo_cod_prova   = new \XoopsFormHidden('campo_cod_prova', $cod_prova);
-        $campo_data_inicio = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_INICIO, 'campo_data_inicio', null, $inicio);
+        $campo_data_inicio = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_INICIO, 'campo_data_inicio', null, $start);
         $campo_data_fim    = new \XoopsFormDateTime(_AM_ASSESSMENT_DATA_FIM, 'campo_data_fim', null, $fim);
         $botao_enviar      = new \XoopsFormButton('', 'botao_submit', _AM_ASSESSMENT_SALVARALTERACOES, 'submit');
         $form->addElement($campo_titulo, true);
@@ -396,46 +443,46 @@ class ExamHandler extends \XoopsPersistableObjectHandler
     }
 
     /**
-     * @param        $total_segundos
-     * @param string $inicio
+     * @param int    $totalSeconds
+     * @param string $start
      *
      * @return mixed
      */
-    public function convertSeconds($total_segundos, $inicio = 'Y')
+    public function convertSeconds($totalSeconds, $start = 'Y')
     {
         /**
          * @autor: Carlos H. Reche
          * @data : 11/08/2004
          */
 
-        $comecou = false;
+        $started = false;
 
-        if ('Y' === $inicio) {
-            $array['anos']  = floor($total_segundos / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12));
-            $total_segundos %= (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12);
-            $comecou        = true;
+        if ('Y' === $start) {
+            $array['anos'] = floor($totalSeconds / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12));
+            $totalSeconds  %= (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH * 12);
+            $started       = true;
         }
-        if (('m' === $inicio) || (true === $comecou)) {
-            $array['meses'] = floor($total_segundos / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH));
-            $total_segundos %= (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH);
-            $comecou        = true;
+        if (('m' === $start) || (true === $started)) {
+            $array['meses'] = floor($totalSeconds / (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH));
+            $totalSeconds   %= (60 * 60 * 24 * _AM_ASSESSMENT_DAYS_PER_MONTH);
+            $started        = true;
         }
-        if (('d' === $inicio) || (true === $comecou)) {
-            $array['dias']  = floor($total_segundos / (60 * 60 * 24));
-            $total_segundos %= (60 * 60 * 24);
-            $comecou        = true;
+        if (('d' === $start) || (true === $started)) {
+            $array['dias'] = floor($totalSeconds / (60 * 60 * 24));
+            $totalSeconds  %= (60 * 60 * 24);
+            $started       = true;
         }
-        if (('H' === $inicio) || (true === $comecou)) {
-            $array['horas'] = floor($total_segundos / (60 * 60));
-            $total_segundos %= (60 * 60);
-            $comecou        = true;
+        if (('H' === $start) || (true === $started)) {
+            $array['horas'] = floor($totalSeconds / (60 * 60));
+            $totalSeconds   %= (60 * 60);
+            $started        = true;
         }
-        if (('i' === $inicio) || (true === $comecou)) {
-            $array['minutos'] = floor($total_segundos / 60);
-            $total_segundos   %= 60;
-            $comecou          = true;
+        if (('i' === $start) || (true === $started)) {
+            $array['minutos'] = floor($totalSeconds / 60);
+            $totalSeconds     %= 60;
+            $started          = true;
         }
-        $array['segundos'] = $total_segundos;
+        $array['segundos'] = $totalSeconds;
 
         return $array;
     }

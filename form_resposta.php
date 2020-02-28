@@ -28,8 +28,7 @@ use XoopsModules\Assessment;
  */
 
 require __DIR__ . '/header.php';
-require XOOPS_ROOT_PATH.'/header.php';
-
+require XOOPS_ROOT_PATH . '/header.php';
 
 /**
  * Pass the variables sent by $ _POST to variables with the same name
@@ -93,15 +92,15 @@ $cod_prova = $pergunta->getVar('cod_prova');
 /**
  * Creating one more criterion for cod_prova, one criterion for uid_aluno and one that has both
  */
-$criteria_prova   = new \Criteria('cod_prova', $cod_prova);
+$criteria_test    = new \Criteria('cod_prova', $cod_prova);
 $criteria_usuario = new \Criteria('uid_aluno', $uid);
-$criteria         = new \CriteriaCompo($criteria_prova);
+$criteria         = new \CriteriaCompo($criteria_test);
 $criteria->add($criteria_usuario);
 
 /**
  * Determining how many questions the test has
  */
-$qtd_perguntas = $questionFactory->getCount($criteria_prova);
+$qtd_perguntas = $questionFactory->getCount($criteria_test);
 
 /**
  * Placing start to point to the next question unless it is the last
@@ -121,7 +120,7 @@ if (($qtd_perguntas - 1) == $start) {
  * we look for the answers he has already given and the code of his
  * ancient answer to this question
  */
-$resultados          = $resultFactory->getObjects($criteria);
+$resultados = $resultFactory->getObjects($criteria);
 /** @var \XoopsModules\Assessment\Result $resultado */
 $resultado           = $resultados[0];
 $respostascertas     = $resultado->getRespostasCertasAsArray();

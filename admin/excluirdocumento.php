@@ -30,5 +30,5 @@ $documentFactory = new Assessment\DocumentHandler($xoopsDB);
 $criteria        = new \Criteria('cod_documento', $cod_documento);
 
 if ($documentFactory->deleteAll($criteria)) {
-    redirect_header('main.php?op=editar_prova&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
+    redirect_header('main.php?op=edit_test&cod_prova=' . $cod_prova, 2, _AM_ASSESSMENT_SUCESSO);
 }

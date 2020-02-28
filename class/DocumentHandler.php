@@ -29,8 +29,8 @@ use XoopsModules\Assessment;
 //require_once XOOPS_ROOT_PATH."/Frameworks/art/functions.sanitizer.php";
 //require_once XOOPS_ROOT_PATH."/Frameworks/xoops22/class/xoopsform/xoopsformloader.php";
 
-///** @var Assessment\Helper $helper */
-//$helper = Assessment\Helper::getInstance();
+///** @var \XoopsModules\Assessment\Helper $helper */
+//$helper = \XoopsModules\Assessment\Helper::getInstance();
 
 // -------------------------------------------------------------------------
 // ------------------Document user handler class -------------------
@@ -42,6 +42,29 @@ use XoopsModules\Assessment;
  */
 class DocumentHandler extends \XoopsPersistableObjectHandler
 {
+
+    /**
+     * @var Helper
+     */
+    public $helper;
+    public $userIsAdmin;
+
+    /**
+     * @param \XoopsDatabase                       $db
+     * @param null|\XoopsModules\Assessment\Helper $helper
+     */
+    public function __construct(\XoopsDatabase $db = null, \XoopsModules\Assessment\Helper $helper = null)
+    {
+        /** @var \XoopsModules\Assessment\Helper $this ->helper */
+        if (null === $helper) {
+            $this->helper = \XoopsModules\Assessment\Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
+        $userIsAdmin = $this->helper->isUserAdmin();
+        parent::__construct($db, 'assessment_documentos', Document::class, 'cod_documento', 'cod_documento');
+    }
+
     /**
      * create a new Assessment\Document
      *
@@ -64,8 +87,8 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * retrieve a Document
      *
-     * @param  mixed $id     ID
-     * @param  array $fields fields to fetch
+     * @param mixed $id     ID
+     * @param array $fields fields to fetch
      * @return bool|\XoopsModules\Assessment\Document <a href='psi_element://XoopsObject'>XoopsObject</a>
      */
     public function get($id = null, $fields = null)
@@ -89,7 +112,7 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      * insert a new Assessment\Document in the database
      *
      * @param \XoopsObject $document reference to the {@link assessment_documentos} object
-     * @param  bool        $force    flag to force the query execution despite security settings
+     * @param bool         $force    flag to force the query execution despite security settings
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
@@ -219,13 +242,13 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     {
         $criteria         = new \Criteria('cod_prova', $cod_prova);
         $cod_documentos   = [];
-        $documentos   = [];
+        $documentos       = [];
         $documentos_prova = $this->getObjects($criteria);
         $myts             = \MyTextSanitizer::getInstance();
         $i                = 0;
         foreach ($documentos_prova as $documento_prova) {
             $cods_perguntas = explode(',', $documento_prova->getVar('cods_perguntas'));
-            if (in_array($cod_pergunta, $cods_perguntas, true)) {
+            if (in_array($cod_pergunta, $cods_perguntas)) {
                 $documentos[$i]['titulo'] = $documento_prova->getVar('titulo');
                 $documentos[$i]['fonte']  = $documento_prova->getVar('fonte');
                 /*if ($helper->getConfig('editorpadrao')=="dhtmlext"||$helper->getConfig('editorpadrao')=="textarea") {
@@ -266,7 +289,6 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
 
         return $count;
     }
-
 
     /**
      * @param array  $criteria
@@ -313,8 +335,8 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
      *
      * @param \CriteriaElement|\Criteria $criteria {@link \CriteriaElement}
      *
-     * @param bool             $force
-     * @param bool             $asObject
+     * @param bool                       $force
+     * @param bool                       $asObject
      * @return bool FALSE if deletion failed
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
@@ -474,11 +496,11 @@ class DocumentHandler extends \XoopsPersistableObjectHandler
     /**
      * Copia os documentos e salva eles ligados � prova clone
      *
-     * @param object $criteria {@link CriteriaElement} to match
+     * @param \CriteriaElement $criteria {@link \CriteriaElement} to match
      *
-     * @param        $cod_prova
+     * @param                  $cod_prova
      */
-    public function clonarDocumentos($criteria, $cod_prova)
+    public function cloneDocuments($criteria, $cod_prova)
     {
         global $xoopsDB;
 
