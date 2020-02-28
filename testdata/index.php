@@ -68,7 +68,7 @@ function loadSampleData()
     }
 
     foreach ($tables as $table) {
-        $tabledata = \Xmf\Yaml::readWrapped($table . '.yml');
+        $tabledata = \Xmf\Yaml::readWrapped($language . $table . '.yml');
         \Xmf\Database\TableLoad::truncateTable($table);
         \Xmf\Database\TableLoad::loadTableFromArray($table, $tabledata);
     }

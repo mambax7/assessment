@@ -1,0 +1,30 @@
+-
+    cod_documento: '3'
+    titulo: Document1
+    tipo: '0'
+    cod_prova: '1'
+    cods_perguntas: ''
+    documento: 'This is a Document Test12'
+    uid_elaborador: '1'
+    fonte: Web
+    html: '1'
+-
+    cod_documento: '4'
+    titulo: zzz
+    tipo: '0'
+    cod_prova: '1'
+    cods_perguntas: '1,2,3'
+    documento: '<p>zzzzz</p>'
+    uid_elaborador: '1'
+    fonte: '1'
+    html: '1'
+-
+    cod_documento: '5'
+    titulo: Brazil
+    tipo: '0'
+    cod_prova: '1'
+    cods_perguntas: ''
+    documento: 'This document is associated with the question: "What is the capital of Brazil"'
+    uid_elaborador: '1'
+    fonte: Wikipedia
+    html: '1'
